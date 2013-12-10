@@ -11,7 +11,6 @@ class Config : public QObject
 public:
     explicit Config(QObject *parent = 0);
     ~Config();
-
     static bool initConfig();
     static QString SQL_CONNECTION_NAME;
     static QString SQL_HOST_NAME;
