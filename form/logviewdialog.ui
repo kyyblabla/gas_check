@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../rs/myrs.qrc">
+    <normaloff>:/icofire.ico</normaloff>:/icofire.ico</iconset>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>
     <widget class="QSplitter" name="splitter">
@@ -58,16 +62,7 @@
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
@@ -140,16 +135,7 @@
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
@@ -225,6 +211,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../rs/myrs.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -154,7 +154,7 @@ void MainForm::creatContentMenu(){
  */
 void MainForm::createTrayIcon(){
 
-    QIcon icon = QIcon(":/icon.ico");
+    QIcon icon = QIcon(":/icofire.ico");
     setWindowIcon(icon);
 
     trayIcon = new QSystemTrayIcon(this);
