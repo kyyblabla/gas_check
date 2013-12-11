@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>lights.png</file>
+        <file>computer.png</file>
+        <file>computer.bmp</file>
+        <file>icon.ico</file>
+        <file>back.jpg</file>
+        <file>computer_white.png</file>
+        <file>green.png</file>
+        <file>grey.png</file>
+        <file>red.png</file>
+        <file>yellow.png</file>
+        <file>bottom.png</file>
+        <file>close.png</file>
+        <file>min.png</file>
+        <file>top.png</file>
+    </qresource>
+</RCC>
