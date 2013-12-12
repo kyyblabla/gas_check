@@ -1159,9 +1159,7 @@ int modbus_read_bits(modbus_t *ctx, int addr, int nb, uint8_t *dest)
 
     if (nb > MODBUS_MAX_READ_BITS) {
         if (ctx->debug) {
-            fprintf(stderr,
-                    "ERROR Too many bits requested (%d > %d)\n",
-                    nb, MODBUS_MAX_READ_BITS);
+            fprintf(stderr,"ERROR Too many bits requested (%d > %d)\n",nb, MODBUS_MAX_READ_BITS);
         }
         errno = EMBMDATA;
         return -1;

@@ -4,15 +4,21 @@
 #include "QPainter"
 
 QCustLabel::QCustLabel(QWidget *parent) :
-    QLabel(parent)
+    QLabel(parent),labelType(QCustLabel::No)
 {
     this->setAlignment(Qt::AlignCenter);
+
 }
 
 void QCustLabel::setDesInfo(QString desInfo){
 
     this->desInfo=desInfo;
 
+}
+
+void QCustLabel::setLabelType(LabelType type){
+
+    this->labelType=type;
 }
 
 void QCustLabel::paintEvent(QPaintEvent *event){

@@ -114,7 +114,7 @@ void MainForm::createActions(){
     connect(logViewAction, SIGNAL(triggered()), this, SLOT(logView()));
 
     exitAction=new QAction(tr("退出"),this);
-    connect(exitAction,SIGNAL(triggered()),qApp,SLOT(quit()));
+    connect(exitAction,SIGNAL(triggered()),this,SLOT(quit()));
 
     minimizeAction=new QAction(tr("min"),this);
     connect(minimizeAction, SIGNAL(triggered()), this, SLOT(showMinimized()));
@@ -124,7 +124,6 @@ void MainForm::createActions(){
 
     norimizeAction=new QAction(tr("normal"),this);
     connect(norimizeAction, SIGNAL(triggered()), this, SLOT(showNormal()));
-
 
 
 }
@@ -195,7 +194,7 @@ void MainForm::createEquipments(){
  */
 void MainForm::createLinkStatusPic(){
 
-    QGridLayout *layout=new QGridLayout;
+
 
     QCustLabel *lab1=new QCustLabel;
 
@@ -204,22 +203,29 @@ void MainForm::createLinkStatusPic(){
 
     QCustLabel*lab2=new QCustLabel;
 
+
+
     lab2->setDesInfo(tr(" 复视器I"));
     lab2->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
 
 
     QCustLabel*lab3=new QCustLabel;
 
+
     lab3->setDesInfo(tr(" 复视器II"));
     lab3->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
 
 
+    QGridLayout *layout=new QGridLayout;
+    layout->setMargin(0);
+    layout->setSpacing(0);
 
     layout->addWidget(lab1,0,0,1,2);
     layout->addWidget(lab2,1,0);
     layout->addWidget(lab3,1,1);
 
     QWidget *newWidget=new QWidget;
+
     newWidget->setLayout(layout);
 
     ui->widget_2->layout()->addWidget(newWidget);
@@ -363,11 +369,11 @@ void MainForm::showContentMenu(){
 }
 
 
-/**
+/*
  * @brief MainForm::mousePressEvent
  * @param event
  * 处理鼠标按下的事件
- */
+
 void MainForm::mousePressEvent(QMouseEvent *event){
 
     //if(event->button() == Qt::LeftButton){
@@ -377,12 +383,12 @@ void MainForm::mousePressEvent(QMouseEvent *event){
    // }
 
 }
-
-/**
+ */
+/*
  * @brief MainForm::mouseMoveEvent
  * @param event
  * 处理鼠标移动事件
- */
+
 void MainForm::mouseMoveEvent(QMouseEvent *event){
 
    // if ((!this->isMaximized()&&!this->isFullScreen())&&event->buttons() == Qt::LeftButton)
@@ -392,13 +398,27 @@ void MainForm::mouseMoveEvent(QMouseEvent *event){
    // }
 
 
-}
+}*/
 
 void MainForm::logView(){
 
     showLogView();
 
 }
+
+
+void MainForm::quit(){
+
+    QMessageBox message(QMessageBox::NoIcon,"","确定要退出?", QMessageBox::Yes | QMessageBox::No, NULL);
+
+    if(message.exec() == QMessageBox::Yes)
+    {
+        qApp->quit();
+    }
+
+}
+
+
 
 /**
  * @brief MainForm::showLogView

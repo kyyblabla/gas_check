@@ -27,8 +27,8 @@ public:
 
 protected:
      bool eventFilter(QObject *obj, QEvent *ev); //filter events, in this moment,we just attention this event of ui's label
-     void mousePressEvent(QMouseEvent *event);        //define a mouse peress event
-     void mouseMoveEvent(QMouseEvent *event);         // define a mouse move event
+     //void mousePressEvent(QMouseEvent *event);        //define a mouse peress event
+     //void mouseMoveEvent(QMouseEvent *event);         // define a mouse move event
      void closeEvent(QCloseEvent *event);
      //bool winEvent(MSG *message, long *result);
 
@@ -37,6 +37,7 @@ private slots:
      void backShowStyle(QSystemTrayIcon::ActivationReason reason); //click trayIcon to show or hidden the mainform
      void logView();
      void on_pushButton_clicked();
+     void quit();
 
 private:
     Ui::MainForm *ui;

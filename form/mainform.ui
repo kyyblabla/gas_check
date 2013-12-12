@@ -225,6 +225,9 @@ QWidget#widget_5{
                   <property name="text">
                    <string>机库</string>
                   </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                  </property>
                  </widget>
                 </item>
                 <item>
