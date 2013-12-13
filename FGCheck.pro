@@ -1,8 +1,4 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2013-11-28T17:43:18
-#
-#-------------------------------------------------
+
 
 QT       += core gui
 QT       += sql
@@ -17,6 +13,7 @@ OBJECTS_DIR = generated
 UI_DIR      = generated
 RCC_DIR     = generated
 
+TRANSLATIONS += gas_zh.ts
 
 SOURCES +=  src/main.cpp\
             src/mainform.cpp \

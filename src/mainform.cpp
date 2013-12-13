@@ -8,17 +8,17 @@
 #include "equipmentwidget.h"
 
 
-#include "QWidget"
-#include "QMessageBox"
-#include "QMenu"
-#include "QAction"
-#include "QPoint"
-#include "QMouseEvent"
-#include "QIcon"
-#include "QCloseEvent"
-#include "QGridLayout"
-#include "QDesktopWidget"
-#include "QDebug"
+#include <QWidget>
+#include <QMessageBox>
+#include <QMenu>
+#include <QAction>
+#include <QPoint>
+#include <QMouseEvent>
+#include <QIcon>
+#include <QCloseEvent>
+#include <QGridLayout>
+#include <QDesktopWidget>
+#include <QDebug>
 
 
 MainForm::MainForm(QWidget *parent) :
@@ -87,7 +87,7 @@ void MainForm::initLabels(){
 
 /**
  * @brief MainForm::initEventerFilter
- * 使标签具有单击事件
+ *
  */
 void MainForm::initEventerFilter(){
 
@@ -106,23 +106,23 @@ void MainForm::initEventerFilter(){
 void MainForm::createActions(){
 
 
-    settingAction=new QAction(tr("设置"),this);
+    settingAction=new QAction(tr("Setting"),this);
     connect(settingAction,SIGNAL(triggered()),this,SLOT(doSetting()));
 
     //showLogView
-    logViewAction=new QAction(tr("日志"),this);
+    logViewAction=new QAction(tr("Log"),this);
     connect(logViewAction, SIGNAL(triggered()), this, SLOT(logView()));
 
-    exitAction=new QAction(tr("退出"),this);
+    exitAction=new QAction(tr("Exit"),this);
     connect(exitAction,SIGNAL(triggered()),this,SLOT(quit()));
 
-    minimizeAction=new QAction(tr("min"),this);
+    minimizeAction=new QAction(tr("Min"),this);
     connect(minimizeAction, SIGNAL(triggered()), this, SLOT(showMinimized()));
 
-    maximizeAction=new QAction(tr("max"),this);
+    maximizeAction=new QAction(tr("Max"),this);
     connect(maximizeAction, SIGNAL(triggered()), this, SLOT(showMaximized()));
 
-    norimizeAction=new QAction(tr("normal"),this);
+    norimizeAction=new QAction(tr("Normal"),this);
     connect(norimizeAction, SIGNAL(triggered()), this, SLOT(showNormal()));
 
 
@@ -130,7 +130,7 @@ void MainForm::createActions(){
 
 /**
  * @brief MainForm::creatContentMenu
- * 创建上下文菜单
+ *
  */
 void MainForm::creatContentMenu(){
 
@@ -149,7 +149,7 @@ void MainForm::creatContentMenu(){
 
 /**
  * @brief MainForm::createTrayIcon
- * 创建系统托盘
+ *
  */
 void MainForm::createTrayIcon(){
 
@@ -190,7 +190,7 @@ void MainForm::createEquipments(){
 
 /**
  * @brief MainForm::createLinkStatusPic
- * 创建主机连接状态图
+ *
  */
 void MainForm::createLinkStatusPic(){
 
@@ -198,21 +198,21 @@ void MainForm::createLinkStatusPic(){
 
     QCustLabel *lab1=new QCustLabel;
 
-    lab1->setDesInfo(tr("主机"));
+    lab1->setDesInfo(tr("MainDevice"));
     lab1->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
 
     QCustLabel*lab2=new QCustLabel;
 
 
 
-    lab2->setDesInfo(tr(" 复视器I"));
+    lab2->setDesInfo(tr(" SubI"));
     lab2->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
 
 
     QCustLabel*lab3=new QCustLabel;
 
 
-    lab3->setDesInfo(tr(" 复视器II"));
+    lab3->setDesInfo(tr(" SubII"));
     lab3->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
 
 
@@ -237,7 +237,7 @@ void MainForm::createLinkStatusPic(){
 /**
  * @brief MainForm::backShowStyle
  * @param reason
- * 处理系统图盘中的图标点击事件
+ *
  */
 void MainForm::backShowStyle(QSystemTrayIcon::ActivationReason reason){
 
@@ -267,7 +267,7 @@ void MainForm::backShowStyle(QSystemTrayIcon::ActivationReason reason){
  * @param obj
  * @param event
  * @return
- * 处理主界面中标签的点击事件
+ *
  */
 bool MainForm::eventFilter(QObject *obj, QEvent *event){
 
@@ -338,7 +338,7 @@ void MainForm::chageMenuLabelBack(bool top){
 
 /**
  * @brief MainForm::doSetting
- * 弹出系统设置窗口
+ *
  */
 void MainForm::doSetting(){
 
@@ -351,7 +351,7 @@ void MainForm::doSetting(){
 
 /**
  * @brief MainForm::showContentMenu
- * 弹出上下文菜单 主要用于打开设置项或退出系统
+ *
  */
 void MainForm::showContentMenu(){
 
@@ -409,7 +409,7 @@ void MainForm::logView(){
 
 void MainForm::quit(){
 
-    QMessageBox message(QMessageBox::NoIcon,"","确定要退出?", QMessageBox::Yes | QMessageBox::No, NULL);
+    QMessageBox message(QMessageBox::NoIcon,"",tr("Are you sure?"), QMessageBox::Yes | QMessageBox::No, NULL);
 
     if(message.exec() == QMessageBox::Yes)
     {

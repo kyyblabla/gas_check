@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright © 2001-2011 Stéphane Raimbault <stephane.raimbault@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -152,7 +152,7 @@ typedef enum
 {
     MODBUS_ERROR_RECOVERY_NONE          = 0,
     MODBUS_ERROR_RECOVERY_LINK          = (1<<1),
-    MODBUS_ERROR_RECOVERY_PROTOCOL      = (1<<2),
+    MODBUS_ERROR_RECOVERY_PROTOCOL      = (1<<2)
 } modbus_error_recovery_mode;
 
 MODBUS_API int modbus_set_slave(modbus_t* ctx, int slave);

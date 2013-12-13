@@ -1,9 +1,9 @@
 ﻿#ifndef MAINFORM_H
 #define MAINFORM_H
 
-#include "QSystemTrayIcon"
-#include "QWidget"
-#include "QList"
+#include <QSystemTrayIcon>
+#include <QWidget>
+#include <QList>
 
 namespace Ui {
 class MainForm;

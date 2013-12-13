@@ -1,11 +1,12 @@
 ﻿#include "logviewdialog.h"
 #include "config.h"
 #include "ui_logviewdialog.h"
-#include "QTableView"
-#include "QStandardItemModel"
-#include "QStandardItem"
-#include "QMessageBox"
-#include "QString"
+
+#include <QTableView>
+#include <QStandardItemModel>
+#include <QStandardItem>
+#include <QMessageBox>
+#include <QString>
 
 
 LogViewDialog::LogViewDialog(QWidget *parent) :
@@ -52,7 +53,7 @@ void LogViewDialog::initTreeView(){
     treeModel=new QStandardItemModel;
 
 
-    QStandardItem *itemAll = new QStandardItem(tr("所有"));
+    QStandardItem *itemAll = new QStandardItem(tr("all"));
     treeModel->appendRow(itemAll);
 
     QString areaName1=Config::AREA_LABEL.split("#").at(0).split("|").at(0);

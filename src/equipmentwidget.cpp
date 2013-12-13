@@ -1,9 +1,9 @@
 ﻿#include "equipmentwidget.h"
 #include "config.h"
 
-#include "QStringList"
-#include "QVBoxLayout"
-#include "QDebug"
+#include <QStringList>
+#include <QVBoxLayout>
+#include <QDebug>
 
 
 EquipmentWidget::EquipmentWidget(QWidget *parent) :
@@ -23,7 +23,7 @@ void EquipmentWidget::initWidget(){
     QStringList list= Config::EQUIPMENT_LABEL.split("#");
 
     if(list.length()<4){
-        list=tr("浓度:|dp#开启状态:|工作/关闭#工作状态:|正常/故障#警报:|无/低报警/高报警").split("#");
+        list=tr("nd:|dp#onOrOff:|on/off#workOrBreak:|work/break#alarm:|no/low/high").split("#");
     }
 
     lNongDuLabelName=list.at(0).split("|").at(0);

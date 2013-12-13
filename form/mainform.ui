@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainForm</string>
+   <string>Gas Miontor</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget#MainForm{
@@ -113,7 +113,7 @@ QWidget#widget_7 QLabel#label_11:hover{
 }</string>
            </property>
            <property name="text">
-            <string>可燃气体报警监视复视器</string>
+            <string>Gas Minotor</string>
            </property>
           </widget>
          </item>
@@ -223,7 +223,7 @@ QWidget#widget_5{
                 <item>
                  <widget class="QLabel" name="label_12">
                   <property name="text">
-                   <string>机库</string>
+                   <string>JiKu</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -257,7 +257,7 @@ QWidget#widget_5{
                 <item>
                  <widget class="QLabel" name="label_13">
                   <property name="text">
-                   <string>加油泵站</string>
+                   <string>JiaYouBeng</string>
                   </property>
                  </widget>
                 </item>
@@ -429,7 +429,7 @@ QWidget#widget_10 .QLabel:hover{
                 <item>
                  <widget class="QLabel" name="label_14">
                   <property name="text">
-                   <string>清除</string>
+                   <string>Clear</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -439,7 +439,7 @@ QWidget#widget_10 .QLabel:hover{
                 <item>
                  <widget class="QLabel" name="label_15">
                   <property name="text">
-                   <string>日志</string>
+                   <string>Log</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -598,7 +598,7 @@ QLabel#label_10{
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>关闭响铃</string>
+              <string>Close Alarm</string>
              </property>
              <property name="textFormat">
               <enum>Qt::AutoText</enum>
@@ -626,7 +626,7 @@ QLabel#label_10{
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>复位</string>
+              <string>Rest</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>

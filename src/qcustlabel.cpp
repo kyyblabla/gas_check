@@ -1,7 +1,8 @@
 ﻿#include "qcustlabel.h"
-#include "QPaintEvent"
-#include "QLabel"
-#include "QPainter"
+
+#include <QPaintEvent>
+#include <QLabel>
+#include <QPainter>
 
 QCustLabel::QCustLabel(QWidget *parent) :
     QLabel(parent),labelType(QCustLabel::No)

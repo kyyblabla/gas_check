@@ -1,4 +1,4 @@
-#include "sqlutil.h"
+﻿#include "sqlutil.h"
 #include "config.h"
 
 QSqlDatabase SQLUtil::dateBase;
@@ -15,13 +15,6 @@ bool SQLUtil::initConnection(){
     bool re=Config::initConfig();
 
     if(re){
-
-//        dateBase = QSqlDatabase::addDatabase(Config::SQL_CONNECTION_NAME);
-//        dateBase.setHostName(Config::SQL_HOST_NAME);
-//        dateBase.setDatabaseName(Config::SQL_DATEBASE_NAME);
-//        dateBase.setPort(Config::SQL_HOST_PORT);
-//        dateBase.setUserName(Config::SQL_USERNAME);
-//        dateBase.setPassword(Config::SQL_PASSWORD);
 
         dateBase = QSqlDatabase::addDatabase("QMYSQL");
         dateBase.setHostName("localhost");

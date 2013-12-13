@@ -1,8 +1,8 @@
 ﻿#include "config.h"
-#include "QString"
-#include "QSettings"
-#include "QDebug"
-#include "QTextCodec"
+#include  <QString>
+#include <QSettings>
+#include <QDebug>
+#include <QTextCodec>
 
 QString Config::SQL_CONNECTION_NAME;
 QString Config::SQL_HOST_NAME;

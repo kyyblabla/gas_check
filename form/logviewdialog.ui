@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Log view</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../rs/myrs.qrc">
@@ -88,7 +88,7 @@
           <item>
            <widget class="QCheckBox" name="checkBox">
             <property name="text">
-             <string>全选</string>
+             <string>all</string>
             </property>
            </widget>
           </item>
@@ -96,22 +96,22 @@
            <widget class="QComboBox" name="comboBox">
             <item>
              <property name="text">
-              <string>全部</string>
+              <string>All</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>红色警报</string>
+              <string>Red</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>黄色警报</string>
+              <string>Yellow</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>橙色警报</string>
+              <string>Orange</string>
              </property>
             </item>
            </widget>
@@ -122,7 +122,7 @@
           <item>
            <widget class="QPushButton" name="pushButton">
             <property name="text">
-             <string>查询</string>
+             <string>Serach</string>
             </property>
            </widget>
           </item>
@@ -178,14 +178,14 @@
           <item>
            <widget class="QPushButton" name="pushButton_3">
             <property name="text">
-             <string>导出</string>
+             <string>Dump</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_2">
             <property name="text">
-             <string>删除</string>
+             <string>Del</string>
             </property>
            </widget>
           </item>

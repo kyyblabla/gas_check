@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>System Setting </string>
   </property>
   <property name="windowIcon">
    <iconset resource="../rs/myrs.qrc">
@@ -27,7 +27,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>确定</string>
+    <string>Change</string>
    </property>
   </widget>
   <widget class="QGroupBox" name="groupBox">
@@ -40,7 +40,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>基本设置</string>
+    <string>Base Seetting</string>
    </property>
   </widget>
  </widget>
