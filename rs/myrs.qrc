@@ -12,5 +12,6 @@
         <file>min.png</file>
         <file>top.png</file>
         <file>icofire.ico</file>
+        <file>ala.wav</file>
     </qresource>
 </RCC>

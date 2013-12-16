@@ -18,6 +18,8 @@
 #include <QCloseEvent>
 #include <QGridLayout>
 #include <QDesktopWidget>
+#include <QSound>
+#include <QTimer>
 #include <QDebug>
 
 
@@ -55,8 +57,10 @@ MainForm::MainForm(QWidget *parent) :
     logview=new LogViewDialog();
     logview->setWindowFlags(Qt::Window);
 
-}
+    //isPlay=false;
 
+    //connect(playTimer, SIGNAL(timeout()), this, SLOT(playSound()));
+}
 
 
 
@@ -73,6 +77,9 @@ MainForm::~MainForm()
     delete minimizeAction;
 
     delete logview;
+
+   // delete playTimer;
+
 }
 
 
@@ -140,9 +147,10 @@ void MainForm::creatContentMenu(){
     contentMenu->addAction(exitAction);
 
     trayIconMenu=new QMenu(this);
-
     trayIconMenu->addAction(logViewAction);
     trayIconMenu->addAction(exitAction);
+
+
 
 }
 
@@ -460,13 +468,30 @@ void MainForm::on_pushButton_clicked()
 
     e->updateLabelInfo(2,on,tr(""));
 
+
     e->updateLabelInfo(3,status,tr(""));
 
+
     e->updateLabelInfo(4,waring,tr(""));
+
 
     int waringLeve= waring>0?waring:(status>0? status : on );
 
     e->updateLabelInfo(0,waringLeve,tr(""));
 
+
+}
+
+
+void MainForm::playSound(){
+
+     playTimer=new QTimer;
+     qDebug()<<"tttt"<<endl;
+     QSound::play("ala.wav");
+
+}
+
+void MainForm::on_pushButton_2_clicked()
+{
 
 }

@@ -80,7 +80,6 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
 
     switch (labelName) {
     case 0:
-
         switch(status){
         case 0:
             this->lLightLabel->setPixmap(QPixmap(QString::fromUtf8(":/green.png")));
@@ -100,13 +99,17 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
         lNongDuLabel->setStyleSheet("color:green");
         break;
     case  2:
+
         if(status==1){
+
             this->lOnOrOffLabel->setText(lOnOrOffLabelName+lOnOrOffLabelValue.split("/").at(1));
             lOnOrOffLabel->setStyleSheet("color:#f40");
         }else{
+
             this->lOnOrOffLabel->setText(lOnOrOffLabelName+lOnOrOffLabelValue.split("/").at(0));
             lOnOrOffLabel->setStyleSheet("color:green");
         }
+
         break;
     case  3:
         if(status==1){

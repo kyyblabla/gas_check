@@ -325,7 +325,7 @@ QWidget#widget_10 .QLabel:hover{
 }
 </string>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0,0,0,0,0,0,0">
+               <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0,0,0,0,0,0,0,0">
                 <property name="spacing">
                  <number>10</number>
                 </property>
@@ -347,6 +347,13 @@ QWidget#widget_10 .QLabel:hover{
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_2">
+                  <property name="text">
+                   <string>paly</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QComboBox" name="lightNum">

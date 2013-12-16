@@ -16,6 +16,7 @@ class QCloseEvent;
 class QMouseEvent;
 class EquipmentWidget;
 class LogViewDialog;
+class QTimer;
 
 class MainForm : public QWidget
 {
@@ -38,6 +39,9 @@ private slots:
      void logView();
      void on_pushButton_clicked();
      void quit();
+     void playSound();
+
+     void on_pushButton_2_clicked();
 
 private:
     Ui::MainForm *ui;
@@ -47,7 +51,6 @@ private:
     QMenu *contentMenu;
     QAction*exitAction;
     QAction*settingAction;
-
 
     void initEventerFilter(); // init label event listener
 
@@ -83,10 +86,10 @@ private:
     void doRester();  //
 
 
+   // QTimer *playTimer;
     void chageMenuLabelBack(bool top);
-
-
-    //init configs
+    QTimer *playTimer;
+   // bool isPlay;
 
 };
 
