@@ -35,13 +35,12 @@ void LogViewDialog::initTableView(){
 
     tableModel=new QStandardItemModel;
 
-    tableModel->setColumnCount(5);
+    tableModel->setColumnCount(4);
 
-    tableModel->setHeaderData(0,Qt::Horizontal,QObject::tr("ID"));
-    tableModel->setHeaderData(1,Qt::Horizontal,QObject::tr("Eid"));
-    tableModel->setHeaderData(2,Qt::Horizontal,QObject::tr("Detila"));
-    tableModel->setHeaderData(3,Qt::Horizontal,QObject::tr("Type"));
-    tableModel->setHeaderData(4,Qt::Horizontal,QObject::tr("DateTime"));
+    tableModel->setHeaderData(0,Qt::Horizontal,tr("ID"));
+    tableModel->setHeaderData(1,Qt::Horizontal,tr("Detial"));
+    tableModel->setHeaderData(2,Qt::Horizontal,tr("Create Time"));
+    tableModel->setHeaderData(3,Qt::Horizontal,tr("Deal Time"));
 
     ui->tableView->setModel(tableModel);
 

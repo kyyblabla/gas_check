@@ -57,9 +57,9 @@ MainForm::MainForm(QWidget *parent) :
     logview=new LogViewDialog();
     logview->setWindowFlags(Qt::Window);
 
-    //isPlay=false;
-
-    //connect(playTimer, SIGNAL(timeout()), this, SLOT(playSound()));
+    isPlay=false;
+    playTimer=new QTimer;
+    connect(playTimer, SIGNAL(timeout()), this, SLOT(playSound()));
 }
 
 
@@ -77,8 +77,7 @@ MainForm::~MainForm()
     delete minimizeAction;
 
     delete logview;
-
-   // delete playTimer;
+    delete playTimer;
 
 }
 
@@ -485,13 +484,13 @@ void MainForm::on_pushButton_clicked()
 
 void MainForm::playSound(){
 
-     playTimer=new QTimer;
-     qDebug()<<"tttt"<<endl;
      QSound::play("ala.wav");
 
 }
 
 void MainForm::on_pushButton_2_clicked()
 {
+    playSound();
+
 
 }

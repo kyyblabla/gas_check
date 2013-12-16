@@ -57,9 +57,29 @@
     </message>
     <message>
         <location filename="form/logviewdialog.ui" line="91"/>
-        <location filename="src/logviewdialog.cpp" line="56"/>
+        <location filename="src/logviewdialog.cpp" line="55"/>
         <source>all</source>
         <translation>全部</translation>
+    </message>
+    <message>
+        <location filename="src/logviewdialog.cpp" line="40"/>
+        <source>ID</source>
+        <translation>编号</translation>
+    </message>
+    <message>
+        <location filename="src/logviewdialog.cpp" line="41"/>
+        <source>Detial</source>
+        <translation>详情</translation>
+    </message>
+    <message>
+        <location filename="src/logviewdialog.cpp" line="42"/>
+        <source>Create Time</source>
+        <translation>发生时间</translation>
+    </message>
+    <message>
+        <location filename="src/logviewdialog.cpp" line="43"/>
+        <source>Deal Time</source>
+        <translation>解除时间</translation>
     </message>
 </context>
 <context>
@@ -89,78 +109,22 @@
         <translation>加油泵站</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="355"/>
-        <source>1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="form/mainform.ui" line="360"/>
-        <source>2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="form/mainform.ui" line="365"/>
-        <source>3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="form/mainform.ui" line="370"/>
-        <source>#1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message utf8="true">
-        <location filename="form/mainform.ui" line="379"/>
-        <source>工作</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message utf8="true">
-        <location filename="form/mainform.ui" line="384"/>
-        <source>关闭</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message utf8="true">
-        <location filename="form/mainform.ui" line="393"/>
-        <location filename="form/mainform.ui" line="407"/>
-        <source>正常</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message utf8="true">
-        <location filename="form/mainform.ui" line="398"/>
-        <source>故障</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message utf8="true">
-        <location filename="form/mainform.ui" line="412"/>
-        <source>低</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message utf8="true">
-        <location filename="form/mainform.ui" line="417"/>
-        <source>高</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message utf8="true">
-        <location filename="form/mainform.ui" line="425"/>
-        <source>确定</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="form/mainform.ui" line="432"/>
+        <location filename="form/mainform.ui" line="356"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="601"/>
+        <location filename="form/mainform.ui" line="525"/>
         <source>Close Alarm</source>
         <translation>关闭响铃</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="629"/>
+        <location filename="form/mainform.ui" line="553"/>
         <source>Rest</source>
         <translation>复位</translation>
     </message>
     <message utf8="true">
-        <location filename="form/mainform.ui" line="491"/>
+        <location filename="form/mainform.ui" line="415"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -170,88 +134,60 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="109"/>
+        <location filename="src/mainform.cpp" line="116"/>
         <source>Setting</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="442"/>
-        <location filename="src/mainform.cpp" line="113"/>
+        <location filename="form/mainform.ui" line="366"/>
+        <location filename="src/mainform.cpp" line="120"/>
         <source>Log</source>
         <translation>日志</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="116"/>
+        <location filename="src/mainform.cpp" line="123"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="119"/>
+        <location filename="src/mainform.cpp" line="126"/>
         <source>Min</source>
         <oldsource>min</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="122"/>
+        <location filename="src/mainform.cpp" line="129"/>
         <source>Max</source>
         <oldsource>max</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="125"/>
+        <location filename="src/mainform.cpp" line="132"/>
         <source>Normal</source>
         <oldsource>normal</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="201"/>
+        <location filename="src/mainform.cpp" line="209"/>
         <source>MainDevice</source>
         <translation>主机</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="208"/>
+        <location filename="src/mainform.cpp" line="216"/>
         <source> SubI</source>
         <oldsource> ???I</oldsource>
         <translation>复视器I</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="215"/>
+        <location filename="src/mainform.cpp" line="223"/>
         <source> SubII</source>
         <oldsource> ???II</oldsource>
         <translation>复视器II</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="412"/>
+        <location filename="src/mainform.cpp" line="420"/>
         <source>Are you sure?</source>
         <translation>确定退出？</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <location filename="src/logviewdialog.cpp" line="40"/>
-        <source>ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/logviewdialog.cpp" line="41"/>
-        <source>Eid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/logviewdialog.cpp" line="42"/>
-        <source>Detila</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/logviewdialog.cpp" line="43"/>
-        <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="src/logviewdialog.cpp" line="44"/>
-        <source>DateTime</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

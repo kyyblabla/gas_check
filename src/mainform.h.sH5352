@@ -89,7 +89,7 @@ private:
 
     void chageMenuLabelBack(bool top);
     QTimer *playTimer;
-    bool isPlay;
+   s bool isPlay;
 
 };
 
