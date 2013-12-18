@@ -1,4 +1,4 @@
-#ifndef SETTINGDIALOG_H
+﻿#ifndef SETTINGDIALOG_H
 #define SETTINGDIALOG_H
 
 #include <QDialog>

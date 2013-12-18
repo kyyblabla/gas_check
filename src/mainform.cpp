@@ -6,6 +6,10 @@
 #include "config.h"
 #include "qcustlabel.h"
 #include "equipmentwidget.h"
+#include "modbusrequestthread.h"
+
+#include "imodbus.h"
+#include "modbus.h"
 
 
 #include <QWidget>
@@ -484,13 +488,49 @@ void MainForm::on_pushButton_clicked()
 
 void MainForm::playSound(){
 
-     QSound::play("ala.wav");
+
+
+    QApplication::beep();
+    qDebug()<<"======"<<endl;
+    //  QSound::play("ala.wav");
+
 
 }
 
+/**
+ * @brief MainForm::on_pushButton_2_clicked
+ * Test the alarm
+ */
 void MainForm::on_pushButton_2_clicked()
 {
-    playSound();
+
+    if(this->isPlay){
+        if(this->playTimer->isActive()){
+            this->playTimer->stop();
+        }
+        this->isPlay=false;
+
+    }else{
+
+        this->playTimer->start(300);
+        this->isPlay=true;
+
+    }
+
+}
+
+void MainForm::startRequest(bool start){
+
+    //ModbusRequestThread re(ui->widget);
 
 
+}
+
+/**
+ * @brief MainForm::on_pushButton_3_clicked
+ * test request thread
+ */
+void MainForm::on_pushButton_3_clicked()
+{
+     reqThread.start();
 }

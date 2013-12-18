@@ -1,6 +1,8 @@
 ﻿#ifndef MAINFORM_H
 #define MAINFORM_H
 
+#include "modbusrequestthread.h"
+
 #include <QSystemTrayIcon>
 #include <QWidget>
 #include <QList>
@@ -40,8 +42,11 @@ private slots:
      void on_pushButton_clicked();
      void quit();
      void playSound();
-
      void on_pushButton_2_clicked();
+
+     void startRequest(bool start);
+
+     void on_pushButton_3_clicked();
 
 private:
     Ui::MainForm *ui;
@@ -85,11 +90,11 @@ private:
     void doStopAlarm(int id); // close the alarm according to the id
     void doRester();  //
 
-
-
     void chageMenuLabelBack(bool top);
     QTimer *playTimer;
     bool isPlay;
+
+    ModbusRequestThread reqThread;
 
 };
 

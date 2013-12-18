@@ -1,5 +1,3 @@
-
-
 QT       += core gui
 QT       += sql
 
@@ -23,11 +21,13 @@ SOURCES +=  src/main.cpp\
             src/config.cpp \
             src/qcustlabel.cpp \
             src/equipmentwidget.cpp \
+            src/serialsettingswidget.cpp \
             3rdparty/qextserialport/qextserialport.cpp	\
             3rdparty/libmodbus/src/modbus.c \
             3rdparty/libmodbus/src/modbus-data.c \
             3rdparty/libmodbus/src/modbus-rtu.c \
-            3rdparty/libmodbus/src/modbus-tcp.c
+            3rdparty/libmodbus/src/modbus-tcp.c \
+            src/modbusrequestthread.cpp
 
 HEADERS  += src/mainform.h \
             src/settingdialog.h \
@@ -36,6 +36,9 @@ HEADERS  += src/mainform.h \
             src/config.h \
             src/qcustlabel.h \
             src/equipmentwidget.h \
+            src/serialsettingswidget.h \
+            src/imodbus.h \
+            src/modbusrequestthread.h \
             3rdparty/qextserialport/qextserialport.h \
             3rdparty/qextserialport/qextserialenumerator.h \
             3rdparty/libmodbus/src/modbus.h
@@ -61,7 +64,8 @@ win32 {
 
 FORMS    += form/mainform.ui \
             form/settingdialog.ui \
-            form/logviewdialog.ui
+            form/logviewdialog.ui \
+            form/serialsettingswidget.ui
 
 RESOURCES += \
     rs/myrs.qrc
