@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui xml
 QT       += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -27,7 +27,8 @@ SOURCES +=  src/main.cpp\
             3rdparty/libmodbus/src/modbus-data.c \
             3rdparty/libmodbus/src/modbus-rtu.c \
             3rdparty/libmodbus/src/modbus-tcp.c \
-            src/modbusrequestthread.cpp
+            src/modbusrequestthread.cpp \
+            src/configxml.cpp
 
 HEADERS  += src/mainform.h \
             src/settingdialog.h \
@@ -41,7 +42,8 @@ HEADERS  += src/mainform.h \
             src/modbusrequestthread.h \
             3rdparty/qextserialport/qextserialport.h \
             3rdparty/qextserialport/qextserialenumerator.h \
-            3rdparty/libmodbus/src/modbus.h
+            3rdparty/libmodbus/src/modbus.h \
+    src/configxml.h
 
 INCLUDEPATH += 3rdparty/libmodbus \
                3rdparty/libmodbus/src \
@@ -71,4 +73,5 @@ RESOURCES += \
     rs/myrs.qrc
 
 OTHER_FILES += \
+    addrConfig.xml \
     config.ini

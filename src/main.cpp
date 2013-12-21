@@ -1,6 +1,7 @@
 ﻿#include "mainform.h"
 #include "sqlutil.h"
 #include "config.h"
+#include "configxml.h"
 
 #include <QApplication>
 #include <QTextCodec>
@@ -9,13 +10,15 @@
 
 int main(int argc, char *argv[])
 {
+
     /*
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForTr(codec);
-
     QTextCodec::setCodecForLocale(codec);
     QTextCodec::setCodecForCStrings(codec);
+
     */
+
 
     QApplication a(argc, argv);
 
@@ -24,6 +27,9 @@ int main(int argc, char *argv[])
     a.installTranslator(&translator);
 
     Config::initConfig();
+    ConfigXml::init();
+
+
     MainForm w;
     w.show();
     return a.exec();

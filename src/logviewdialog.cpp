@@ -1,12 +1,14 @@
 ﻿#include "logviewdialog.h"
 #include "config.h"
 #include "ui_logviewdialog.h"
+#include "configxml.h"
 
 #include <QTableView>
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QMessageBox>
 #include <QString>
+#include <QDebug>
 
 
 LogViewDialog::LogViewDialog(QWidget *parent) :
@@ -19,6 +21,7 @@ LogViewDialog::LogViewDialog(QWidget *parent) :
     initTableView();
     ui->splitter->setStretchFactor(1,5);
     ui->lineEdit->setFocus();
+    this->setWindowFlags(Qt::Window);
 }
 
 LogViewDialog::~LogViewDialog()
@@ -53,28 +56,24 @@ void LogViewDialog::initTreeView(){
 
 
     QStandardItem *itemAll = new QStandardItem(tr("all"));
+
     treeModel->appendRow(itemAll);
 
-    QString areaName1=Config::AREA_LABEL.split("#").at(0).split("|").at(0);
 
-    int len1=Config::AREA_LABEL.split("#").at(0).split("|").at(1).split("/").length();
+    int len=ConfigXml::addrs.length();
 
-    for(int i=0;i<len1;i++){
+    for(int i=0;i<len;i++){
 
-        QStandardItem *item = new QStandardItem(areaName1+Config::AREA_LABEL.split("#").at(0).split("|").at(1).split("/").at(i));
+        Addr*addr=ConfigXml::addrs.at(i);
+        QString labName= (addr->location==1)? Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
+
+        QStandardItem *item = new QStandardItem(labName+addr->num);
         treeModel->appendRow(item);
-    }
 
-
-    QString areaName2=Config::AREA_LABEL.split("#").at(1).split("|").at(0);
-    int len2=Config::AREA_LABEL.split("#").at(1).split("|").at(1).split("/").length();
-
-    for(int i=0;i<len2;i++){
-
-        QStandardItem *item = new QStandardItem(areaName2+Config::AREA_LABEL.split("#").at(1).split("|").at(1).split("/").at(i));
-        treeModel->appendRow(item);
     }
 
     ui->treeView->setModel(treeModel);
+
+
 
 }

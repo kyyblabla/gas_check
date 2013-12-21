@@ -7,6 +7,7 @@
 #include "qcustlabel.h"
 #include "equipmentwidget.h"
 #include "modbusrequestthread.h"
+#include "configxml.h"
 
 #include "imodbus.h"
 #include "modbus.h"
@@ -35,11 +36,11 @@ MainForm::MainForm(QWidget *parent) :
 
     initLabels();
 
+
+
     createActions();
 
-
     initEventerFilter();
-
 
     creatContentMenu();
 
@@ -59,7 +60,6 @@ MainForm::MainForm(QWidget *parent) :
     //SQLUtil::test();
 
     logview=new LogViewDialog();
-    logview->setWindowFlags(Qt::Window);
 
     isPlay=false;
     playTimer=new QTimer;
@@ -87,12 +87,9 @@ MainForm::~MainForm()
 
 
 void MainForm::initLabels(){
-
     ui->label->setText(Config::MAIN_TITLE);
     ui->label_12->setText(Config::AREA_LABEL.split("#").at(0).split("|").at(0));
     ui->label_13->setText(Config::AREA_LABEL.split("#").at(1).split("|").at(0));
-
-
 }
 
 /**
@@ -181,21 +178,28 @@ void MainForm::createTrayIcon(){
 
 void MainForm::createEquipments(){
 
-    int len1=Config::AREA_LABEL.split("#").at(0).split("|").at(1).split("/").length();
 
-    for(int i=0;i<len1;i++){
+
+    int len=ConfigXml::addrs.length();
+
+    for(int i=0;i<len;i++){
+
         EquipmentWidget *e=new EquipmentWidget;
-        ui->widget_5->layout()->addWidget(e);
+        int loca=ConfigXml::addrs.at(i)->location;
+        if(loca==1){
+
+            ui->widget_5->layout()->addWidget(e);
+
+        }else{
+
+            ui->widget_6->layout()->addWidget(e);
+
+        }
+
         equipmentsList.append(e);
     }
 
-    int len2=Config::AREA_LABEL.split("#").at(1).split("|").at(1).split("/").length();
 
-    for(int i=0;i<len2;i++){
-        EquipmentWidget *e=new EquipmentWidget;
-        ui->widget_6->layout()->addWidget(e);
-        equipmentsList.append(e);
-    }
 
 }
 
@@ -523,7 +527,6 @@ void MainForm::startRequest(bool start){
 
     //ModbusRequestThread re(ui->widget);
 
-
 }
 
 /**
@@ -532,5 +535,5 @@ void MainForm::startRequest(bool start){
  */
 void MainForm::on_pushButton_3_clicked()
 {
-     reqThread.start();
+    reqThread.start();
 }

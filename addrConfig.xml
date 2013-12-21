@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<root>
+       <addr id="1">
+           <startAddr>0</startAddr>
+           <slaveId>101</slaveId>
+           <numCoils>1</numCoils>
+           <num>1号</num>
+           <location>1</location>
+       </addr>
+
+       <addr id="2">
+           <startAddr>0</startAddr>
+           <slaveId>102</slaveId>
+           <numCoils>13</numCoils>
+           <num>2号</num>
+            <location>1</location>
+       </addr>
+
+       <addr id="3">
+           <startAddr>0</startAddr>
+           <slaveId>103</slaveId>
+           <numCoils>13</numCoils>
+           <num>3号</num>
+           <location>1</location>
+       </addr>
+       <addr id="4">
+           <startAddr>0</startAddr>
+           <slaveId>104</slaveId>
+           <numCoils>13</numCoils>
+           <num>1号</num>
+           <location>2</location>
+       </addr>
+</root>
