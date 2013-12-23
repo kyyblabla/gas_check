@@ -16,8 +16,9 @@ SettingDialog::SettingDialog(QWidget *parent) :
     ui->setupUi(this);
     initTable();
     createConnects();
+    this->setWindowFlags(Qt::Window);
 
-     this->setWindowFlags(Qt::Window);
+    connect(this,SIGNAL(changeSerials(int)),ui->widget,SLOT(changeSerialPort(int)));
 }
 
 SettingDialog::~SettingDialog()
@@ -29,15 +30,15 @@ SettingDialog::~SettingDialog()
 
 void SettingDialog::createConnects(){
 
-    //connect(ui->tableView,SIGNAL(dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)),this,SLOT(tableValueChange(const QModelIndex &topLeft, const QModelIndex &bottomRight)));
+
+
+    connect(tableModel,SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),this,SLOT(tableValueChange(const QModelIndex &, const QModelIndex &)));
 }
 
 void SettingDialog::tableValueChange(const QModelIndex &topLeft, const QModelIndex &bottomRight){
 
-    //ui->pushButton_2->setEnabled(true);
-    //ui->pushButton->setEnabled(true);
-
-
+    ui->pushButton_5->setEnabled(true);
+    ui->pushButton->setEnabled(true);
 
 }
 
@@ -65,7 +66,7 @@ void SettingDialog::initTable(){
 
         tableModel->setItem(i,0,new QStandardItem(labName+addr->num));
         tableModel->setItem(i,1,new QStandardItem(QString::number(addr->slaveId)));
-        tableModel->setItem(i,2,new QStandardItem(QString::number(addr->addrStart)));
+        tableModel->setItem(i,2,new QStandardItem(QString::number(addr->startAddr)));
         tableModel->setItem(i,3,new QStandardItem(QString::number(addr->coilNum)));
 
     }
@@ -113,7 +114,7 @@ void SettingDialog::changeTableValue(){
         }
 
         ConfigXml::addrs.at(i)->slaveId=slaveId;
-        ConfigXml::addrs.at(i)->addrStart=addrStart;
+        ConfigXml::addrs.at(i)->startAddr=addrStart;
         ConfigXml::addrs.at(i)->coilNum=coilNum;
 
     }
@@ -129,10 +130,20 @@ void SettingDialog::changeTableValue(){
 //tab 1
 void SettingDialog::on_pushButton_clicked()
 {
-    changeTableValue();
+
+    on_pushButton_5_clicked();
 
     on_pushButton_3_clicked();
 }
+
+void SettingDialog::on_pushButton_5_clicked()
+{
+     changeTableValue();
+     ui->pushButton_5->setEnabled(false);
+     ui->pushButton->setEnabled(false);
+
+}
+
 
 void SettingDialog::on_pushButton_3_clicked()
 {
@@ -142,10 +153,19 @@ void SettingDialog::on_pushButton_3_clicked()
 //tab 2
 void SettingDialog::on_pushButton_4_clicked()
 {
+    on_pushButton_2_clicked();
     on_pushButton_6_clicked();
 }
+
+
+void SettingDialog::on_pushButton_2_clicked()
+{
+    emit changeSerials(1);
+}
+
 
 void SettingDialog::on_pushButton_6_clicked()
 {
     this->close();
 }
+

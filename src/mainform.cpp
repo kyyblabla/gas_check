@@ -6,7 +6,6 @@
 #include "config.h"
 #include "qcustlabel.h"
 #include "equipmentwidget.h"
-#include "modbusrequestthread.h"
 #include "configxml.h"
 
 #include "imodbus.h"
@@ -36,8 +35,6 @@ MainForm::MainForm(QWidget *parent) :
 
     initLabels();
 
-
-
     createActions();
 
     initEventerFilter();
@@ -64,6 +61,108 @@ MainForm::MainForm(QWidget *parent) :
     isPlay=false;
     playTimer=new QTimer;
     connect(playTimer, SIGNAL(timeout()), this, SLOT(playSound()));
+
+    transcationCreate=new QTimer;
+    connect(transcationCreate, SIGNAL(timeout()), this, SLOT(createTranstration()));
+
+    //transcationDone
+    connect(&reqThread,SIGNAL(transcationDone(Transcation*)),this,SLOT(transcationIsDone(Transcation*)));
+
+    transitionIndex=0;
+    transtionTimeOut=2000;
+
+}
+
+void MainForm::createTranstration(){
+
+    int index=transitionIndex%ConfigXml::addrs.length();
+    if(index<0){
+        index+=ConfigXml::addrs.length();
+    }
+
+    Transcation*t=new Transcation;
+    t->addr=ConfigXml::addrs.at(index);
+    t->funCode=2;
+
+    this->reqThread.addTranscation(t);
+
+    transitionIndex= (transitionIndex+1)<ConfigXml::addrs.length()?transitionIndex+1:0;
+
+
+}
+
+void MainForm::transcationIsDone(Transcation*trans){
+
+    int funCode=trans->funCode;
+    int index=trans->addr->index;
+
+    switch (funCode) {
+    case 2:
+
+        qDebug()<<"thread message:"<<trans->returnCode<<endl;
+        qDebug()<<"thread message data:"<<trans->returnData<<endl;
+
+        if(trans->returnCode>0){
+
+            QStringList list=trans->returnData.split("#");
+
+            int fault=list.at(7).toInt()==1?1:0;
+            int a1=list.at(5).toInt()==1?1:0;
+            int a2=list.at(4).toInt()==1?2:0;
+            int a3=list.at(3).toInt()==1?2:0;
+
+            if(fault==1){
+
+                changeEquipmentStatus(index,3,1,"");
+
+            }else{
+
+                changeEquipmentStatus(index,3,0,"");
+
+            }
+
+            int waringLevel=(a3>a2)?(a3>a1?a3:a1):(a2>a1?a2:a1);
+
+
+            int  lighhtlevel= (waringLevel>0)?waringLevel:fault;
+
+            changeEquipmentStatus(index,4,waringLevel,"");
+
+            changeEquipmentStatus(index,0,lighhtlevel,"");
+
+
+        }else{  //fult to link
+
+            changeEquipmentStatus(index,2,0,"");
+            changeEquipmentStatus(index,0,1,"");
+
+        }
+        break;
+//    case 3:
+
+//        break;
+//    case 4:
+
+//        break;
+//    case 6:
+
+//        break;
+//    case 16:
+
+//        break;
+    default:
+        break;
+    }
+
+}
+
+
+void MainForm::changeEquipmentStatus(int index,int labelIndex,int data,QString info){
+
+
+    EquipmentWidget*e=equipmentsList.at(index);
+
+    e->updateLabelInfo(labelIndex,data,info);
 }
 
 
@@ -82,6 +181,7 @@ MainForm::~MainForm()
 
     delete logview;
     delete playTimer;
+    delete transcationCreate;
 
 }
 
@@ -131,6 +231,7 @@ void MainForm::createActions(){
 
     norimizeAction=new QAction(tr("Normal"),this);
     connect(norimizeAction, SIGNAL(triggered()), this, SLOT(showNormal()));
+
 
 
 }
@@ -464,7 +565,6 @@ void MainForm::closeEvent(QCloseEvent *event){
 void MainForm::on_pushButton_clicked()
 {
     int num=ui->lightNum->currentIndex();
-
     int  on=ui->onOrOff->currentIndex();
     int  status=ui->norOrBreak->currentIndex();
     int  waring=ui->lowOrHigh->currentIndex();
@@ -475,24 +575,18 @@ void MainForm::on_pushButton_clicked()
 
     e->updateLabelInfo(2,on,tr(""));
 
-
     e->updateLabelInfo(3,status,tr(""));
 
-
     e->updateLabelInfo(4,waring,tr(""));
-
 
     int waringLeve= waring>0?waring:(status>0? status : on );
 
     e->updateLabelInfo(0,waringLeve,tr(""));
 
-
 }
 
 
 void MainForm::playSound(){
-
-
 
     QApplication::beep();
     qDebug()<<"======"<<endl;
@@ -523,11 +617,6 @@ void MainForm::on_pushButton_2_clicked()
 
 }
 
-void MainForm::startRequest(bool start){
-
-    //ModbusRequestThread re(ui->widget);
-
-}
 
 /**
  * @brief MainForm::on_pushButton_3_clicked
@@ -535,5 +624,10 @@ void MainForm::startRequest(bool start){
  */
 void MainForm::on_pushButton_3_clicked()
 {
+    if(reqThread.isRunning()){
+        return;
+    }
+
+    this->transcationCreate->start(this->transtionTimeOut);
     reqThread.start();
 }

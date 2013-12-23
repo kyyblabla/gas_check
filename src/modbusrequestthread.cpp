@@ -1,145 +1,167 @@
 ﻿#include "modbusrequestthread.h"
 #include "modbus-private.h"
+#include "configxml.h"
+#include "config.h"
 
 #include <QMessageBox>
 #include <QDebug>
+#include <QMutexLocker>
 
 modbus_t* ModbusRequestThread::m_modbus;
 
 ModbusRequestThread::ModbusRequestThread()
 {
-    this->flag=true;
-    this->sleepTime=1000;
+    this->stopFlag=false;
+    this->sleepTime=10;
+    createModbus();
+
 }
 
 ModbusRequestThread::~ModbusRequestThread(){
 
-    stop();
+    {
+
+        QMutexLocker locker(&mutex);
+        while(!this->transcations.isEmpty()){
+
+            delete transcations.dequeue();
+        }
+
+        this->stopFlag=true;
+        this->transcationAdded.wakeOne();
+
+    }
+
+    wait();
 
 }
 
 
-void ModbusRequestThread::sendModbusRequest(){
+void ModbusRequestThread::createModbus(){
 
 
+    char parity;
+    if(Config::serialParity=="even"){
+
+        parity = 'E';
+    }else if(Config::serialParity=="odd"){
+        parity = 'O';
+    }else{
+        parity = 'N';
+    }
+
+
+    qDebug()<<Config::serialinterface.toAscii().constData();
+    ModbusRequestThread::m_modbus = modbus_new_rtu(  Config::serialinterface.toAscii().constData(),
+                                                     Config::serialBaudRate,
+                                                     parity,
+                                                     Config::serialDatabits,
+                                                     Config::serialStopbits );
+
+    if( modbus_connect( ModbusRequestThread::m_modbus ) == -1 )
+    {
+        qDebug()<<"connect create"<<endl;
+    }
+
+}
+
+
+void ModbusRequestThread::addTranscation(Transcation *transcation){
+
+    QMutexLocker locker(&mutex);
+    this->transcations.enqueue(transcation);
+    this->transcationAdded.wakeOne();
+
+}
+
+
+void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
 
     if( m_modbus == NULL )
     {
         return;
     }
 
-    //int slaveID
-    //int func
-    //int startAddr
-    //int numCoils
-    //
-    const int slave = 101;
-    const int func = 4;
-    const int addr = 0;
-    int num = 1;
+    const int slaveId = transcation->addr->slaveId;
+    const int func = transcation->funCode;
+    const int satrtAddr = transcation->addr->startAddr;
+    int coilNum = transcation->addr->coilNum;
 
-    uint8_t dest[1024];
+    uint8_t dest[coilNum*sizeof(uint16_t)];
 
     uint16_t * dest16 = (uint16_t *) dest;
 
-    memset( dest, 0, 1024 );
+    memset( dest, 0, sizeof( dest ) );
 
     int ret = -1;
     bool is16Bit = false;
     bool writeAccess = false;
-    const QString dataType = "1111";
+    //const QString dataType = "1111";
 
+    modbus_set_slave( m_modbus, slaveId );
 
-    qDebug()<<"0"<<endl;
-    modbus_set_slave( m_modbus, slave );
-    qDebug()<<"1"<<endl;
     switch( func )
     {
-
-    qDebug()<<func<<endl;
-    case 1:
-        ret = modbus_read_bits( m_modbus, addr, num, dest );
-        break;
     case 2:
-        ret = modbus_read_input_bits( m_modbus, addr, num, dest );
+        ret = modbus_read_input_bits( m_modbus, satrtAddr, coilNum, dest );
         break;
     case 3:
-        ret = modbus_read_registers( m_modbus, addr, num, dest16 );
+        ret = modbus_read_registers( m_modbus, satrtAddr, coilNum, dest16 );
         is16Bit = true;
         break;
     case 4:
-        ret = modbus_read_input_registers( m_modbus, addr, num, dest16 );
+        ret = modbus_read_input_registers( m_modbus, satrtAddr, coilNum, dest16 );
         is16Bit = true;
         break;
-        /*case MODBUS_FC_WRITE_SINGLE_COIL:
-            ret = modbus_write_bit( m_modbus, addr,
-                    ui->regTable->item( 0, DataColumn )->
-                        text().toInt(0, 0) ? 1 : 0 );
-            writeAccess = true;
-            num = 1;
-            break;
-        case MODBUS_FC_WRITE_SINGLE_REGISTER:
-            ret = modbus_write_register( m_modbus, addr,
-                    ui->regTable->item( 0, DataColumn )->
-                        text().toInt(0, 0) );
-            writeAccess = true;
-            num = 1;
-            break;
+    case 6:
+        //        ret = modbus_write_register( m_modbus, addr,
+        //                    ui->regTable->item( 0, DataColumn )->
+        //                        text().toInt(0, 0) );
+        //            writeAccess = true;
+        //            num = 1;
+        break;
+    case 16:
+        //        int modbus_write_registers(modbus_t *'ctx', int 'addr', int 'nb', const uint16_t *'src');*
+        //                    ui->regTable->item( 0, DataColumn )->
+        //                        text().toInt(0, 0) );
+        //            writeAccess = true;
+        //            num = 1;
+        break;
 
-        case MODBUS_FC_WRITE_MULTIPLE_COILS:
-        {
-            uint8_t * data = new uint8_t[num];
-            for( int i = 0; i < num; ++i )
-            {
-                data[i] = ui->regTable->item( i, DataColumn )->
-                                text().toInt(0, 0);
-            }
-            ret = modbus_write_bits( m_modbus, addr, num, data );
-            delete[] data;
-            writeAccess = true;
-            break;
-        }
-        case MODBUS_FC_WRITE_MULTIPLE_REGISTERS:
-        {
-            uint16_t * data = new uint16_t[num];
-            for( int i = 0; i < num; ++i )
-            {
-                data[i] = ui->regTable->item( i, DataColumn )->
-                                text().toInt(0, 0);
-            }
-            ret = modbus_write_registers( m_modbus, addr, num, data );
-            delete[] data;
-            writeAccess = true;
-            break;
-        }
-        */
     default:
         break;
     }
 
     qDebug()<<"ret:"<<ret<<endl;
-    if( ret == num  )
+    if( ret == coilNum  )
     {
         if( writeAccess )
         {
             qDebug()<<"Values successfully sent"<<endl;
+
+            transcation->returnCode=1;
+            transcation->returnData="";
         }
         else
         {
             qDebug()<<"here:"<<endl;
             bool b_hex = true;
-            QString qs_num;
+            QString qsCount="";
 
-            for( int i = 0; i < num; ++i )
+
+            for( int i = 0; i < coilNum; ++i )
             {
                 int data = is16Bit ? dest16[i] : dest[i];
-
+                QString qs_num="";
                 qs_num.sprintf( b_hex ? "0x%04x" : "%d", data);
-
-                qDebug()<<"dt:"<<dataType<<endl;
-                qDebug()<<"addr:"<<QString::number( addr+i )<<endl;
+                qDebug()<<"addr:"<<QString::number( satrtAddr+i )<<endl;
                 qDebug()<<"data:"<<qs_num<<endl;
+
+                qsCount+=qs_num+"#";
             }
+
+            transcation->returnCode=1;
+            transcation->returnData=qsCount;
         }
     }
     else
@@ -157,12 +179,11 @@ void ModbusRequestThread::sendModbusRequest(){
 
                 qDebug()<<"I/O error: did not receive any data from slave."<<endl;
 
+
             }
             else
             {
                 qDebug()<<tr( "Slave threw exception \"%1\" or function not implemented." ).arg( modbus_strerror( errno ) )<<endl;
-
-
             }
         }
         else
@@ -170,8 +191,12 @@ void ModbusRequestThread::sendModbusRequest(){
             qDebug()<<"Protocol error:Number of registers returned does not match number of registers requested!"<<endl;
 
         }
+
+        transcation->returnCode=-1;
+        transcation->returnData="";
     }
 
+    emit transcationDone(transcation);
 
 }
 
@@ -179,19 +204,30 @@ void ModbusRequestThread::sendModbusRequest(){
 
 void ModbusRequestThread::run(){
 
-    while(flag){
+    forever{
 
-        sendModbusRequest();
+        QMutexLocker locker(&mutex);
 
-        this->sleep(this->sleepTime);
+        if(this->transcations.isEmpty()){
+            qDebug()<<"wait for transtation..."<<endl;
+            this->transcationAdded.wait(&mutex);
+        }
+
+        if(this->stopFlag){
+            break;
+        }
+
+
+        Transcation*trans=this->transcations.dequeue();
+
+        qDebug()<<"get a transation:"<<trans->addr->slaveId<<endl;
+
+        sendModbusRequest(trans);
+
+        emit transcationDone(trans);
+
+        //this->msleep(this->sleepTime);
 
     }
-}
-
-
-void ModbusRequestThread::stop(){
-
-    this->flag=false;
-
 }
 

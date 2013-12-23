@@ -81,9 +81,6 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
     switch (labelName) {
     case 0:
         switch(status){
-        case 0:
-            this->lLightLabel->setPixmap(QPixmap(QString::fromUtf8(":/green.png")));
-            break;
         case 1:
             this->lLightLabel->setPixmap(QPixmap(QString::fromUtf8(":/yellow.png")));
             break;
@@ -91,6 +88,7 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
             this->lLightLabel->setPixmap(QPixmap(QString::fromUtf8(":/red.png")));
             break;
         default:
+            this->lLightLabel->setPixmap(QPixmap(QString::fromUtf8(":/green.png")));
             break;
         }
         break;
@@ -100,7 +98,7 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
         break;
     case  2:
 
-        if(status==1){
+        if(status==0){
 
             this->lOnOrOffLabel->setText(lOnOrOffLabelName+lOnOrOffLabelValue.split("/").at(1));
             lOnOrOffLabel->setStyleSheet("color:#f40");
@@ -112,7 +110,7 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
 
         break;
     case  3:
-        if(status==1){
+        if(status==0){
             lWorkOrBreakLabel->setText(lWorkOrBreakLabelName+lWorkOrBreakLabelValue.split("/").at(1));
             lWorkOrBreakLabel->setStyleSheet("color:#f80");
         }else{
@@ -122,12 +120,12 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
         }
         break;
     case  4:
-        if(status==1){
+        if(status==2){
             lWaringLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(1));
             lWaringLabel->setStyleSheet("color:yellow");
 
 
-        }else if(status==2){
+        }else if(status==3){
             lWaringLabel->setStyleSheet("color:red");
             lWaringLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(2));
 

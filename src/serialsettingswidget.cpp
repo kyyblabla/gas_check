@@ -17,12 +17,12 @@ SerialSettingsWidget::SerialSettingsWidget(QWidget *parent) :
     bool check=Config::serialinterfaceActive==1;
 
     ui->checkBox->setChecked(check);
-
     if(check){
-        setOptions();
+        setupModbusPort();
     }
 
     enableGuiItems(check);
+
 }
 
 SerialSettingsWidget::~SerialSettingsWidget()
@@ -32,6 +32,8 @@ SerialSettingsWidget::~SerialSettingsWidget()
 
 
 void SerialSettingsWidget::setOptions(){
+
+    disconnect(ui->serialPort,0,0,0 );
 
     int portIndex = 0;
     int i = 0;
@@ -54,7 +56,16 @@ void SerialSettingsWidget::setOptions(){
     ui->stopBits->setCurrentIndex( ui->stopBits->findText( QString::number(Config::serialStopbits )) );
     ui->parity->setCurrentIndex( ui->parity->findText(Config::serialParity ) );
 
-    bindOrDisbind(true);
+    connect( ui->serialPort, SIGNAL( currentIndexChanged( int ) ),
+             this, SLOT( changeSerialPort( int ) ) );
+    connect( ui->baud, SIGNAL( currentIndexChanged( int ) ),
+             this, SLOT( changeSerialPort( int ) ) );
+    connect( ui->dataBits, SIGNAL( currentIndexChanged( int ) ),
+             this, SLOT( changeSerialPort( int ) ) );
+    connect( ui->stopBits, SIGNAL( currentIndexChanged( int ) ),
+             this, SLOT( changeSerialPort( int ) ) );
+    connect( ui->parity, SIGNAL( currentIndexChanged( int ) ),
+             this, SLOT( changeSerialPort( int ) ) );
 
 }
 
@@ -67,27 +78,6 @@ int SerialSettingsWidget::setupModbusPort()
 }
 
 
-void SerialSettingsWidget::bindOrDisbind(bool bind){
-
-    if(bind){
-
-        connect( ui->serialPort, SIGNAL( currentIndexChanged( int ) ),
-                 this, SLOT( changeSerialPort( int ) ) );
-        connect( ui->baud, SIGNAL( currentIndexChanged( int ) ),
-                 this, SLOT( changeSerialPort( int ) ) );
-        connect( ui->dataBits, SIGNAL( currentIndexChanged( int ) ),
-                 this, SLOT( changeSerialPort( int ) ) );
-        connect( ui->stopBits, SIGNAL( currentIndexChanged( int ) ),
-                 this, SLOT( changeSerialPort( int ) ) );
-        connect( ui->parity, SIGNAL( currentIndexChanged( int ) ),
-                 this, SLOT( changeSerialPort( int ) ) );
-    }else{
-
-        disconnect(ui->serialPort,0,0,0 );
-    }
-
-}
-
 void SerialSettingsWidget::releaseSerialModbus()
 {
     if( ModbusRequestThread::m_modbus )
@@ -96,15 +86,13 @@ void SerialSettingsWidget::releaseSerialModbus()
         modbus_free( ModbusRequestThread::m_modbus );
         ModbusRequestThread::m_modbus = NULL;
     }
-
-    bindOrDisbind(false);
 }
 
 void SerialSettingsWidget::changeModbusInterface(const QString& port, char parity)
 {
     releaseSerialModbus();
 
-
+    qDebug()<<port.toAscii().constData();
     ModbusRequestThread::m_modbus = modbus_new_rtu( port.toAscii().constData(),
                                                     ui->baud->currentText().toInt(),
                                                     parity,
@@ -134,11 +122,7 @@ void SerialSettingsWidget::changeSerialPort( int )
     QList<QextPortInfo> ports = QextSerialEnumerator::getPorts();
     if( !ports.isEmpty() )
     {
-        Config::updateConfig("serialSetting/serialinterface",ports[iface].friendName);
-        Config::updateConfig("serialSetting/serialBaudRate",ui->baud->currentText());
-        Config::updateConfig("serialSetting/serialDatabits",ui->dataBits->currentText());
-        Config::updateConfig("serialSetting/serialStopbits",ui->stopBits->currentText());
-        Config::updateConfig("serialSetting/serialParity",ui->parity->currentText());
+
 
 #ifdef Q_OS_WIN32
         QString port = ports[iface].portName;
@@ -152,6 +136,13 @@ void SerialSettingsWidget::changeSerialPort( int )
 #else
         const QString port = ports[iface].physName;
 #endif
+
+
+        Config::updateConfig("serialSetting/serialinterface",port);
+        Config::updateConfig("serialSetting/serialBaudRate",ui->baud->currentText());
+        Config::updateConfig("serialSetting/serialDatabits",ui->dataBits->currentText());
+        Config::updateConfig("serialSetting/serialStopbits",ui->stopBits->currentText());
+        Config::updateConfig("serialSetting/serialParity",ui->parity->currentText());
 
         char parity;
         switch( ui->parity->currentIndex() )

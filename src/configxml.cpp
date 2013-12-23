@@ -51,6 +51,7 @@ void ConfigXml::init(){
         {
             Addr*addr=new Addr;
 
+            addr->index= ConfigXml::addrs.length();
             addr->id=addrNode.toElement().attribute("id").toInt();
 
             QDomNodeList attrlist = addrNode.toElement().childNodes();
@@ -63,7 +64,7 @@ void ConfigXml::init(){
                     QString tagName=attrNode.toElement().tagName();
                     if(tagName=="startAddr"){
 
-                        addr->addrStart=attrNode.toElement().text().toInt();
+                        addr->startAddr=attrNode.toElement().text().toInt();
 
                     }else if(tagName=="numCoils"){
 
@@ -125,7 +126,7 @@ void ConfigXml::update(){
         addr.setAttribute("id",pAddr->id);
 
         QDomElement startAddr=doc.createElement("startAddr");
-        startAddr.appendChild(doc.createTextNode(QString::number(pAddr->addrStart)));
+        startAddr.appendChild(doc.createTextNode(QString::number(pAddr->startAddr)));
 
         QDomElement slaveId=doc.createElement("slaveId");
         slaveId.appendChild(doc.createTextNode(QString::number(pAddr->slaveId)));

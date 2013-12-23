@@ -43,10 +43,10 @@ private slots:
      void quit();
      void playSound();
      void on_pushButton_2_clicked();
-
-     void startRequest(bool start);
-
      void on_pushButton_3_clicked();
+
+     void transcationIsDone(Transcation *trans);
+     void createTranstration();
 
 private:
     Ui::MainForm *ui;
@@ -76,7 +76,6 @@ private:
 
     //crate lin status pic
     void createLinkStatusPic();
-
     void createEquipments();
 
 
@@ -92,9 +91,17 @@ private:
 
     void chageMenuLabelBack(bool top);
     QTimer *playTimer;
+    QTimer *transcationCreate;
     bool isPlay;
 
     ModbusRequestThread reqThread;
+
+
+    void changeEquipmentStatus(int index, int labelIndex, int data, QString info);
+
+    int transitionIndex;
+    int transtionTimeOut;
+
 
 };
 

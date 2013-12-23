@@ -5,12 +5,14 @@
 #include <QList>
 
 class Addr{
+
 public:
     int id;
     int slaveId;
-    int addrStart;
+    int startAddr;
     int coilNum;
     int location;
+    int index;
     QString num;
 };
 
