@@ -69,7 +69,7 @@ MainForm::MainForm(QWidget *parent) :
     connect(&reqThread,SIGNAL(transcationDone(Transcation*)),this,SLOT(transcationIsDone(Transcation*)));
 
     transitionIndex=0;
-    transtionTimeOut=2000;
+    transtionTimeOut=1000;
 
 }
 
@@ -89,27 +89,40 @@ void MainForm::createTranstration(){
     transitionIndex= (transitionIndex+1)<ConfigXml::addrs.length()?transitionIndex+1:0;
 
 
+
+
+
 }
 
 void MainForm::transcationIsDone(Transcation*trans){
 
+    qDebug()<<"==============================="<<endl;
+
     int funCode=trans->funCode;
     int index=trans->addr->index;
+
+    qDebug()<<"thread message index:"<<index<<endl;
 
     switch (funCode) {
     case 2:
 
-        qDebug()<<"thread message:"<<trans->returnCode<<endl;
+        qDebug()<<"thread message from:"<<trans->addr->slaveId<<endl;
         qDebug()<<"thread message data:"<<trans->returnData<<endl;
+        qDebug()<<"thread message returnCode:"<<trans->returnCode<<endl;
 
         if(trans->returnCode>0){
+
+            changeEquipmentStatus(index,2,0,"");
 
             QStringList list=trans->returnData.split("#");
 
             int fault=list.at(7).toInt()==1?1:0;
-            int a1=list.at(5).toInt()==1?1:0;
+
+            int a1=list.at(5).toInt()==1?2:0;
             int a2=list.at(4).toInt()==1?2:0;
-            int a3=list.at(3).toInt()==1?2:0;
+            int a3=list.at(3).toInt()==1?3:0;
+
+            qDebug()<<"a1,a2,a3:"<<a1<<","<<a2<<","<<a3<<endl;
 
             if(fault==1){
 
@@ -121,35 +134,37 @@ void MainForm::transcationIsDone(Transcation*trans){
 
             }
 
-            int waringLevel=(a3>a2)?(a3>a1?a3:a1):(a2>a1?a2:a1);
-
+            int waringLevel=((a3>a2)?(a3>a1?a3:(a1>a2?a1:a3)):(a2>a1?a2:a1>a3?a1:a2));
 
             int  lighhtlevel= (waringLevel>0)?waringLevel:fault;
 
-            changeEquipmentStatus(index,4,waringLevel,"");
+            qDebug()<<"lighhtlevel:"<<waringLevel<<" "<<lighhtlevel<<endl;
+
+
+            changeEquipmentStatus(index,4,waringLevel-1,"");
 
             changeEquipmentStatus(index,0,lighhtlevel,"");
 
 
         }else{  //fult to link
 
-            changeEquipmentStatus(index,2,0,"");
+            changeEquipmentStatus(index,2,1,"");
             changeEquipmentStatus(index,0,1,"");
 
         }
         break;
-//    case 3:
+        //    case 3:
 
-//        break;
-//    case 4:
+        //        break;
+        //    case 4:
 
-//        break;
-//    case 6:
+        //        break;
+        //    case 6:
 
-//        break;
-//    case 16:
+        //        break;
+        //    case 16:
 
-//        break;
+        //        break;
     default:
         break;
     }
@@ -569,7 +584,6 @@ void MainForm::on_pushButton_clicked()
     int  status=ui->norOrBreak->currentIndex();
     int  waring=ui->lowOrHigh->currentIndex();
 
-    qDebug()<<num<<" "<<on<<" "<<status<<" "<<waring<<endl;
 
     EquipmentWidget*e=equipmentsList.at(num);
 
@@ -579,9 +593,12 @@ void MainForm::on_pushButton_clicked()
 
     e->updateLabelInfo(4,waring,tr(""));
 
-    int waringLeve= waring>0?waring:(status>0? status : on );
+    int waringLeve= waring>0?(waring+1):(status>0||on>0?1:0);
 
     e->updateLabelInfo(0,waringLeve,tr(""));
+
+    qDebug()<<num<<" "<<on<<" "<<status<<" "<<waring<<" "<<waringLeve<<endl;
+
 
 }
 

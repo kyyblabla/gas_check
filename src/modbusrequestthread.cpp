@@ -144,7 +144,7 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
         }
         else
         {
-            qDebug()<<"here:"<<endl;
+           // qDebug()<<"here:"<<endl;
             bool b_hex = true;
             QString qsCount="";
 
@@ -153,9 +153,10 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
             {
                 int data = is16Bit ? dest16[i] : dest[i];
                 QString qs_num="";
-                qs_num.sprintf( b_hex ? "0x%04x" : "%d", data);
-                qDebug()<<"addr:"<<QString::number( satrtAddr+i )<<endl;
-                qDebug()<<"data:"<<qs_num<<endl;
+                qs_num=qs_num.sprintf("%d", data);
+
+               // qDebug()<<"addr:"<<QString::number( satrtAddr+i )<<endl;
+              //  qDebug()<<"data:"<<qs_num<<endl;
 
                 qsCount+=qs_num+"#";
             }
@@ -166,7 +167,7 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
     }
     else
     {
-        qDebug()<<"here2:"<<endl;
+       // qDebug()<<"here2:"<<endl;
         if( ret < 0 )
         {
             if(
@@ -220,7 +221,7 @@ void ModbusRequestThread::run(){
 
         Transcation*trans=this->transcations.dequeue();
 
-        qDebug()<<"get a transation:"<<trans->addr->slaveId<<endl;
+       // qDebug()<<"get a transation:"<<trans->addr->slaveId<<endl;
 
         sendModbusRequest(trans);
 

@@ -52,8 +52,6 @@ bool Config::initConfig(){
     Config::serialStopbits = settings.value("serialSetting/serialStopbits").toInt();
     Config::serialParity = settings.value("serialSetting/serialParity").toString();
 
-
-
     Config::SQL_CONNECTION_NAME="QMYSQL";
     Config::SQL_HOST_NAME="localhost";
     Config::SQL_DATEBASE_NAME="test";

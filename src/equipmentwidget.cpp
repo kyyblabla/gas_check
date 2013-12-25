@@ -85,6 +85,9 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
             this->lLightLabel->setPixmap(QPixmap(QString::fromUtf8(":/yellow.png")));
             break;
         case 2:
+            this->lLightLabel->setPixmap(QPixmap(QString::fromUtf8(":/orange.png")));
+            break;
+        case 3:
             this->lLightLabel->setPixmap(QPixmap(QString::fromUtf8(":/red.png")));
             break;
         default:
@@ -98,10 +101,11 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
         break;
     case  2:
 
-        if(status==0){
+        if(status==1){
 
             this->lOnOrOffLabel->setText(lOnOrOffLabelName+lOnOrOffLabelValue.split("/").at(1));
-            lOnOrOffLabel->setStyleSheet("color:#f40");
+            lOnOrOffLabel->setStyleSheet("color:yellow");
+
         }else{
 
             this->lOnOrOffLabel->setText(lOnOrOffLabelName+lOnOrOffLabelValue.split("/").at(0));
@@ -110,9 +114,9 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
 
         break;
     case  3:
-        if(status==0){
+        if(status==1){
             lWorkOrBreakLabel->setText(lWorkOrBreakLabelName+lWorkOrBreakLabelValue.split("/").at(1));
-            lWorkOrBreakLabel->setStyleSheet("color:#f80");
+            lWorkOrBreakLabel->setStyleSheet("color:yellow");
         }else{
 
             lWorkOrBreakLabel->setText(lWorkOrBreakLabelName+lWorkOrBreakLabelValue.split("/").at(0));
@@ -120,12 +124,11 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
         }
         break;
     case  4:
-        if(status==2){
+        if(status==1){
             lWaringLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(1));
-            lWaringLabel->setStyleSheet("color:yellow");
+            lWaringLabel->setStyleSheet("color:#f80");
 
-
-        }else if(status==3){
+        }else if(status==2){
             lWaringLabel->setStyleSheet("color:red");
             lWaringLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(2));
 

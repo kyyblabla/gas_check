@@ -13,5 +13,6 @@
         <file>top.png</file>
         <file>icofire.ico</file>
         <file>ala.wav</file>
+        <file>orange.png</file>
     </qresource>
 </RCC>

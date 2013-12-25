@@ -31,6 +31,8 @@ SerialSettingsWidget::~SerialSettingsWidget()
 }
 
 
+
+
 void SerialSettingsWidget::setOptions(){
 
     disconnect(ui->serialPort,0,0,0 );
