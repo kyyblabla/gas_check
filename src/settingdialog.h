@@ -26,23 +26,19 @@ private slots:
 
     void on_pushButton_3_clicked();
 
-    void on_pushButton_4_clicked();
-
-    void on_pushButton_6_clicked();
-
     void tableValueChange(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
     void on_pushButton_5_clicked();
 
-    void on_pushButton_2_clicked();
+    void on_checkBox_clicked(bool checked);
 
 private:
     Ui::SettingDialog *ui;
     QStandardItemModel *tableModel;
     void initTable();
     void  createConnects();
-
     void  changeTableValue();
+    void setBlockEnable(bool enable);
 };
 
 #endif // SETTINGDIALOG_H

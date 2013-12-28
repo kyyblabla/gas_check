@@ -7,6 +7,8 @@
 #include "qcustlabel.h"
 #include "equipmentwidget.h"
 #include "configxml.h"
+#include "gasviewform.h"
+
 
 #include "imodbus.h"
 #include "modbus.h"
@@ -25,6 +27,7 @@
 #include <QSound>
 #include <QTimer>
 #include <QDebug>
+#include <QGraphicsDropShadowEffect>
 
 
 MainForm::MainForm(QWidget *parent) :
@@ -65,26 +68,55 @@ MainForm::MainForm(QWidget *parent) :
     transcationCreate=new QTimer;
     connect(transcationCreate, SIGNAL(timeout()), this, SLOT(createTranstration()));
 
+    reqThread= new ModbusRequestThread;
     //transcationDone
-    connect(&reqThread,SIGNAL(transcationDone(Transcation*)),this,SLOT(transcationIsDone(Transcation*)));
+    connect(reqThread,SIGNAL(transcationDone(Transcation*)),this,SLOT(transcationIsDone(Transcation*)));
 
     transitionIndex=0;
-    transtionTimeOut=1000;
+
+
+    /*
+    MySerialPort::MySerialPort(const QString &name, const BaudRateType baudRate, const DataBitsType dataBits,
+                               const ParityType parity, const StopBitsType stopBits, const FlowType flowControl,
+                               ulong milliseconds)
+    {
+        initPrivateVariable();
+        setPortName(name);
+        setBaudRate(baudRate);
+        setDataBits(dataBits);
+        setParity(parity);
+        setStopBits(stopBits);
+        setFlowControl(flowControl);
+        setTimeout(milliseconds);
+    }*/
+
+
+    this->mySerialPort=new MySerialPort(Config::serialinterface,BAUD9600,DATA_8,PAR_ODD,STOP_1,FLOW_OFF,1000);
+
+    //    QGraphicsDropShadowEffect *shadow_effect = new QGraphicsDropShadowEffect(this);
+    //    shadow_effect->setOffset(0, 2);
+    //    shadow_effect->setColor(Qt::gray);
+    //    shadow_effect->setBlurRadius(0);
+    //    ui->widget_7->setGraphicsEffect(shadow_effect);
+    // network_group_box->setGraphicsEffect(shadow_effect);
 
 }
 
 void MainForm::createTranstration(){
 
     int index=transitionIndex%ConfigXml::addrs.length();
+
     if(index<0){
         index+=ConfigXml::addrs.length();
     }
 
     Transcation*t=new Transcation;
+
     t->addr=ConfigXml::addrs.at(index);
+
     t->funCode=2;
 
-    this->reqThread.addTranscation(t);
+    this->reqThread->addTranscation(t);
 
     transitionIndex= (transitionIndex+1)<ConfigXml::addrs.length()?transitionIndex+1:0;
 
@@ -128,6 +160,8 @@ void MainForm::transcationIsDone(Transcation*trans){
 
                 changeEquipmentStatus(index,3,1,"");
 
+                this->addLogInfo(tr("break down!"),index,1);
+
             }else{
 
                 changeEquipmentStatus(index,3,0,"");
@@ -135,6 +169,15 @@ void MainForm::transcationIsDone(Transcation*trans){
             }
 
             int waringLevel=((a3>a2)?(a3>a1?a3:(a1>a2?a1:a3)):(a2>a1?a2:a1>a3?a1:a2));
+
+            if(waringLevel==3){
+
+                this->addLogInfo(tr("high alarm!"),index,3);
+
+            }else if(waringLevel==2){
+                this->addLogInfo(tr("low alarm!"),index,2);
+            }
+
 
             int  lighhtlevel= (waringLevel>0)?waringLevel:fault;
 
@@ -148,6 +191,7 @@ void MainForm::transcationIsDone(Transcation*trans){
 
         }else{  //fult to link
 
+            this->addLogInfo(tr("not work!"),index,1);
             changeEquipmentStatus(index,2,1,"");
             changeEquipmentStatus(index,0,1,"");
 
@@ -184,6 +228,8 @@ void MainForm::changeEquipmentStatus(int index,int labelIndex,int data,QString i
 
 MainForm::~MainForm()
 {
+
+    qDebug()<<"~MainForm"<<endl;
     delete ui;
     delete contentMenu;
     delete exitAction;
@@ -198,13 +244,16 @@ MainForm::~MainForm()
     delete playTimer;
     delete transcationCreate;
 
+    delete reqThread;
+    delete mySerialPort;
+
 }
 
 
 void MainForm::initLabels(){
     ui->label->setText(Config::MAIN_TITLE);
-    ui->label_12->setText(Config::AREA_LABEL.split("#").at(0).split("|").at(0));
-    ui->label_13->setText(Config::AREA_LABEL.split("#").at(1).split("|").at(0));
+    ui->label_12->setText(Config::AREA_LABEL.split("#").at(0));
+    ui->label_13->setText(Config::AREA_LABEL.split("#").at(1));
 }
 
 /**
@@ -216,8 +265,8 @@ void MainForm::initEventerFilter(){
     ui->label_11->installEventFilter(this);
     ui->label_15->installEventFilter(this);
 
-    ui->label_2->installEventFilter(this);
-    ui->label_3->installEventFilter(this);
+    // ui->label_2->installEventFilter(this);
+    // ui->label_3->installEventFilter(this);
 
     ui->label_14->installEventFilter(this);
 }
@@ -326,24 +375,19 @@ void MainForm::createEquipments(){
 void MainForm::createLinkStatusPic(){
 
 
-
     QCustLabel *lab1=new QCustLabel;
-
-    lab1->setDesInfo(tr("MainDevice"));
+    lab1->setDesInfo(Config::LINKSTATUS_LABEL.split("#").at(0));
     lab1->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
+    lab1->setLabelType(QCustLabel::MainDevice);
+
 
     QCustLabel*lab2=new QCustLabel;
-
-
-
-    lab2->setDesInfo(tr(" SubI"));
+    lab2->setDesInfo(Config::LINKSTATUS_LABEL.split("#").at(1));
     lab2->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
 
 
     QCustLabel*lab3=new QCustLabel;
-
-
-    lab3->setDesInfo(tr(" SubII"));
+    lab3->setDesInfo(Config::LINKSTATUS_LABEL.split("#").at(2));
     lab3->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
 
 
@@ -358,8 +402,13 @@ void MainForm::createLinkStatusPic(){
     QWidget *newWidget=new QWidget;
 
     newWidget->setLayout(layout);
+    //newWidget->setStyleSheet("*{border-style:solid;border-color:#000;border-width:1px}");
+
 
     ui->widget_2->layout()->addWidget(newWidget);
+
+
+
 
 
 }
@@ -421,7 +470,7 @@ bool MainForm::eventFilter(QObject *obj, QEvent *event){
 
             return true;
         }
-    }else if(obj==ui->label_2){
+    }/*else if(obj==ui->label_2){
 
         if (event->type() == QEvent::MouseButtonPress) {
 
@@ -435,7 +484,7 @@ bool MainForm::eventFilter(QObject *obj, QEvent *event){
             this->showMinimized();
             return true;
         }
-    }else if(obj==ui->label_14){
+    }*/else if(obj==ui->label_14){
 
         if (event->type() == QEvent::MouseButtonPress) {
 
@@ -579,25 +628,54 @@ void MainForm::closeEvent(QCloseEvent *event){
 
 void MainForm::on_pushButton_clicked()
 {
-    int num=ui->lightNum->currentIndex();
-    int  on=ui->onOrOff->currentIndex();
-    int  status=ui->norOrBreak->currentIndex();
-    int  waring=ui->lowOrHigh->currentIndex();
+//    int num=ui->lightNum->currentIndex();
+//    int  on=ui->onOrOff->currentIndex();
+//    int  status=ui->norOrBreak->currentIndex();
+//    int  waring=ui->lowOrHigh->currentIndex();
 
 
-    EquipmentWidget*e=equipmentsList.at(num);
+//    EquipmentWidget*e=equipmentsList.at(num);
 
-    e->updateLabelInfo(2,on,tr(""));
+//    e->updateLabelInfo(2,on,tr(""));
 
-    e->updateLabelInfo(3,status,tr(""));
+//    e->updateLabelInfo(3,status,tr(""));
 
-    e->updateLabelInfo(4,waring,tr(""));
+//    e->updateLabelInfo(4,waring,tr(""));
 
-    int waringLeve= waring>0?(waring+1):(status>0||on>0?1:0);
+//    int waringLeve= waring>0?(waring+1):(status>0||on>0?1:0);
 
-    e->updateLabelInfo(0,waringLeve,tr(""));
+//    e->updateLabelInfo(0,waringLeve,tr(""));
 
-    qDebug()<<num<<" "<<on<<" "<<status<<" "<<waring<<" "<<waringLeve<<endl;
+//    qDebug()<<num<<" "<<on<<" "<<status<<" "<<waring<<" "<<waringLeve<<endl;
+
+
+
+    MySerialPort *s1=new MySerialPort(Config::serialinterface,BAUD9600,DATA_8,PAR_ODD,STOP_1,FLOW_OFF,1000);
+
+    MySerialPort *s2=new MySerialPort(Config::serialinterface,BAUD9600,DATA_8,PAR_ODD,STOP_1,FLOW_OFF,1000);
+
+    bool op= s1->open();
+
+    qDebug()<<"open seriport1:"<<op<<endl;
+
+    op=s2->open();
+
+    qDebug()<<"open seriport2:"<<op<<endl;
+
+//    if(mySerialPort->isOpen()){
+
+//        mySerialPort->close();
+
+//         qDebug()<<"close seriport------"<<endl;
+//    }else{
+
+//        mySerialPort->open();
+//         qDebug()<<"open seriport:"<<op<<endl;
+//    }
+
+
+
+
 
 
 }
@@ -641,10 +719,32 @@ void MainForm::on_pushButton_2_clicked()
  */
 void MainForm::on_pushButton_3_clicked()
 {
-    if(reqThread.isRunning()){
+    if(reqThread->isRunning()){
         return;
     }
 
-    this->transcationCreate->start(this->transtionTimeOut);
-    reqThread.start();
+    this->transcationCreate->start(Config::sleepTime);
+    reqThread->start();
+}
+
+void MainForm::addLogInfo(QString info,int index,int level){
+
+
+    Addr*addr=ConfigXml::addrs.at(index);
+
+    QString loca;
+
+    loca=(addr->location==1)?Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
+
+    info="<span style='color:"+Config::colorLevel.split("|").at(level)+"'>"+info+"</span>";
+
+    ui->textEdit->append(loca+addr->num+":"+info);
+
+
+}
+
+void MainForm::on_pushButton_4_clicked()
+{
+    GasViewForm gas;
+    gas.exec();
 }

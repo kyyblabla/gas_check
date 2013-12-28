@@ -21,7 +21,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget#MainForm{
-    background-color:#fff;
+    background-color:#333;
 	 
 }
 *{
@@ -40,7 +40,10 @@
     <widget class="QWidget" name="widget_12" native="true">
      <property name="styleSheet">
       <string notr="true">QWidget#widget_12{
-    background-color:#fff;
+    background-color:#646464;
+	
+	background-color: qlineargradient(spread:pad, x1:0.517, y1:0, x2:0.54, y2:1, stop:0 rgba(40, 40, 40, 255), stop:1 rgba(82, 82, 82, 255));
+	background-color: qlineargradient(spread:pad, x1:0.545, y1:1, x2:0.484, y2:0, stop:0 rgba(40, 40, 40, 255), stop:1 rgba(150, 150, 150, 255));
 	border-width:1px;
     border-color:#ccc;
     border-style:solid;
@@ -70,8 +73,9 @@
         </property>
         <property name="styleSheet">
          <string notr="true">QWidget#widget_7{
-  background-color:#3790CE;
+  background-color:#15A0F5;
   border-bottom:1px solid #ccc;
+  
 }
 
 QWidget#widget_7 *{
@@ -92,7 +96,7 @@ QWidget#widget_7 QLabel#label_11:hover{
 	 
 }</string>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0,0,0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0">
          <property name="margin">
           <number>9</number>
          </property>
@@ -115,6 +119,9 @@ QWidget#widget_7 QLabel#label_11:hover{
            <property name="text">
             <string>Gas Minotor</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
           </widget>
          </item>
          <item>
@@ -130,26 +137,6 @@ QWidget#widget_7 QLabel#label_11:hover{
            </property>
            <property name="pixmap">
             <pixmap resource="../rs/myrs.qrc">:/top.png</pixmap>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="../rs/myrs.qrc">:/min.png</pixmap>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="../rs/myrs.qrc">:/close.png</pixmap>
            </property>
           </widget>
          </item>
@@ -185,12 +172,12 @@ QWidget#widget_7 QLabel#label_11:hover{
            <widget class="QWidget" name="widget" native="true">
             <property name="styleSheet">
              <string notr="true">QWidget#widget QLabel{
-    color:#707070;
+    color:#FFF;
 }
 
 QWidget#widget_9{
 	color:#fff;
-    background-color:#CCC;
+    background-color:none;
 }
 
 QWidget#widget_9 &gt; QLabel{
@@ -307,7 +294,7 @@ QWidget#widget_5{
               <widget class="QWidget" name="widget_10" native="true">
                <property name="styleSheet">
                 <string notr="true">QWidget#widget_10{
-	background-color:  #FAFAFA;
+	background-color:   
 }
 QWidget#widget_10 .QLabel{
   color:#fff;
@@ -325,7 +312,7 @@ QWidget#widget_10 .QLabel:hover{
 }
 </string>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0,0,0,0,0,0,0,0,0">
+               <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0,0,0,0,0,0">
                 <property name="spacing">
                  <number>10</number>
                 </property>
@@ -349,6 +336,20 @@ QWidget#widget_10 .QLabel:hover{
                  </spacer>
                 </item>
                 <item>
+                 <widget class="QPushButton" name="pushButton">
+                  <property name="text">
+                   <string>TestSlave</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_4">
+                  <property name="text">
+                   <string>ShowPan</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QPushButton" name="pushButton_3">
                   <property name="text">
                    <string>run</string>
@@ -359,84 +360,6 @@ QWidget#widget_10 .QLabel:hover{
                  <widget class="QPushButton" name="pushButton_2">
                   <property name="text">
                    <string>paly</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="lightNum">
-                  <item>
-                   <property name="text">
-                    <string>1</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>2</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>3</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>#1</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="onOrOff">
-                  <item>
-                   <property name="text">
-                    <string>工作</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>关闭</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="norOrBreak">
-                  <item>
-                   <property name="text">
-                    <string>正常</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>故障</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="lowOrHigh">
-                  <item>
-                   <property name="text">
-                    <string>正常</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>低</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
-                    <string>高</string>
-                   </property>
-                  </item>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton">
-                  <property name="text">
-                   <string>确定</string>
                   </property>
                  </widget>
                 </item>
@@ -497,7 +420,7 @@ QWidget#widget_10 .QLabel:hover{
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QTextEdit#textEdit{
-	 
+	background-color: qlineargradient(spread:pad, x1:0.489, y1:0, x2:0.488, y2:1, stop:0 rgba(242, 242, 242, 255), stop:1 rgba(255, 255, 255, 255));
 	padding:0px;
 }</string>
                   </property>
@@ -506,8 +429,7 @@ QWidget#widget_10 .QLabel:hover{
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'微软雅黑'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'SimSun'; color:#000000;&quot;&gt;[2013-12-01 12:12:11]&lt;/span&gt;&lt;span style=&quot; font-family:'SimSun';&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'SimSun'; color:#00ff00;&quot;&gt;一号机：单位物体:数量/单位&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'SimSun'; color:#000000;&quot;&gt;[2013-12-01 12:12:12]&lt;/span&gt;&lt;span style=&quot; font-family:'SimSun';&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'SimSun'; color:#00ff00;&quot;&gt;一号机：&lt;/span&gt;&lt;span style=&quot; font-family:'SimSun'; color:#ff0000;&quot;&gt;单位物体:数量/单位&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                  </widget>
                 </item>
@@ -535,12 +457,12 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="styleSheet">
            <string notr="true">QWidget#widget_4{
-   background-color:#05a1c7;
+   background-color:none;
 }
 
 QLabel#label_9,QLabel#label_10{
      color:#fff;
-	  background-color:#ACE834;
+	  background-color:#ACE834;;
      font-size:13pt;
 }
 

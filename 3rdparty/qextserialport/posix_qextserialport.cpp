@@ -1,4 +1,4 @@
-
+﻿
 
 #include <fcntl.h>
 #include <stdio.h>
@@ -677,6 +677,7 @@ The port is also configured to the current settings, as stored in the Settings s
 bool QextSerialPort::open(OpenMode mode)
 {
     QMutexLocker lock(mutex);
+
     if (mode == QIODevice::NotOpen)
         return isOpen();
     if (!isOpen()) {

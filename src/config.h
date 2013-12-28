@@ -31,6 +31,10 @@ public:
     static int serialDatabits;
     static int serialStopbits;
     static QString serialParity;
+
+    static QString colorLevel;
+    static int sleepTime;
+    static bool isSlave;
 signals:
 
 public slots:

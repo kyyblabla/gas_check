@@ -14,5 +14,8 @@
         <file>icofire.ico</file>
         <file>ala.wav</file>
         <file>orange.png</file>
+        <file>pan.png</file>
+        <file>zhen.png</file>
+        <file>test.gif</file>
     </qresource>
 </RCC>

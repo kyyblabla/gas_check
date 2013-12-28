@@ -23,7 +23,7 @@ void EquipmentWidget::initWidget(){
     QStringList list= Config::EQUIPMENT_LABEL.split("#");
 
     if(list.length()<4){
-        list=tr("nd:|dp#onOrOff:|on/off#workOrBreak:|work/break#alarm:|no/low/high").split("#");
+        list=QString("nd:|dp#onOrOff:|on/off#workOrBreak:|work/break#alarm:|no/low/high").split("#");
     }
 
     lNongDuLabelName=list.at(0).split("|").at(0);
@@ -52,19 +52,19 @@ void EquipmentWidget::setLabels(){
     lLightLabel->setPixmap(QPixmap(QString::fromUtf8(":/green.png")));
 
     this->lNongDuLabel=new QLabel;
-    lNongDuLabel->setStyleSheet("color:green");
+    lNongDuLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(0));
     lNongDuLabel->setText(lNongDuLabelName+"0"+lNongDuLabelValue);
 
     this->lOnOrOffLabel=new QLabel;
-    lOnOrOffLabel->setStyleSheet("color:green");
+    lOnOrOffLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(0));
     lOnOrOffLabel->setText(lOnOrOffLabelName+lOnOrOffLabelValue.split("/").at(0));
 
     this->lWorkOrBreakLabel=new QLabel;
-    lWorkOrBreakLabel->setStyleSheet("color:green");
+    lWorkOrBreakLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(0));
     lWorkOrBreakLabel->setText(lWorkOrBreakLabelName+lWorkOrBreakLabelValue.split("/").at(0));
 
     this->lWaringLabel=new QLabel;
-    lWaringLabel->setStyleSheet("color:green");
+    lWaringLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(0));
     lWaringLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(0));
 
     this->layout()->addWidget(lLightLabel);
@@ -97,43 +97,44 @@ void EquipmentWidget::updateLabelInfo(int labelName, int status, QString info){
         break;
     case  1:
         this->lNongDuLabel->setText(lNongDuLabelName+info+lNongDuLabelValue);
-        lNongDuLabel->setStyleSheet("color:green");
+        lNongDuLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(0));
         break;
     case  2:
 
         if(status==1){
 
             this->lOnOrOffLabel->setText(lOnOrOffLabelName+lOnOrOffLabelValue.split("/").at(1));
-            lOnOrOffLabel->setStyleSheet("color:yellow");
+            lOnOrOffLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(1));
 
         }else{
 
             this->lOnOrOffLabel->setText(lOnOrOffLabelName+lOnOrOffLabelValue.split("/").at(0));
-            lOnOrOffLabel->setStyleSheet("color:green");
+            lOnOrOffLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(0));
         }
 
         break;
     case  3:
         if(status==1){
             lWorkOrBreakLabel->setText(lWorkOrBreakLabelName+lWorkOrBreakLabelValue.split("/").at(1));
-            lWorkOrBreakLabel->setStyleSheet("color:yellow");
+            lWorkOrBreakLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(1));
         }else{
 
             lWorkOrBreakLabel->setText(lWorkOrBreakLabelName+lWorkOrBreakLabelValue.split("/").at(0));
-            lWorkOrBreakLabel->setStyleSheet("color:green");
+            lWorkOrBreakLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(0));
         }
         break;
     case  4:
         if(status==1){
+
+            lWaringLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(2));
             lWaringLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(1));
-            lWaringLabel->setStyleSheet("color:#f80");
 
         }else if(status==2){
-            lWaringLabel->setStyleSheet("color:red");
+            lWaringLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(3));
             lWaringLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(2));
 
         }else{
-            lWaringLabel->setStyleSheet("color:green");
+            lWaringLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(0));
             lWaringLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(0));
         }
         break;

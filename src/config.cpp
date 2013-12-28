@@ -21,6 +21,11 @@ int Config::serialBaudRate;
 int Config::serialDatabits;
 int Config::serialStopbits;
 QString Config::serialParity;
+QString Config::colorLevel;
+
+int Config::sleepTime;
+
+bool Config::isSlave;
 
 Config::Config(QObject *parent) :
     QObject(parent)
@@ -52,6 +57,14 @@ bool Config::initConfig(){
     Config::serialStopbits = settings.value("serialSetting/serialStopbits").toInt();
     Config::serialParity = settings.value("serialSetting/serialParity").toString();
 
+    Config::colorLevel=settings.value("color/colorLevel").toString();
+
+    Config::sleepTime=settings.value("SystemThread/sleepTime").toInt();
+
+    Config::isSlave=settings.value("model/isSlave").toBool();
+
+    qDebug()<<Config::colorLevel<<endl;
+
     Config::SQL_CONNECTION_NAME="QMYSQL";
     Config::SQL_HOST_NAME="localhost";
     Config::SQL_DATEBASE_NAME="test";
@@ -66,6 +79,7 @@ bool Config::initConfig(){
 bool Config::updateConfig(QString name, QString value){
 
     QSettings settings("config.ini", QSettings::IniFormat);
+
     settings.setIniCodec(QTextCodec::codecForName("UTF-8")); //在此添加设置，即可读写ini文件中的中文
 
     settings.setValue(name,value);

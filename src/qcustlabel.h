@@ -1,8 +1,12 @@
 ﻿#ifndef QCUSTLABEL_H
 #define QCUSTLABEL_H
 
+
 #include <QLabel>
+
+
 class QPaintEvent;
+class QTimer;
 
 class QCustLabel : public QLabel
 {
@@ -10,9 +14,10 @@ class QCustLabel : public QLabel
 public:
     explicit QCustLabel(QWidget *parent = 0);
     void setDesInfo(QString desInfo);
+    ~QCustLabel();
 
     enum LabelType{
-        MianDevice,
+        MainDevice,
         SubI,
         SubII,
         No
@@ -31,6 +36,8 @@ protected:
 private:
      QString  desInfo;
      LabelType labelType;
+     QTimer*timer;
+     int timeCount;
 };
 
 #endif // QCUSTLABEL_H

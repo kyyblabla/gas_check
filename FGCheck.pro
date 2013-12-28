@@ -28,7 +28,13 @@ SOURCES +=  src/main.cpp\
             3rdparty/libmodbus/src/modbus-rtu.c \
             3rdparty/libmodbus/src/modbus-tcp.c \
             src/modbusrequestthread.cpp \
-            src/configxml.cpp
+            src/configxml.cpp \
+            src/gasviewform.cpp \
+            src/gasviewwidget.cpp \
+            src/myserialport.cpp \
+    src/myserialsettingswidget.cpp
+
+
 
 HEADERS  += src/mainform.h \
             src/settingdialog.h \
@@ -43,7 +49,13 @@ HEADERS  += src/mainform.h \
             3rdparty/qextserialport/qextserialport.h \
             3rdparty/qextserialport/qextserialenumerator.h \
             3rdparty/libmodbus/src/modbus.h \
-    src/configxml.h
+            src/configxml.h \
+            src/gasviewform.h \
+            src/gasviewwidget.h \
+            src/myserialport.h \
+    src/myserialsettingswidget.h
+
+
 
 INCLUDEPATH += 3rdparty/libmodbus \
                3rdparty/libmodbus/src \
@@ -67,7 +79,11 @@ win32 {
 FORMS    += form/mainform.ui \
             form/settingdialog.ui \
             form/logviewdialog.ui \
-            form/serialsettingswidget.ui
+            form/serialsettingswidget.ui \
+            form/gasviewform.ui \
+            form/gasviewwidget.ui \
+    src/myserialsettingswidget.ui
+
 
 RESOURCES += \
     rs/myrs.qrc

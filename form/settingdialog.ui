@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>405</width>
-    <height>320</height>
+    <width>632</width>
+    <height>455</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,15 +27,67 @@
       <attribute name="title">
        <string>Base Setting</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>devices list</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+        <widget class="QWidget" name="widget_4" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0">
+          <property name="margin">
+           <number>0</number>
+          </property>
           <item>
-           <widget class="QTableView" name="tableView"/>
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>devices list</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QTableView" name="tableView"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="title">
+             <string>Host/Slave Settig</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="checkBox">
+               <property name="text">
+                <string>Is Slave</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>address</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="spinBox">
+               <property name="maximum">
+                <number>255</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <spacer name="verticalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -94,35 +146,43 @@
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,0">
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="title">
-          <string>Serial Setting</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
+        <widget class="QWidget" name="widget" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <property name="margin">
+           <number>0</number>
+          </property>
           <item>
-           <widget class="SerialSettingsWidget" name="widget" native="true"/>
+           <widget class="QGroupBox" name="groupBox_4">
+            <property name="title">
+             <string>SerialPort Setting</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <item>
+              <widget class="SerialSettingsWidget" name="widget_6" native="true"/>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+           <widget class="QGroupBox" name="groupBox_5">
+            <property name="title">
+             <string>Slave Equipment Setting</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
+            <layout class="QVBoxLayout" name="verticalLayout_10">
+             <item>
+              <widget class="MySerialSettingsWidget" name="widget_2" native="true"/>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
        </item>
        <item>
         <widget class="QWidget" name="widget_5" native="true">
-         <layout class="QVBoxLayout" name="verticalLayout_4">
+         <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
-           <widget class="QPushButton" name="pushButton_4">
+           <widget class="QPushButton" name="pushButton_7">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -132,7 +192,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="pushButton_8">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -142,14 +202,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_6">
+           <widget class="QPushButton" name="pushButton_9">
             <property name="text">
              <string>Cancel</string>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="verticalSpacer_2">
+           <spacer name="verticalSpacer_3">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
@@ -175,6 +235,12 @@
    <class>SerialSettingsWidget</class>
    <extends>QWidget</extends>
    <header>serialsettingswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MySerialSettingsWidget</class>
+   <extends>QWidget</extends>
+   <header>myserialsettingswidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -14,11 +14,14 @@ SettingDialog::SettingDialog(QWidget *parent) :
     ui(new Ui::SettingDialog)
 {
     ui->setupUi(this);
+
     initTable();
+
     createConnects();
+
     this->setWindowFlags(Qt::Window);
 
-    connect(this,SIGNAL(changeSerials(int)),ui->widget,SLOT(changeSerialPort(int)));
+
 }
 
 SettingDialog::~SettingDialog()
@@ -30,9 +33,11 @@ SettingDialog::~SettingDialog()
 
 void SettingDialog::createConnects(){
 
-
-
     connect(tableModel,SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),this,SLOT(tableValueChange(const QModelIndex &, const QModelIndex &)));
+
+    connect(ui->checkBox,SIGNAL(clicked(bool)),this,SLOT(on_checkBox_clicked(bool)));
+
+    connect(this,SIGNAL(changeSerials(int)),ui->widget_6,SLOT(changeSerialPort(int)));
 }
 
 void SettingDialog::tableValueChange(const QModelIndex &topLeft, const QModelIndex &bottomRight){
@@ -75,6 +80,30 @@ void SettingDialog::initTable(){
     ui->tableView->setModel(tableModel);
 
     ui->tableView->resizeColumnsToContents();
+
+    ui->checkBox->setChecked(Config::isSlave);
+
+    setBlockEnable(!Config::isSlave);
+
+}
+
+void SettingDialog::setBlockEnable(bool enable){
+
+    ui->tableView->setEnabled(enable);
+    ui->widget_6->setEnabled(enable);
+
+    QString labName;
+
+    if(enable){
+
+        labName=tr("slave address");
+
+    }else{
+
+        labName=tr("host address");
+    }
+
+    ui->label->setText(labName);
 
 }
 
@@ -138,9 +167,9 @@ void SettingDialog::on_pushButton_clicked()
 
 void SettingDialog::on_pushButton_5_clicked()
 {
-     changeTableValue();
-     ui->pushButton_5->setEnabled(false);
-     ui->pushButton->setEnabled(false);
+    changeTableValue();
+    ui->pushButton_5->setEnabled(false);
+    ui->pushButton->setEnabled(false);
 
 }
 
@@ -150,22 +179,9 @@ void SettingDialog::on_pushButton_3_clicked()
     this->close();
 }
 
-//tab 2
-void SettingDialog::on_pushButton_4_clicked()
+void SettingDialog::on_checkBox_clicked(bool checked)
 {
-    on_pushButton_2_clicked();
-    on_pushButton_6_clicked();
+    Config::updateConfig("model/isSlave",checked?"true":"false");
+    setBlockEnable(!Config::isSlave);
+
 }
-
-
-void SettingDialog::on_pushButton_2_clicked()
-{
-    emit changeSerials(1);
-}
-
-
-void SettingDialog::on_pushButton_6_clicked()
-{
-    this->close();
-}
-

@@ -2,6 +2,7 @@
 #include "sqlutil.h"
 #include "config.h"
 #include "configxml.h"
+#include "gasviewform.h"
 
 #include <QApplication>
 #include <QTextCodec>

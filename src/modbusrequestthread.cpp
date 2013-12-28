@@ -2,6 +2,7 @@
 #include "modbus-private.h"
 #include "configxml.h"
 #include "config.h"
+#include "myserialport.h"
 
 #include <QMessageBox>
 #include <QDebug>
@@ -13,11 +14,14 @@ ModbusRequestThread::ModbusRequestThread()
 {
     this->stopFlag=false;
     this->sleepTime=10;
-    createModbus();
+    //createModbus();
 
 }
 
 ModbusRequestThread::~ModbusRequestThread(){
+
+
+     qDebug()<<"~ModbusRequestThread"<<endl;
 
     {
 
@@ -41,10 +45,9 @@ void ModbusRequestThread::createModbus(){
 
 
     char parity;
-    if(Config::serialParity=="even"){
-
+    if(Config::serialParity=="even"||Config::serialParity=="奇"){
         parity = 'E';
-    }else if(Config::serialParity=="odd"){
+    }else if(Config::serialParity=="odd"||Config::serialParity=="偶"){
         parity = 'O';
     }else{
         parity = 'N';
@@ -60,7 +63,7 @@ void ModbusRequestThread::createModbus(){
 
     if( modbus_connect( ModbusRequestThread::m_modbus ) == -1 )
     {
-        qDebug()<<"connect create"<<endl;
+        qDebug()<<"cant create"<<endl;
     }
 
 }
@@ -80,6 +83,12 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
     if( m_modbus == NULL )
     {
         return;
+    }
+
+
+    if( modbus_connect( m_modbus ) == -1 )
+    {
+        qDebug()<<"cant create"<<endl;
     }
 
     const int slaveId = transcation->addr->slaveId;
@@ -197,6 +206,8 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
         transcation->returnData="";
     }
 
+    modbus_close(m_modbus);
+
     emit transcationDone(transcation);
 
 }
@@ -221,11 +232,9 @@ void ModbusRequestThread::run(){
 
         Transcation*trans=this->transcations.dequeue();
 
-       // qDebug()<<"get a transation:"<<trans->addr->slaveId<<endl;
+        qDebug()<<"get a transation:"<<trans->addr->slaveId<<endl;
 
         sendModbusRequest(trans);
-
-        emit transcationDone(trans);
 
         //this->msleep(this->sleepTime);
 

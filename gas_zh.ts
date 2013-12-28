@@ -4,9 +4,24 @@
 <context>
     <name>EquipmentWidget</name>
     <message>
-        <location filename="src/equipmentwidget.cpp" line="26"/>
         <source>nd:|dp#onOrOff:|on/off#workOrBreak:|work/break#alarm:|no/low/high</source>
-        <translation>浓度:|dp#开启状态:|工作/关闭#工作状态:|正常/故障#警报:|无/低报警/高报警</translation>
+        <translation type="obsolete">浓度:|dp#开启状态:|工作/关闭#工作状态:|正常/故障#警报:|无/低报警/高报警</translation>
+    </message>
+</context>
+<context>
+    <name>GasViewForm</name>
+    <message>
+        <location filename="form/gasviewform.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished">系统日志查看</translation>
+    </message>
+</context>
+<context>
+    <name>GasViewWidget</name>
+    <message>
+        <location filename="form/gasviewwidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -94,164 +109,185 @@
         <translation type="obsolete">可燃气体报警监视复视器</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="116"/>
+        <location filename="form/mainform.ui" line="120"/>
         <source>Gas Minotor</source>
         <translation>可燃气体报警监视复视器</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="226"/>
+        <location filename="form/mainform.ui" line="213"/>
         <source>JiKu</source>
         <translation>机库</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="260"/>
+        <location filename="form/mainform.ui" line="247"/>
         <source>JiaYouBeng</source>
         <translation>加油泵站</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="354"/>
+        <location filename="form/mainform.ui" line="341"/>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="form/mainform.ui" line="348"/>
         <source>run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="361"/>
+        <location filename="form/mainform.ui" line="355"/>
         <source>paly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="369"/>
+        <location filename="form/mainform.ui" line="363"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="374"/>
+        <location filename="form/mainform.ui" line="368"/>
         <source>2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="379"/>
+        <location filename="form/mainform.ui" line="373"/>
         <source>3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="384"/>
+        <location filename="form/mainform.ui" line="378"/>
         <source>#1</source>
         <translation type="unfinished"></translation>
     </message>
     <message utf8="true">
-        <location filename="form/mainform.ui" line="393"/>
+        <location filename="form/mainform.ui" line="387"/>
         <source>工作</source>
         <translation type="unfinished"></translation>
     </message>
     <message utf8="true">
-        <location filename="form/mainform.ui" line="398"/>
+        <location filename="form/mainform.ui" line="392"/>
         <source>关闭</source>
         <translation type="unfinished"></translation>
     </message>
     <message utf8="true">
-        <location filename="form/mainform.ui" line="407"/>
-        <location filename="form/mainform.ui" line="421"/>
+        <location filename="form/mainform.ui" line="401"/>
+        <location filename="form/mainform.ui" line="415"/>
         <source>正常</source>
         <translation type="unfinished"></translation>
     </message>
     <message utf8="true">
-        <location filename="form/mainform.ui" line="412"/>
+        <location filename="form/mainform.ui" line="406"/>
         <source>故障</source>
         <translation type="unfinished"></translation>
     </message>
     <message utf8="true">
-        <location filename="form/mainform.ui" line="426"/>
+        <location filename="form/mainform.ui" line="420"/>
         <source>低</source>
         <translation type="unfinished"></translation>
     </message>
     <message utf8="true">
-        <location filename="form/mainform.ui" line="431"/>
+        <location filename="form/mainform.ui" line="425"/>
         <source>高</source>
         <translation type="unfinished"></translation>
     </message>
     <message utf8="true">
-        <location filename="form/mainform.ui" line="439"/>
+        <location filename="form/mainform.ui" line="433"/>
         <source>确定</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="446"/>
+        <location filename="form/mainform.ui" line="440"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
-    <message>
-        <location filename="form/mainform.ui" line="615"/>
-        <source>Close Alarm</source>
-        <translation>关闭响铃</translation>
-    </message>
-    <message>
-        <location filename="form/mainform.ui" line="643"/>
-        <source>Rest</source>
-        <translation>复位</translation>
-    </message>
     <message utf8="true">
-        <location filename="form/mainform.ui" line="505"/>
+        <location filename="form/mainform.ui" line="499"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;微软雅黑&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;SimSun&apos;; color:#000000;&quot;&gt;[2013-12-01 12:12:11]&lt;/span&gt;&lt;span style=&quot; font-family:&apos;SimSun&apos;;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:&apos;SimSun&apos;; color:#00ff00;&quot;&gt;一号机：单位物体:数量/单位&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;SimSun&apos;; color:#000000;&quot;&gt;[2013-12-01 12:12:12]&lt;/span&gt;&lt;span style=&quot; font-family:&apos;SimSun&apos;;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:&apos;SimSun&apos;; color:#00ff00;&quot;&gt;一号机：&lt;/span&gt;&lt;span style=&quot; font-family:&apos;SimSun&apos;; color:#ff0000;&quot;&gt;单位物体:数量/单位&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="116"/>
+        <location filename="form/mainform.ui" line="608"/>
+        <source>Close Alarm</source>
+        <translation>关闭响铃</translation>
+    </message>
+    <message>
+        <location filename="form/mainform.ui" line="636"/>
+        <source>Rest</source>
+        <translation>复位</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="263"/>
         <source>Setting</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="456"/>
-        <location filename="src/mainform.cpp" line="120"/>
+        <location filename="form/mainform.ui" line="450"/>
+        <location filename="src/mainform.cpp" line="267"/>
         <source>Log</source>
         <translation>日志</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="123"/>
+        <location filename="src/mainform.cpp" line="146"/>
+        <source>break down!</source>
+        <translation>出现故障！</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="158"/>
+        <source>high alarm!</source>
+        <translation>高报警！</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="161"/>
+        <source>low alarm!</source>
+        <translation>低报警！</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="177"/>
+        <source>not work!</source>
+        <translation>停止工作！</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="270"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="126"/>
+        <location filename="src/mainform.cpp" line="273"/>
         <source>Min</source>
         <oldsource>min</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="129"/>
+        <location filename="src/mainform.cpp" line="276"/>
         <source>Max</source>
         <oldsource>max</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="132"/>
+        <location filename="src/mainform.cpp" line="279"/>
         <source>Normal</source>
         <oldsource>normal</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="216"/>
         <source>MainDevice</source>
-        <translation>主机</translation>
+        <translation type="obsolete">主机</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="223"/>
         <source> SubI</source>
         <oldsource> ???I</oldsource>
-        <translation>复视器I</translation>
+        <translation type="obsolete">复视器I</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="230"/>
         <source> SubII</source>
         <oldsource> ???II</oldsource>
-        <translation>复视器II</translation>
+        <translation type="obsolete">复视器II</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="427"/>
+        <location filename="src/mainform.cpp" line="575"/>
         <source>Are you sure?</source>
         <translation>确定退出？</translation>
     </message>
@@ -259,8 +295,116 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ModbusRequestThread</name>
     <message>
-        <location filename="src/modbusrequestthread.cpp" line="163"/>
+        <location filename="src/modbusrequestthread.cpp" line="189"/>
         <source>Slave threw exception &quot;%1&quot; or function not implemented.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MySerialSettingsWidget</name>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="21"/>
+        <source>none</source>
+        <translation type="unfinished">无</translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="26"/>
+        <source>odd</source>
+        <translation type="unfinished">奇</translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="31"/>
+        <source>even</source>
+        <translation type="unfinished">偶</translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="39"/>
+        <source>Data bits</source>
+        <translation type="unfinished">数据位数</translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="46"/>
+        <source>Parity</source>
+        <translation type="unfinished">奇偶校验</translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="57"/>
+        <source>7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="62"/>
+        <source>8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="70"/>
+        <source>Stop bits</source>
+        <translation type="unfinished">停止位</translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="77"/>
+        <source>Serial port</source>
+        <translation type="unfinished">串口</translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="84"/>
+        <source>Baud</source>
+        <translation type="unfinished">速率</translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="95"/>
+        <source>1200</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="100"/>
+        <source>4800</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="105"/>
+        <source>9600</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="110"/>
+        <source>19200</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="115"/>
+        <source>38400</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="120"/>
+        <source>57600</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="125"/>
+        <source>115200</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="137"/>
+        <source>1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="142"/>
+        <source>1.5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="src/myserialsettingswidget.ui" line="147"/>
+        <source>2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -369,30 +513,30 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="form/serialsettingswidget.ui" line="32"/>
         <source>odd</source>
-        <translation>奇数</translation>
+        <translation>奇</translation>
     </message>
     <message>
         <location filename="form/serialsettingswidget.ui" line="37"/>
         <source>even</source>
-        <translation>偶数</translation>
+        <translation>偶</translation>
     </message>
     <message>
-        <location filename="src/serialsettingswidget.cpp" line="118"/>
+        <location filename="src/serialsettingswidget.cpp" line="108"/>
         <source>Connection failed</source>
         <translation>连接失败</translation>
     </message>
     <message>
-        <location filename="src/serialsettingswidget.cpp" line="119"/>
+        <location filename="src/serialsettingswidget.cpp" line="109"/>
         <source>Could not connect serial port!</source>
         <translation>串口连接失败！</translation>
     </message>
     <message>
-        <location filename="src/serialsettingswidget.cpp" line="169"/>
+        <location filename="src/serialsettingswidget.cpp" line="162"/>
         <source>No serial port found</source>
         <translation>没有找到串口</translation>
     </message>
     <message>
-        <location filename="src/serialsettingswidget.cpp" line="170"/>
+        <location filename="src/serialsettingswidget.cpp" line="163"/>
         <source>Could not find any serial port on this computer!</source>
         <translation>此设备中无任何串口！</translation>
     </message>
@@ -420,26 +564,41 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="form/settingdialog.ui" line="52"/>
-        <location filename="form/settingdialog.ui" line="120"/>
+        <location filename="form/settingdialog.ui" line="138"/>
         <source>Sure</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="59"/>
-        <location filename="form/settingdialog.ui" line="127"/>
+        <location filename="form/settingdialog.ui" line="62"/>
+        <location filename="form/settingdialog.ui" line="148"/>
+        <source>Apply</source>
+        <translation>应用</translation>
+    </message>
+    <message>
+        <location filename="form/settingdialog.ui" line="69"/>
+        <location filename="form/settingdialog.ui" line="155"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="83"/>
+        <location filename="form/settingdialog.ui" line="93"/>
         <source>Miontor Setting</source>
         <translation>串口通信设置</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="89"/>
+        <location filename="form/settingdialog.ui" line="105"/>
+        <source>Host Setting</source>
+        <translation>主机串口参数设置</translation>
+    </message>
+    <message>
+        <location filename="form/settingdialog.ui" line="117"/>
+        <source>Slave Equipment Setting</source>
+        <translation>复视器II串口参数设置</translation>
+    </message>
+    <message>
         <source>Serial Setting</source>
         <oldsource>Setting</oldsource>
-        <translation>串口设置</translation>
+        <translation type="obsolete">串口设置</translation>
     </message>
     <message>
         <source>Change</source>
@@ -450,44 +609,44 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">基本设置</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="51"/>
+        <location filename="src/settingdialog.cpp" line="50"/>
         <source>Name</source>
         <translation>设备名称</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="52"/>
+        <location filename="src/settingdialog.cpp" line="51"/>
         <source>Slave Id</source>
         <translation>从机ID</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="53"/>
+        <location filename="src/settingdialog.cpp" line="52"/>
         <source>Start Address</source>
         <translation>起始卡槽子通道地址</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="54"/>
+        <location filename="src/settingdialog.cpp" line="53"/>
         <source>Number of Colis</source>
         <translation>通道数目</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="95"/>
-        <location filename="src/settingdialog.cpp" line="103"/>
-        <location filename="src/settingdialog.cpp" line="111"/>
+        <location filename="src/settingdialog.cpp" line="94"/>
+        <location filename="src/settingdialog.cpp" line="102"/>
+        <location filename="src/settingdialog.cpp" line="110"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="95"/>
+        <location filename="src/settingdialog.cpp" line="94"/>
         <source>slaveId must be num!</source>
         <translation>从机ID必须是数字！</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="103"/>
+        <location filename="src/settingdialog.cpp" line="102"/>
         <source>addrStart must be num!</source>
         <translation>起始卡槽子通道地址必须是数字！</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="111"/>
+        <location filename="src/settingdialog.cpp" line="110"/>
         <source>coilNum must be num!</source>
         <translation>通道数目必须是数字！</translation>
     </message>

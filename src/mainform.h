@@ -2,6 +2,7 @@
 #define MAINFORM_H
 
 #include "modbusrequestthread.h"
+#include "myserialport.h"
 
 #include <QSystemTrayIcon>
 #include <QWidget>
@@ -47,6 +48,8 @@ private slots:
 
      void transcationIsDone(Transcation *trans);
      void createTranstration();
+
+     void on_pushButton_4_clicked();
 
 private:
     Ui::MainForm *ui;
@@ -94,13 +97,15 @@ private:
     QTimer *transcationCreate;
     bool isPlay;
 
-    ModbusRequestThread reqThread;
+    ModbusRequestThread*reqThread;
+    MySerialPort*mySerialPort;
 
 
     void changeEquipmentStatus(int index, int labelIndex, int data, QString info);
 
     int transitionIndex;
-    int transtionTimeOut;
+
+    void addLogInfo(QString info, int index, int level);
 
 
 };
