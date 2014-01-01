@@ -32,7 +32,8 @@ SOURCES +=  src/main.cpp\
             src/gasviewform.cpp \
             src/gasviewwidget.cpp \
             src/myserialport.cpp \
-    src/myserialsettingswidget.cpp
+            src/myserialsettingswidget.cpp \
+            src/speedo_meter.cpp
 
 
 
@@ -53,7 +54,8 @@ HEADERS  += src/mainform.h \
             src/gasviewform.h \
             src/gasviewwidget.h \
             src/myserialport.h \
-    src/myserialsettingswidget.h
+            src/myserialsettingswidget.h \
+            src/speedo_meter.h
 
 
 
@@ -61,6 +63,11 @@ INCLUDEPATH += 3rdparty/libmodbus \
                3rdparty/libmodbus/src \
                3rdparty/qextserialport \
                src
+
+INCLUDEPATH += E:\QT4\qwt-6.1.0\src
+
+DEPENDPATH  += E:\QT4\qwt-6.1.0\lib
+
 
 unix {
     SOURCES += 3rdparty/qextserialport/posix_qextserialport.cpp	\
@@ -73,7 +80,11 @@ win32 {
            3rdparty/qextserialport/qextserialenumerator_win.cpp
     DEFINES += _TTY_WIN_  WINVER=0x0501
     LIBS += -lsetupapi -lwsock32 -lWS2_32
+
 }
+
+LIBS += -LE:\QT4\qwt-6.1.0\lib -lqwtd
+
 
 
 FORMS    += form/mainform.ui \
@@ -82,7 +93,7 @@ FORMS    += form/mainform.ui \
             form/serialsettingswidget.ui \
             form/gasviewform.ui \
             form/gasviewwidget.ui \
-    src/myserialsettingswidget.ui
+            src/myserialsettingswidget.ui
 
 
 RESOURCES += \

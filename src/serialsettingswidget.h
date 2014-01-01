@@ -20,7 +20,7 @@ public:
 
      modbus_t*  modbus() { return m_serialModbus;}
      int setupModbusPort();
-     void setOptions();
+     void setOptions(bool first);
     // void setModbus(modbus_t *m);
 
 protected:
@@ -30,7 +30,7 @@ protected:
 
 signals:
 	void serialPortActive(bool active);
-
+    void selectIndexChanged(int);
 public slots:
 	void changeSerialPort(int);
 

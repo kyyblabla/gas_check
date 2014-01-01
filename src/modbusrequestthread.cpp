@@ -14,14 +14,13 @@ ModbusRequestThread::ModbusRequestThread()
 {
     this->stopFlag=false;
     this->sleepTime=10;
-    //createModbus();
+    createModbus();
 
 }
 
 ModbusRequestThread::~ModbusRequestThread(){
 
-
-     qDebug()<<"~ModbusRequestThread"<<endl;
+    qDebug()<<"~ModbusRequestThread"<<endl;
 
     {
 
@@ -45,9 +44,9 @@ void ModbusRequestThread::createModbus(){
 
 
     char parity;
-    if(Config::serialParity=="even"||Config::serialParity=="奇"){
+    if(Config::serialParity=="even"){
         parity = 'E';
-    }else if(Config::serialParity=="odd"||Config::serialParity=="偶"){
+    }else if(Config::serialParity=="odd"){
         parity = 'O';
     }else{
         parity = 'N';
@@ -83,12 +82,6 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
     if( m_modbus == NULL )
     {
         return;
-    }
-
-
-    if( modbus_connect( m_modbus ) == -1 )
-    {
-        qDebug()<<"cant create"<<endl;
     }
 
     const int slaveId = transcation->addr->slaveId;
@@ -153,7 +146,7 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
         }
         else
         {
-           // qDebug()<<"here:"<<endl;
+            // qDebug()<<"here:"<<endl;
             bool b_hex = true;
             QString qsCount="";
 
@@ -164,8 +157,8 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
                 QString qs_num="";
                 qs_num=qs_num.sprintf("%d", data);
 
-               // qDebug()<<"addr:"<<QString::number( satrtAddr+i )<<endl;
-              //  qDebug()<<"data:"<<qs_num<<endl;
+                // qDebug()<<"addr:"<<QString::number( satrtAddr+i )<<endl;
+                //  qDebug()<<"data:"<<qs_num<<endl;
 
                 qsCount+=qs_num+"#";
             }
@@ -176,7 +169,7 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
     }
     else
     {
-       // qDebug()<<"here2:"<<endl;
+        // qDebug()<<"here2:"<<endl;
         if( ret < 0 )
         {
             if(
@@ -206,7 +199,7 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
         transcation->returnData="";
     }
 
-    modbus_close(m_modbus);
+    transcation->mesCreateTime=QDateTime::currentDateTime();
 
     emit transcationDone(transcation);
 

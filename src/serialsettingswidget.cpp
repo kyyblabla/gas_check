@@ -18,7 +18,7 @@ SerialSettingsWidget::SerialSettingsWidget(QWidget *parent) :
 
     ui->checkBox->setChecked(check);
     if(check){
-        setupModbusPort();
+        setOptions(true);
     }
 
     enableGuiItems(check);
@@ -33,9 +33,8 @@ SerialSettingsWidget::~SerialSettingsWidget()
 
 
 
-void SerialSettingsWidget::setOptions(){
+void SerialSettingsWidget::setOptions(bool first){
 
-    disconnect(ui->serialPort,0,0,0 );
 
     int portIndex = 0;
     int i = 0;
@@ -58,22 +57,23 @@ void SerialSettingsWidget::setOptions(){
     ui->stopBits->setCurrentIndex( ui->stopBits->findText( QString::number(Config::serialStopbits )) );
     ui->parity->setCurrentIndex( ui->parity->findText(Config::serialParity ) );
 
-    connect( ui->serialPort, SIGNAL( currentIndexChanged( int ) ),
-             this, SLOT( changeSerialPort( int ) ) );
+
+    connect( ui->serialPort, SIGNAL( currentIndexChanged( int )),
+             this, SIGNAL( selectIndexChanged( int ) ) );
     connect( ui->baud, SIGNAL( currentIndexChanged( int ) ),
-             this, SLOT( changeSerialPort( int ) ) );
+             this, SIGNAL( selectIndexChanged( int ) ) );
     connect( ui->dataBits, SIGNAL( currentIndexChanged( int ) ),
-             this, SLOT( changeSerialPort( int ) ) );
+             this, SIGNAL( selectIndexChanged( int ) ) );
     connect( ui->stopBits, SIGNAL( currentIndexChanged( int ) ),
-             this, SLOT( changeSerialPort( int ) ) );
+             this, SIGNAL( selectIndexChanged( int ) ) );
     connect( ui->parity, SIGNAL( currentIndexChanged( int ) ),
-             this, SLOT( changeSerialPort( int ) ) );
+             this, SIGNAL( selectIndexChanged( int ) ) );
 
 }
 
 int SerialSettingsWidget::setupModbusPort()
 {
-    setOptions();
+    setOptions(false);
     int portIndex=ui->serialPort->currentIndex();
     changeSerialPort(portIndex);
     return portIndex;

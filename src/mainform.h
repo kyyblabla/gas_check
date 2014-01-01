@@ -20,6 +20,7 @@ class QMouseEvent;
 class EquipmentWidget;
 class LogViewDialog;
 class QTimer;
+class GasViewForm;
 
 class MainForm : public QWidget
 {
@@ -30,33 +31,34 @@ public:
     ~MainForm();
 
 protected:
-     bool eventFilter(QObject *obj, QEvent *ev); //filter events, in this moment,we just attention this event of ui's label
-     //void mousePressEvent(QMouseEvent *event);        //define a mouse peress event
-     //void mouseMoveEvent(QMouseEvent *event);         // define a mouse move event
-     void closeEvent(QCloseEvent *event);
-     //bool winEvent(MSG *message, long *result);
+    bool eventFilter(QObject *obj, QEvent *ev); //filter events, in this moment,we just attention this event of ui's label
+    //void mousePressEvent(QMouseEvent *event);        //define a mouse peress event
+    //void mouseMoveEvent(QMouseEvent *event);         // define a mouse move event
+    void closeEvent(QCloseEvent *event);
+    //bool winEvent(MSG *message, long *result);
 
 private slots:
-     void doSetting(); //click to setting the syatem
-     void backShowStyle(QSystemTrayIcon::ActivationReason reason); //click trayIcon to show or hidden the mainform
-     void logView();
-     void on_pushButton_clicked();
-     void quit();
-     void playSound();
-     void on_pushButton_2_clicked();
-     void on_pushButton_3_clicked();
+    void doSetting(); //click to setting the syatem
+    void backShowStyle(QSystemTrayIcon::ActivationReason reason); //click trayIcon to show or hidden the mainform
 
-     void transcationIsDone(Transcation *trans);
-     void createTranstration();
+    void quit();
+    void playSound();
+    void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
+    void doLogView();
+    void transcationIsDone(Transcation *trans);
+    void createTranstration();
 
-     void on_pushButton_4_clicked();
+    void on_pushButton_4_clicked();
+
+    void  gasViewSelectIndexChange(int);
 
 private:
     Ui::MainForm *ui;
     QList<EquipmentWidget*> equipmentsList;
     QPoint dragPosition;
 
-    QMenu *contentMenu;
+    //QMenu *contentMenu;
     QAction*exitAction;
     QAction*settingAction;
 
@@ -72,9 +74,6 @@ private:
     void createTrayIcon();
     QSystemTrayIcon*trayIcon;
     QMenu *trayIconMenu;
-    QAction*maximizeAction;
-    QAction*minimizeAction;
-    QAction*norimizeAction;
     QAction*logViewAction;
 
     //crate lin status pic
@@ -83,7 +82,7 @@ private:
 
 
     //label click events
-    void showContentMenu(); //show contentmanu
+    // void showContentMenu(); //show contentmanu
 
     LogViewDialog *logview;
     void showLogView();
@@ -92,20 +91,23 @@ private:
     void doStopAlarm(int id); // close the alarm according to the id
     void doRester();  //
 
-    void chageMenuLabelBack(bool top);
+
     QTimer *playTimer;
     QTimer *transcationCreate;
     bool isPlay;
 
     ModbusRequestThread*reqThread;
-    MySerialPort*mySerialPort;
+    // MySerialPort*mySerialPort;
 
 
-    void changeEquipmentStatus(int index, int labelIndex, int data, QString info);
+    bool changeEquipmentStatus(int index, int labelIndex, int data);
 
     int transitionIndex;
 
     void addLogInfo(QString info, int index, int level);
+
+
+    GasViewForm*gasViewForm;
 
 
 };

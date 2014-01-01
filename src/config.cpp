@@ -27,6 +27,12 @@ int Config::sleepTime;
 
 bool Config::isSlave;
 
+double Config::ndLableMin;
+double Config::ndLableMax;
+double Config::ndLableStep;
+QString Config::ndLableName;
+
+
 Config::Config(QObject *parent) :
     QObject(parent)
 {
@@ -62,6 +68,13 @@ bool Config::initConfig(){
     Config::sleepTime=settings.value("SystemThread/sleepTime").toInt();
 
     Config::isSlave=settings.value("model/isSlave").toBool();
+
+
+    Config::ndLableMin=settings.value("color/ndLableMin").toDouble();
+    Config::ndLableMax=settings.value("color/ndLableMax").toDouble();
+    Config::ndLableStep=settings.value("color/ndLableStep").toDouble();
+    Config::ndLableName=settings.value("color/ndLableName").toString();
+
 
     qDebug()<<Config::colorLevel<<endl;
 

@@ -3,8 +3,10 @@
 
 #include <QWidget>
 
-class QPaintEvent;
-class QPainter;
+class QwtDial;
+class QPalette;
+class SpeedoMeter;
+class AttitudeIndicator;
 
 namespace Ui {
 class GasViewWidget;
@@ -19,19 +21,18 @@ public:
     ~GasViewWidget();
 
 protected:
-    void paintEvent(QPaintEvent *event);
     
+
+public slots:
+    void setGanNd(double nd);
+
 private:
     Ui::GasViewWidget *ui;
 
-    int x;
-    int y;
-    int picWidth;
-    int pixHeight;
-    int startAngle;
-    int endAngle;
-
-    void initPainter();
+    QPalette colorTheme( const QColor & ) const;
+    QwtDial *createDial();
+    SpeedoMeter *d_speedo;
+    AttitudeIndicator *d_ai;
 
 };
 

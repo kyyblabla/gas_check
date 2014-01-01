@@ -13,7 +13,7 @@
 #include "imodbus.h"
 #include "modbus.h"
 
-
+#include <QDateTime>
 #include <QWidget>
 #include <QMessageBox>
 #include <QMenu>
@@ -35,6 +35,7 @@ MainForm::MainForm(QWidget *parent) :
     ui(new Ui::MainForm)
 {
     ui->setupUi(this);
+
 
     initLabels();
 
@@ -59,6 +60,8 @@ MainForm::MainForm(QWidget *parent) :
     //resize(QApplication::desktop()->availableGeometry().size());
     //SQLUtil::test();
 
+    qDebug()<<"4444"<<endl;
+
     logview=new LogViewDialog();
 
     isPlay=false;
@@ -75,30 +78,24 @@ MainForm::MainForm(QWidget *parent) :
     transitionIndex=0;
 
 
-    /*
-    MySerialPort::MySerialPort(const QString &name, const BaudRateType baudRate, const DataBitsType dataBits,
-                               const ParityType parity, const StopBitsType stopBits, const FlowType flowControl,
-                               ulong milliseconds)
-    {
-        initPrivateVariable();
-        setPortName(name);
-        setBaudRate(baudRate);
-        setDataBits(dataBits);
-        setParity(parity);
-        setStopBits(stopBits);
-        setFlowControl(flowControl);
-        setTimeout(milliseconds);
-    }*/
+    this->gasViewForm=new GasViewForm;
+    connect(gasViewForm,SIGNAL(currentEquipIndexChange(int)),this,SLOT(gasViewSelectIndexChange(int)));
+
+}
+
+void MainForm::gasViewSelectIndexChange(int currIndex){
+
+    currIndex= currIndex<0?0:(currIndex>=this->equipmentsList.length()?this->equipmentsList.length()-1:currIndex);
 
 
-    this->mySerialPort=new MySerialPort(Config::serialinterface,BAUD9600,DATA_8,PAR_ODD,STOP_1,FLOW_OFF,1000);
+    Addr*addr=ConfigXml::addrs.at(currIndex);
+    QString labName= (addr->location==1)? Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
 
-    //    QGraphicsDropShadowEffect *shadow_effect = new QGraphicsDropShadowEffect(this);
-    //    shadow_effect->setOffset(0, 2);
-    //    shadow_effect->setColor(Qt::gray);
-    //    shadow_effect->setBlurRadius(0);
-    //    ui->widget_7->setGraphicsEffect(shadow_effect);
-    // network_group_box->setGraphicsEffect(shadow_effect);
+    QString tit= labName+addr->num;
+
+    int nd= equipmentsList.at(currIndex)->getGasNd();
+
+    this->gasViewForm->setEquipments(tit,nd,currIndex);
 
 }
 
@@ -120,10 +117,6 @@ void MainForm::createTranstration(){
 
     transitionIndex= (transitionIndex+1)<ConfigXml::addrs.length()?transitionIndex+1:0;
 
-
-
-
-
 }
 
 void MainForm::transcationIsDone(Transcation*trans){
@@ -133,18 +126,23 @@ void MainForm::transcationIsDone(Transcation*trans){
     int funCode=trans->funCode;
     int index=trans->addr->index;
 
+    bool change=false;
+
     qDebug()<<"thread message index:"<<index<<endl;
 
     switch (funCode) {
     case 2:
 
-        qDebug()<<"thread message from:"<<trans->addr->slaveId<<endl;
-        qDebug()<<"thread message data:"<<trans->returnData<<endl;
+        // qDebug()<<"thread message from:"<<trans->addr->slaveId<<endl;
+        //  qDebug()<<"thread message data:"<<trans->returnData<<endl;
         qDebug()<<"thread message returnCode:"<<trans->returnCode<<endl;
 
         if(trans->returnCode>0){
 
-            changeEquipmentStatus(index,2,0,"");
+            change=changeEquipmentStatus(index,2,0);
+            if(change){
+                this->addLogInfo(tr("continue on!"),index,0);
+            }
 
             QStringList list=trans->returnData.split("#");
 
@@ -154,46 +152,51 @@ void MainForm::transcationIsDone(Transcation*trans){
             int a2=list.at(4).toInt()==1?2:0;
             int a3=list.at(3).toInt()==1?3:0;
 
-            qDebug()<<"a1,a2,a3:"<<a1<<","<<a2<<","<<a3<<endl;
+            //  qDebug()<<"a1,a2,a3:"<<a1<<","<<a2<<","<<a3<<endl;
 
             if(fault==1){
 
-                changeEquipmentStatus(index,3,1,"");
+                change= changeEquipmentStatus(index,3,1);
 
-                this->addLogInfo(tr("break down!"),index,1);
+                if(change){
+                    this->addLogInfo(tr("break down!"),index,1);
+                }
 
             }else{
 
-                changeEquipmentStatus(index,3,0,"");
-
+                change=changeEquipmentStatus(index,3,0);
+                if(change){
+                    this->addLogInfo(tr("continue work!"),index,0);
+                }
             }
 
             int waringLevel=((a3>a2)?(a3>a1?a3:(a1>a2?a1:a3)):(a2>a1?a2:a1>a3?a1:a2));
 
-            if(waringLevel==3){
+            int tempWaringLevel=waringLevel>0?waringLevel-1:0;
+
+            change= changeEquipmentStatus(index,4,tempWaringLevel);
+
+            if(change&&waringLevel==3){
 
                 this->addLogInfo(tr("high alarm!"),index,3);
 
-            }else if(waringLevel==2){
+            }else if(change&&waringLevel==2){
+
                 this->addLogInfo(tr("low alarm!"),index,2);
+
+            }else if(change&&waringLevel==0){
+
+                this->addLogInfo(tr("stop alarm!"),index,0);
+
             }
-
-
-            int  lighhtlevel= (waringLevel>0)?waringLevel:fault;
-
-            qDebug()<<"lighhtlevel:"<<waringLevel<<" "<<lighhtlevel<<endl;
-
-
-            changeEquipmentStatus(index,4,waringLevel-1,"");
-
-            changeEquipmentStatus(index,0,lighhtlevel,"");
-
 
         }else{  //fult to link
 
-            this->addLogInfo(tr("not work!"),index,1);
-            changeEquipmentStatus(index,2,1,"");
-            changeEquipmentStatus(index,0,1,"");
+
+            change=changeEquipmentStatus(index,2,1);
+            if(change){
+                this->addLogInfo(tr("not work!"),index,1);
+            }
 
         }
         break;
@@ -216,37 +219,27 @@ void MainForm::transcationIsDone(Transcation*trans){
 }
 
 
-void MainForm::changeEquipmentStatus(int index,int labelIndex,int data,QString info){
-
+bool MainForm::changeEquipmentStatus(int index,int labelIndex,int data){
 
     EquipmentWidget*e=equipmentsList.at(index);
-
-    e->updateLabelInfo(labelIndex,data,info);
+    e->updateLabelVlaue(labelIndex,data);
 }
 
 
 
 MainForm::~MainForm()
 {
-
     qDebug()<<"~MainForm"<<endl;
     delete ui;
-    delete contentMenu;
     delete exitAction;
     delete settingAction;
     delete trayIcon;
-
     delete trayIconMenu;
-    delete maximizeAction;
-    delete minimizeAction;
-
     delete logview;
     delete playTimer;
     delete transcationCreate;
-
     delete reqThread;
-    delete mySerialPort;
-
+    delete gasViewForm;
 }
 
 
@@ -254,6 +247,7 @@ void MainForm::initLabels(){
     ui->label->setText(Config::MAIN_TITLE);
     ui->label_12->setText(Config::AREA_LABEL.split("#").at(0));
     ui->label_13->setText(Config::AREA_LABEL.split("#").at(1));
+    ui->stackedWidget_4->setCurrentIndex(0);
 }
 
 /**
@@ -262,13 +256,17 @@ void MainForm::initLabels(){
  */
 void MainForm::initEventerFilter(){
 
-    ui->label_11->installEventFilter(this);
     ui->label_15->installEventFilter(this);
 
-    // ui->label_2->installEventFilter(this);
-    // ui->label_3->installEventFilter(this);
+    ui->label_20->installEventFilter(this);
+    ui->label_19->installEventFilter(this);
+    ui->label_16->installEventFilter(this);
+
+    ui->label_17->installEventFilter(this);
+    ui->label_18->installEventFilter(this);
 
     ui->label_14->installEventFilter(this);
+    ui->label_21->installEventFilter(this);
 }
 
 /**
@@ -280,42 +278,32 @@ void MainForm::createActions(){
     settingAction=new QAction(tr("Setting"),this);
     connect(settingAction,SIGNAL(triggered()),this,SLOT(doSetting()));
 
-    //showLogView
+    //  showLogView
     logViewAction=new QAction(tr("Log"),this);
-    connect(logViewAction, SIGNAL(triggered()), this, SLOT(logView()));
+    connect(logViewAction, SIGNAL(triggered()), this, SLOT(doLogView()));
 
     exitAction=new QAction(tr("Exit"),this);
     connect(exitAction,SIGNAL(triggered()),this,SLOT(quit()));
 
-    minimizeAction=new QAction(tr("Min"),this);
-    connect(minimizeAction, SIGNAL(triggered()), this, SLOT(showMinimized()));
-
-    maximizeAction=new QAction(tr("Max"),this);
-    connect(maximizeAction, SIGNAL(triggered()), this, SLOT(showMaximized()));
-
-    norimizeAction=new QAction(tr("Normal"),this);
-    connect(norimizeAction, SIGNAL(triggered()), this, SLOT(showNormal()));
-
-
-
 }
 
+
+void MainForm::doLogView(){
+
+    this->showLogView();
+}
 /**
  * @brief MainForm::creatContentMenu
  *
  */
 void MainForm::creatContentMenu(){
 
-    contentMenu = new QMenu(this);
-    contentMenu->addAction(settingAction);
-    contentMenu->addAction(logViewAction);
-    contentMenu->addAction(exitAction);
+
 
     trayIconMenu=new QMenu(this);
+    trayIconMenu->addAction(this->settingAction);
     trayIconMenu->addAction(logViewAction);
     trayIconMenu->addAction(exitAction);
-
-
 
 }
 
@@ -343,8 +331,6 @@ void MainForm::createTrayIcon(){
 
 void MainForm::createEquipments(){
 
-
-
     int len=ConfigXml::addrs.length();
 
     for(int i=0;i<len;i++){
@@ -363,8 +349,6 @@ void MainForm::createEquipments(){
 
         equipmentsList.append(e);
     }
-
-
 
 }
 
@@ -391,6 +375,8 @@ void MainForm::createLinkStatusPic(){
     lab3->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
 
 
+
+
     QGridLayout *layout=new QGridLayout;
     layout->setMargin(0);
     layout->setSpacing(0);
@@ -404,11 +390,7 @@ void MainForm::createLinkStatusPic(){
     newWidget->setLayout(layout);
     //newWidget->setStyleSheet("*{border-style:solid;border-color:#000;border-width:1px}");
 
-
     ui->widget_2->layout()->addWidget(newWidget);
-
-
-
 
 
 }
@@ -451,16 +433,7 @@ void MainForm::backShowStyle(QSystemTrayIcon::ActivationReason reason){
  */
 bool MainForm::eventFilter(QObject *obj, QEvent *event){
 
-    if(obj==ui->label_11){
-
-        if (event->type() == QEvent::MouseButtonPress) {
-
-            showContentMenu();
-
-            return true;
-        }
-
-    }else if(obj==ui->label_15){
+    if(obj==ui->label_15){
 
         if (event->type() == QEvent::MouseButtonPress) {
 
@@ -470,49 +443,67 @@ bool MainForm::eventFilter(QObject *obj, QEvent *event){
 
             return true;
         }
-    }/*else if(obj==ui->label_2){
+    } else if(obj==ui->label_19){
 
         if (event->type() == QEvent::MouseButtonPress) {
 
-            this->close();
+            ui->stackedWidget_4->setCurrentIndex(1);
             return true;
+
+
+
         }
-    }else if(obj==ui->label_3){
+
+    } else if(obj==ui->label_20){
 
         if (event->type() == QEvent::MouseButtonPress) {
 
-            this->showMinimized();
+            ui->stackedWidget_4->setCurrentIndex(0);
             return true;
         }
-    }*/else if(obj==ui->label_14){
+
+    }else if(obj==ui->label_17){
 
         if (event->type() == QEvent::MouseButtonPress) {
 
-            ui->textEdit->clear();
+            this->showLogView();
             return true;
         }
+
+    }else if(obj==ui->label_16){
+
+        if (event->type() == QEvent::MouseButtonPress) {
+
+            this->doSetting();
+            return true;
+        }
+
+    }else if(obj==ui->label_18){
+
+        if (event->type() == QEvent::MouseButtonPress) {
+
+            this->quit();
+            return true;
+
+        }
+
+    }else if(obj==ui->label_21){
+
+        if (event->type() == QEvent::MouseButtonPress) {
+
+            this->gasViewForm->exec();
+
+            return true;
+
+        }
+
     }
-
 
     return QWidget::eventFilter(obj,event);
 
 }
 
 
-void MainForm::chageMenuLabelBack(bool top){
-
-    if(top){
-
-        ui->label_11->setPixmap(QPixmap(QString::fromUtf8(":/top.png")));
-
-    }else{
-
-        ui->label_11->setPixmap(QPixmap(QString::fromUtf8(":/bottom.png")));
-
-    }
-
-
-}
 
 
 
@@ -528,63 +519,6 @@ void MainForm::doSetting(){
 
 }
 
-
-/**
- * @brief MainForm::showContentMenu
- *
- */
-void MainForm::showContentMenu(){
-
-    chageMenuLabelBack(false);
-    QPoint point=this->ui->label_11->pos();
-
-    QPoint tPoint;
-
-    tPoint.setX(point.x());
-    tPoint.setY(point.y()+(this->ui->label_11->height()));
-
-    this->contentMenu->exec(this->mapToGlobal(tPoint));
-    chageMenuLabelBack(true);
-
-}
-
-
-/*
- * @brief MainForm::mousePressEvent
- * @param event
- * 处理鼠标按下的事件
-
-void MainForm::mousePressEvent(QMouseEvent *event){
-
-    //if(event->button() == Qt::LeftButton){
-
-    //    this->dragPosition=event->globalPos() - frameGeometry().topLeft();
-        event->accept();
-   // }
-
-}
- */
-/*
- * @brief MainForm::mouseMoveEvent
- * @param event
- * 处理鼠标移动事件
-
-void MainForm::mouseMoveEvent(QMouseEvent *event){
-
-   // if ((!this->isMaximized()&&!this->isFullScreen())&&event->buttons() == Qt::LeftButton)
-   // {
-   //     move(event->globalPos() - dragPosition);
-        event->accept();
-   // }
-
-
-}*/
-
-void MainForm::logView(){
-
-    showLogView();
-
-}
 
 
 void MainForm::quit(){
@@ -624,62 +558,6 @@ void MainForm::closeEvent(QCloseEvent *event){
     }
 
 }
-
-
-void MainForm::on_pushButton_clicked()
-{
-//    int num=ui->lightNum->currentIndex();
-//    int  on=ui->onOrOff->currentIndex();
-//    int  status=ui->norOrBreak->currentIndex();
-//    int  waring=ui->lowOrHigh->currentIndex();
-
-
-//    EquipmentWidget*e=equipmentsList.at(num);
-
-//    e->updateLabelInfo(2,on,tr(""));
-
-//    e->updateLabelInfo(3,status,tr(""));
-
-//    e->updateLabelInfo(4,waring,tr(""));
-
-//    int waringLeve= waring>0?(waring+1):(status>0||on>0?1:0);
-
-//    e->updateLabelInfo(0,waringLeve,tr(""));
-
-//    qDebug()<<num<<" "<<on<<" "<<status<<" "<<waring<<" "<<waringLeve<<endl;
-
-
-
-    MySerialPort *s1=new MySerialPort(Config::serialinterface,BAUD9600,DATA_8,PAR_ODD,STOP_1,FLOW_OFF,1000);
-
-    MySerialPort *s2=new MySerialPort(Config::serialinterface,BAUD9600,DATA_8,PAR_ODD,STOP_1,FLOW_OFF,1000);
-
-    bool op= s1->open();
-
-    qDebug()<<"open seriport1:"<<op<<endl;
-
-    op=s2->open();
-
-    qDebug()<<"open seriport2:"<<op<<endl;
-
-//    if(mySerialPort->isOpen()){
-
-//        mySerialPort->close();
-
-//         qDebug()<<"close seriport------"<<endl;
-//    }else{
-
-//        mySerialPort->open();
-//         qDebug()<<"open seriport:"<<op<<endl;
-//    }
-
-
-
-
-
-
-}
-
 
 void MainForm::playSound(){
 
@@ -729,22 +607,15 @@ void MainForm::on_pushButton_3_clicked()
 
 void MainForm::addLogInfo(QString info,int index,int level){
 
-
     Addr*addr=ConfigXml::addrs.at(index);
-
     QString loca;
 
     loca=(addr->location==1)?Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
 
+
     info="<span style='color:"+Config::colorLevel.split("|").at(level)+"'>"+info+"</span>";
 
-    ui->textEdit->append(loca+addr->num+":"+info);
+    ui->textEdit->append("["+QDateTime::currentDateTime().toLocalTime().toString()+"]"+loca+addr->num+":"+info);
 
 
-}
-
-void MainForm::on_pushButton_4_clicked()
-{
-    GasViewForm gas;
-    gas.exec();
 }

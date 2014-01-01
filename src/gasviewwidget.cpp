@@ -1,13 +1,16 @@
 ﻿#include "gasviewwidget.h"
 #include "ui_gasviewwidget.h"
+#include "speedo_meter.h"
+#include "config.h"
 
-#include <QPaintEvent>
-#include <QPainter>
-#include <QPen>
-#include <QBrush>
-#include <QRectF>
-#include <QImage>
-#include <QPixmap>
+#include "Qwt/qwt_compass.h"
+#include "Qwt/qwt_compass_rose.h"
+#include "Qwt/qwt_dial_needle.h"
+
+#include <QGridLayout>
+#include <QPalette>
+#include <QTimer>
+
 
 
 GasViewWidget::GasViewWidget(QWidget *parent) :
@@ -15,76 +18,80 @@ GasViewWidget::GasViewWidget(QWidget *parent) :
     ui(new Ui::GasViewWidget)
 {
     ui->setupUi(this);
-    initPainter();
+
+    setAutoFillBackground( true );
+
+    setPalette( colorTheme( QColor( Qt::darkGray ).dark( 150 ) ) );
+
+    QVBoxLayout *layout=new QVBoxLayout(this);
+    layout->setSpacing( 5 );
+    layout->setMargin( 0 );
+
+    QwtDial *dial = createDial();
+    layout->addWidget(dial);
 }
 
-void GasViewWidget::initPainter(){
-
-
-    this->startAngle=-45*16;
-    this->endAngle=270*16;
-
-}
-
-void GasViewWidget::paintEvent(QPaintEvent *event){
-
-    QPainter paint(this);
-
-    paint.setRenderHint(QPainter::Antialiasing,true);
-
-    paint.setPen(QPen(Qt::white,0,Qt::NoPen));
-    paint.setBrush(QBrush(Qt::white,Qt::SolidPattern));
-    paint.drawRect(0,0,this->width(),this->height());
-
-
-    this->picWidth = this->width()*2/3;
-    this->pixHeight=this->picWidth;
-
-    this->x=this->width()*1/6;
-
-    this->y=this->height()*1/10;
-
-    paint.setPen(QPen(Qt::green,2,Qt::SolidLine));
-
-    paint.drawArc(this->x,this->y,this->picWidth,this->pixHeight,this->startAngle,this->endAngle);
-
-
-    int cx=this->x+ this->picWidth/2;
-    int cy=this->y+ this->pixHeight/2;
-
-    this->picWidth-=20;
-    this->pixHeight=this->picWidth;
-
-    this->x=cx-this->picWidth/2;
-    this->y=cy-this->pixHeight/2;
-
-    paint.setPen(QPen(Qt::green,10,Qt::SolidLine));
-
-    paint.drawArc(this->x,this->y,this->picWidth,this->pixHeight,this->startAngle,this->endAngle);
-
-    //paint.drawImage();
-
-   // QImage image(":/pan.png"); //建立QImage类对象image
-
-    QPixmap image; //建立QImage类对象image
-
-    image.load( ":/pan.png",0,Qt::AvoidDither|Qt::ThresholdDither|Qt::ThresholdAlphaDither);
-
-
-    QRectF source(0, 0, image.width(), image.height()); //建立源矩形，用来框定源图像文件中要显示的部分
-
-    int taHeight=this->width()*image.height()/image.width();
-
-    QRectF target(0, 0, this->width(),taHeight); //建立目标矩形
-
-
-   // paint.drawImage(target, image, source);
-
-    paint.drawPixmap(target, image, source);
-
-}
 
 GasViewWidget::~GasViewWidget()
 {
     delete ui;
 }
+
+QwtDial *GasViewWidget::createDial(  )
+{
+    QwtDial *dial = NULL;
+
+    d_speedo = new SpeedoMeter( this );
+    d_speedo->setScaleStepSize( Config::ndLableStep );
+    d_speedo->setScale( Config::ndLableMin, Config::ndLableMax );
+    d_speedo->scaleDraw()->setPenWidth( 2 );
+
+    d_speedo->setLabel(Config::ndLableName);
+
+    d_speedo->setValue(0);
+
+    dial = d_speedo;
+
+    if ( dial )
+    {
+        dial->setReadOnly( true );
+        dial->setLineWidth( 4 );
+        dial->setFrameShadow( QwtDial::Sunken );
+    }
+
+    return dial;
+}
+
+QPalette GasViewWidget::colorTheme( const QColor &base ) const
+{
+    QPalette palette;
+    palette.setColor( QPalette::Base, base );
+    palette.setColor( QPalette::Window, base.dark( 150 ) );
+    palette.setColor( QPalette::Mid, base.dark( 110 ) );
+    palette.setColor( QPalette::Light, base.light( 170 ) );
+    palette.setColor( QPalette::Dark, base.dark( 170 ) );
+    palette.setColor( QPalette::Text, base.dark( 200 ).light( 800 ) );
+    palette.setColor( QPalette::WindowText, base.dark( 200 ) );
+
+    return palette;
+}
+
+
+void GasViewWidget::setGanNd(double nd){
+
+
+    if(nd<Config::ndLableMin){
+
+        nd=0;
+
+    }else if(nd>Config::ndLableMin){
+
+        nd=Config::ndLableMax;
+    }
+
+    d_speedo->setValue(nd);
+
+}
+
+
+

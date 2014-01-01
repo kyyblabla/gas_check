@@ -35,6 +35,13 @@ public:
     static QString colorLevel;
     static int sleepTime;
     static bool isSlave;
+
+    static double ndLableMin;
+    static double ndLableMax;
+    static double ndLableStep;
+    static QString ndLableName;
+
+
 signals:
 
 public slots:

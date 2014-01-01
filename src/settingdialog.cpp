@@ -38,6 +38,10 @@ void SettingDialog::createConnects(){
     connect(ui->checkBox,SIGNAL(clicked(bool)),this,SLOT(on_checkBox_clicked(bool)));
 
     connect(this,SIGNAL(changeSerials(int)),ui->widget_6,SLOT(changeSerialPort(int)));
+
+    connect(ui->widget_6,SIGNAL(selectIndexChanged(int)),this,SLOT(serilaSelectIndexChange(int)));
+
+
 }
 
 void SettingDialog::tableValueChange(const QModelIndex &topLeft, const QModelIndex &bottomRight){
@@ -183,5 +187,37 @@ void SettingDialog::on_checkBox_clicked(bool checked)
 {
     Config::updateConfig("model/isSlave",checked?"true":"false");
     setBlockEnable(!Config::isSlave);
+
+}
+
+
+//tab2
+
+void SettingDialog::on_pushButton_8_clicked()
+{
+    emit changeSerials(1);
+    ui->pushButton_8->setEnabled(false);
+    ui->pushButton_7->setEnabled(false);
+}
+
+
+void SettingDialog::on_pushButton_7_clicked()
+{
+    on_pushButton_8_clicked();
+    on_pushButton_9_clicked();
+
+}
+
+
+void SettingDialog::on_pushButton_9_clicked()
+{
+    on_pushButton_3_clicked();
+}
+
+
+void SettingDialog::serilaSelectIndexChange(int){
+
+    ui->pushButton_8->setEnabled(true);
+    ui->pushButton_7->setEnabled(true);
 
 }

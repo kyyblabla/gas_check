@@ -7,6 +7,7 @@
 #include <QMutex>
 #include <QQueue>
 #include <QWaitCondition>
+#include <QDateTime>
 
 
 class Transcation{
@@ -16,6 +17,7 @@ public:
     Addr*addr;
     QString returnData;
     int returnCode;
+    QDateTime mesCreateTime;
 
 };
 

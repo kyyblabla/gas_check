@@ -7,6 +7,8 @@
 #include <QString>
 
 
+
+
 class EquipmentWidget : public QWidget
 {
     Q_OBJECT
@@ -16,6 +18,8 @@ public:
     void initWidget();
     void setLabels();
     void updateLabelInfo(int labelName, int status, QString info);
+    bool updateLabelVlaue(int labelIndex, int status);
+    int getGasNd(){return lNongDuLabelStatus;}
 
 signals:
     
@@ -27,18 +31,24 @@ private:
     QLabel *lNongDuLabel;
     QString lNongDuLabelName;
     QString lNongDuLabelValue;
+    int lNongDuLabelStatus;
 
     QLabel *lOnOrOffLabel;
     QString lOnOrOffLabelName;
     QString lOnOrOffLabelValue;
+    int lOnOrOffLabelStatus;
 
     QLabel *lWorkOrBreakLabel;
     QString lWorkOrBreakLabelName;
     QString lWorkOrBreakLabelValue;
+    int lWorkOrBreakLabelStatus;
 
     QLabel *lWaringLabel;
     QString lWaringLabelName;
     QString lWaringLabelValue;
+    int lWaringLabelStatus;
+
+    void updateInfo();
     
 };
 
