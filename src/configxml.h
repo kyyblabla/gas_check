@@ -13,6 +13,8 @@ public:
     int coilNum;
     int location;
     int index;
+    int telStartAddr;
+    int telColiNum;
     QString num;
 };
 

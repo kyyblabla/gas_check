@@ -190,6 +190,9 @@ void MainForm::transcationIsDone(Transcation*trans){
 
             }
 
+
+            changeEquipmentStatus(index,1,1);
+
         }else{  //fult to link
 
 

@@ -71,8 +71,6 @@ void SettingDialog::initTable(){
         Addr*addr=ConfigXml::addrs.at(i);
         QString labName= (addr->location==1)? Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
 
-
-
         tableModel->setItem(i,0,new QStandardItem(labName+addr->num));
         tableModel->setItem(i,1,new QStandardItem(QString::number(addr->slaveId)));
         tableModel->setItem(i,2,new QStandardItem(QString::number(addr->startAddr)));

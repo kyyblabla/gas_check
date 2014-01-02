@@ -471,7 +471,7 @@ QLabel#label_19,QLabel#label_20{
 }</string>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="stackedWidget_4Page1">
            <layout class="QVBoxLayout" name="verticalLayout_8">
