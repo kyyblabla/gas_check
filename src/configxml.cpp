@@ -81,6 +81,14 @@ void ConfigXml::init(){
 
                         addr->location=attrNode.toElement().text().toInt();
 
+                    }else if(tagName=="telStartAddr"){
+
+                        addr->telStartAddr=attrNode.toElement().text().toInt();
+
+                    }else if(tagName=="telColiNum"){
+
+                        addr->telColiNum=attrNode.toElement().text().toInt();
+
                     }
 
                     //qDebug() << "   " << qPrintable(attrNode.toElement().tagName()) << qPrintable(attrNode.toElement().text());
@@ -140,12 +148,22 @@ void ConfigXml::update(){
         QDomElement num=doc.createElement("num");
         num.appendChild(doc.createTextNode( pAddr->num));
 
+        QDomElement telStartAddr=doc.createElement("telStartAddr");
+        telStartAddr.appendChild(doc.createTextNode( QString::number(pAddr->telStartAddr)));
+
+        QDomElement telColiNum=doc.createElement("telColiNum");
+        telColiNum.appendChild(doc.createTextNode( QString::number(pAddr->telColiNum)));
+
 
         addr.appendChild(startAddr);
         addr.appendChild(slaveId);
         addr.appendChild(numCoils);
         addr.appendChild(location);
         addr.appendChild(num);
+
+        addr.appendChild(telStartAddr);
+        addr.appendChild(telColiNum);
+
 
     }
 

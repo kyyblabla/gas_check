@@ -56,13 +56,15 @@ void SettingDialog::initTable(){
 
     tableModel=new QStandardItemModel;
 
-    tableModel->setColumnCount(4);
+    tableModel->setColumnCount(6);
 
     tableModel->setHeaderData(0,Qt::Horizontal,tr("Name"));
     tableModel->setHeaderData(1,Qt::Horizontal,tr("Slave Id"));
     tableModel->setHeaderData(2,Qt::Horizontal,tr("Start Address"));
     tableModel->setHeaderData(3,Qt::Horizontal,tr("Number of Colis"));
 
+    tableModel->setHeaderData(4,Qt::Horizontal,tr("Start TelAddress"));
+    tableModel->setHeaderData(5,Qt::Horizontal,tr("Number of TelColis"));
 
     int len=ConfigXml::addrs.length();
 
@@ -75,6 +77,10 @@ void SettingDialog::initTable(){
         tableModel->setItem(i,1,new QStandardItem(QString::number(addr->slaveId)));
         tableModel->setItem(i,2,new QStandardItem(QString::number(addr->startAddr)));
         tableModel->setItem(i,3,new QStandardItem(QString::number(addr->coilNum)));
+
+        tableModel->setItem(i,4,new QStandardItem(QString::number(addr->telStartAddr)));
+        tableModel->setItem(i,5,new QStandardItem(QString::number(addr->telColiNum)));
+
 
     }
 
@@ -117,8 +123,8 @@ void SettingDialog::changeTableValue(){
             break;
         }
         int slaveId;
-        int addrStart;
-        int coilNum;
+        int addrStart,addrTelStart;
+        int coilNum,telCoilNum;
 
         try{
             slaveId=tableModel->item(i,1)->text().toInt();
@@ -144,9 +150,28 @@ void SettingDialog::changeTableValue(){
             return;
         }
 
+        try{
+            addrTelStart=tableModel->item(i,4)->text().toInt();
+        }catch(QString exception){
+
+            QMessageBox::about(this,tr("Error"),tr("addrTelStart must be num!"));
+            return;
+        }
+
+        try{
+            telCoilNum=tableModel->item(i,5)->text().toInt();
+        }catch(QString exception){
+
+            QMessageBox::about(this,tr("Error"),tr("telCoilNum must be num!"));
+            return;
+        }
+
         ConfigXml::addrs.at(i)->slaveId=slaveId;
         ConfigXml::addrs.at(i)->startAddr=addrStart;
         ConfigXml::addrs.at(i)->coilNum=coilNum;
+        ConfigXml::addrs.at(i)->telStartAddr=addrTelStart;
+        ConfigXml::addrs.at(i)->telColiNum=telCoilNum;
+
 
     }
 

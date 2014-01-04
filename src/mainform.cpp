@@ -60,7 +60,7 @@ MainForm::MainForm(QWidget *parent) :
     //resize(QApplication::desktop()->availableGeometry().size());
     //SQLUtil::test();
 
-    qDebug()<<"4444"<<endl;
+
 
     logview=new LogViewDialog();
 
@@ -80,8 +80,33 @@ MainForm::MainForm(QWidget *parent) :
 
     this->gasViewForm=new GasViewForm;
     connect(gasViewForm,SIGNAL(currentEquipIndexChange(int)),this,SLOT(gasViewSelectIndexChange(int)));
+    gasViewSelectIndexChange(0);
+
+
+    connect(this,SIGNAL(gasValueChange(int)),this,SLOT(gasViewValueChange(int)));
+
 
 }
+
+void MainForm::gasViewValueChange(int currIndex){
+
+    currIndex= currIndex<0?0:(currIndex>=this->equipmentsList.length()?this->equipmentsList.length()-1:currIndex);
+
+    if(currIndex==gasViewForm->getcurrentEquipIndex()){
+
+        Addr*addr=ConfigXml::addrs.at(currIndex);
+        QString labName= (addr->location==1)? Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
+
+        QString tit= labName+addr->num;
+
+        int nd= equipmentsList.at(currIndex)->getGasNd();
+
+        this->gasViewForm->setEquipments(tit,nd,currIndex);
+
+    }
+
+}
+
 
 void MainForm::gasViewSelectIndexChange(int currIndex){
 
@@ -114,6 +139,15 @@ void MainForm::createTranstration(){
     t->funCode=2;
 
     this->reqThread->addTranscation(t);
+
+
+    Transcation*t2=new Transcation;
+
+    t2->addr=ConfigXml::addrs.at(index);
+
+    t2->funCode=4;
+
+    this->reqThread->addTranscation(t2);
 
     transitionIndex= (transitionIndex+1)<ConfigXml::addrs.length()?transitionIndex+1:0;
 
@@ -191,7 +225,7 @@ void MainForm::transcationIsDone(Transcation*trans){
             }
 
 
-            changeEquipmentStatus(index,1,1);
+
 
         }else{  //fult to link
 
@@ -203,18 +237,25 @@ void MainForm::transcationIsDone(Transcation*trans){
 
         }
         break;
-        //    case 3:
+    case 4:
 
-        //        break;
-        //    case 4:
+        if(trans->returnCode>0){
 
-        //        break;
-        //    case 6:
+            QStringList list=trans->returnData.split("#");
 
-        //        break;
-        //    case 16:
+            int gasNd=list.at(0).toInt();
 
-        //        break;
+            change=changeEquipmentStatus(index,1,gasNd);
+
+        }else{
+
+            change=changeEquipmentStatus(index,1,0);
+        }
+
+        emit gasValueChange(index);
+
+        break;
+
     default:
         break;
     }
@@ -232,6 +273,8 @@ bool MainForm::changeEquipmentStatus(int index,int labelIndex,int data){
 
 MainForm::~MainForm()
 {
+    this->transcationCreate->stop();
+
     qDebug()<<"~MainForm"<<endl;
     delete ui;
     delete exitAction;
@@ -620,5 +663,37 @@ void MainForm::addLogInfo(QString info,int index,int level){
 
     ui->textEdit->append("["+QDateTime::currentDateTime().toLocalTime().toString()+"]"+loca+addr->num+":"+info);
 
+
+}
+
+
+extern "C" {
+
+void busMonitorAddItem( uint8_t isRequest, uint8_t slave, uint8_t func, uint16_t addr, uint16_t nb, uint16_t expectedCRC, uint16_t actualCRC )
+{
+    qDebug()<<"busMonitorAddItem:"<<endl;
+
+
+}
+
+void busMonitorRawData( uint8_t * data, uint8_t dataLen, uint8_t addNewline )
+{
+    qDebug()<<"busMonitorRawData:"<<endl;
+
+    if( dataLen > 0 )
+    {
+        QString dump = "";
+        for( int i = 0; i < dataLen; ++i )
+        {
+            dump += QString().sprintf( "%.2x ", data[i] );
+        }
+        if( addNewline )
+        {
+            dump += "\n";
+        }
+
+         qDebug()<<dump<<endl;
+    }
+}
 
 }

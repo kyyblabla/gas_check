@@ -189,7 +189,8 @@ bool EquipmentWidget::updateLabelVlaue(int labelIndex, int status){
 void EquipmentWidget::updateInfo(){
 
 
-    this->lNongDuLabel->setText(lNongDuLabelName+this->lNongDuLabelStatus +lNongDuLabelValue);
+
+    this->lNongDuLabel->setText(lNongDuLabelName+QString::number(this->lNongDuLabelStatus)+lNongDuLabelValue);
     lNongDuLabel->setStyleSheet("color:"+Config::colorLevel.split("|").at(0));
 
     if(this->lOnOrOffLabelStatus==1){
@@ -225,7 +226,7 @@ void EquipmentWidget::updateInfo(){
         lWaringLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(0));
     }
 
-    int waringLvel=lWaringLabelStatus>0?lWaringLabelStatus:((lWorkOrBreakLabelStatus>0||lOnOrOffLabelStatus>0)?1:0);
+    int waringLvel=lWaringLabelStatus>0?lWaringLabelStatus+1:((lWorkOrBreakLabelStatus>0||lOnOrOffLabelStatus>0)?1:0);
 
 
     switch(waringLvel){

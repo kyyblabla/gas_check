@@ -21,7 +21,6 @@ GasViewForm::GasViewForm(QWidget *parent) :
     ui->label_2->installEventFilter(this);
     ui->label_3->installEventFilter(this);
 
-
 }
 
 GasViewForm::~GasViewForm()
@@ -34,9 +33,7 @@ void GasViewForm::setEquipments(QString tit, double value,int index){
 
     ui->widget->setGanNd(value);
     ui->label->setText(tit);
-
     this->currentEquipIndex=index;
-
 
 }
 

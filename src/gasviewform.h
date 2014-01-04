@@ -22,6 +22,7 @@ public:
 
     void setEquipments(QString tit, double value, int index);
 
+    int getcurrentEquipIndex(){return currentEquipIndex;}
 
 signals:
     void currentEquipIndexChange(int);

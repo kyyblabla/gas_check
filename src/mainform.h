@@ -49,9 +49,12 @@ private slots:
     void transcationIsDone(Transcation *trans);
     void createTranstration();
 
-    void on_pushButton_4_clicked();
-
     void  gasViewSelectIndexChange(int);
+
+    void gasViewValueChange(int);
+
+signals:
+    void gasValueChange(int);
 
 private:
     Ui::MainForm *ui;

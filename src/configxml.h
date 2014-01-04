@@ -15,6 +15,7 @@ public:
     int index;
     int telStartAddr;
     int telColiNum;
+
     QString num;
 };
 

@@ -86,8 +86,8 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
 
     const int slaveId = transcation->addr->slaveId;
     const int func = transcation->funCode;
-    const int satrtAddr = transcation->addr->startAddr;
-    int coilNum = transcation->addr->coilNum;
+    const int satrtAddr = func==2?transcation->addr->startAddr:transcation->addr->telStartAddr;
+    int coilNum = func==2?transcation->addr->coilNum:transcation->addr->telColiNum;
 
     uint8_t dest[coilNum*sizeof(uint16_t)];
 
@@ -147,7 +147,7 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
         else
         {
             // qDebug()<<"here:"<<endl;
-            bool b_hex = true;
+
             QString qsCount="";
 
 
@@ -157,8 +157,8 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
                 QString qs_num="";
                 qs_num=qs_num.sprintf("%d", data);
 
-                // qDebug()<<"addr:"<<QString::number( satrtAddr+i )<<endl;
-                //  qDebug()<<"data:"<<qs_num<<endl;
+                qDebug()<<"addr:"<<QString::number( satrtAddr+i )<<endl;
+                qDebug()<<"data:"<<qs_num<<endl;
 
                 qsCount+=qs_num+"#";
             }
@@ -169,7 +169,7 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
     }
     else
     {
-        // qDebug()<<"here2:"<<endl;
+         qDebug()<<"here2:"<<endl;
         if( ret < 0 )
         {
             if(

@@ -425,9 +425,10 @@ int _modbus_receive_msg(modbus_t *ctx, uint8_t *msg, msg_type_t msg_type)
             return -1;
         }
 
-		// -- BEGIN QMODBUS MODIFICATION --
-        //busMonitorRawData( msg + msg_length, rc, ( step == _STEP_DATA && length_to_read-rc == 0 ) ? 1 : 0 );
-		// -- END QMODBUS MODIFICATION --
+        // -- BEGIN QMODBUS MODIFICATION --
+
+        busMonitorRawData( msg + msg_length, rc, ( step == _STEP_DATA && length_to_read-rc == 0 ) ? 1 : 0 );
+        // -- END QMODBUS MODIFICATION --
 
         /* Display the hex code of each character received */
         if (ctx->debug) {
@@ -520,13 +521,13 @@ static int check_confirmation(modbus_t *ctx, uint8_t *req,
     const int offset = ctx->backend->header_length;
     const int function = rsp[offset];
 
-	// -- BEGIN QMODBUS MODIFICATION --
-	int s_crc = 0; // TODO
-    //busMonitorAddItem( 1, req[0], req[1],
-    //                        ( req[2] << 8 ) + req[3],
-    //                        ( req[4] << 8 ) + req[5],
-    //                        s_crc, s_crc );
-	// -- END QMODBUS MODIFICATION --
+    // -- BEGIN QMODBUS MODIFICATION --
+    int s_crc = 0;  // TODO
+//    busMonitorAddItem( 1, req[0], req[1],
+//                            ( req[2] << 8 ) + req[3],
+//                            ( req[4] << 8 ) + req[5],
+//                            s_crc, s_crc );
+   // -- END QMODBUS MODIFICATION --
 
     if (ctx->backend->pre_check_confirmation) {
         rc = ctx->backend->pre_check_confirmation(ctx, req, rsp, rsp_length);
@@ -568,8 +569,8 @@ static int check_confirmation(modbus_t *ctx, uint8_t *req,
         function < 0x80) {
         int req_nb_value;
         int rsp_nb_value;
-		int num_items = 1;
-		int addr = (req[offset + 1] << 8) + req[offset + 2];
+        int num_items = 1;
+        int addr = (req[offset + 1] << 8) + req[offset + 2];
 
         /* Check function code */
         if (function != req[offset]) {
@@ -619,33 +620,33 @@ static int check_confirmation(modbus_t *ctx, uint8_t *req,
             req_nb_value = rsp_nb_value = 1;
         }
 
-		num_items = rsp_nb_value;
-		switch (function)
-		{
-			case _FC_READ_COILS:
-			case _FC_READ_DISCRETE_INPUTS:
-				num_items = rsp_nb_value*8;
-				break;
-			case _FC_WRITE_AND_READ_REGISTERS:
-			case _FC_READ_HOLDING_REGISTERS:
-			case _FC_READ_INPUT_REGISTERS:
-				num_items = rsp_nb_value/2;
-				break;
-			case _FC_WRITE_MULTIPLE_COILS:
-			case _FC_WRITE_MULTIPLE_REGISTERS:
-				addr = (rsp[offset + 1] << 8) | rsp[offset + 2];
-				num_items = rsp_nb_value;
-				break;
-			default:
-				break;
-		}
+        num_items = rsp_nb_value;
+        switch (function)
+        {
+            case _FC_READ_COILS:
+            case _FC_READ_DISCRETE_INPUTS:
+                num_items = rsp_nb_value*8;
+                break;
+            case _FC_WRITE_AND_READ_REGISTERS:
+            case _FC_READ_HOLDING_REGISTERS:
+            case _FC_READ_INPUT_REGISTERS:
+                num_items = rsp_nb_value/2;
+                break;
+            case _FC_WRITE_MULTIPLE_COILS:
+            case _FC_WRITE_MULTIPLE_REGISTERS:
+                addr = (rsp[offset + 1] << 8) | rsp[offset + 2];
+                num_items = rsp_nb_value;
+                break;
+            default:
+                break;
+        }
         //busMonitorAddItem( 0, rsp[offset-1], rsp[offset+0],
        //                    addr, num_items,
         //                    ctx->last_crc_expected,
         //                    ctx->last_crc_received
-                    //		( rsp[offset+req_nb_value+4] << 8 ) |
-                    //			rsp[offset+req_nb_value+5]
-//);
+        //		( rsp[offset+req_nb_value+4] << 8 ) |
+        //			rsp[offset+req_nb_value+5]
+        //);
 
         if (req_nb_value == rsp_nb_value) {
             rc = rsp_nb_value;
@@ -1911,64 +1912,64 @@ size_t strlcpy(char *dest, const char *src, size_t dest_size)
 
 void modbus_poll(modbus_t* ctx)
 {
-	uint8_t msg[MAX_MESSAGE_LENGTH];
-	uint8_t msg_len = 0;
+    uint8_t msg[MAX_MESSAGE_LENGTH];
+    uint8_t msg_len = 0;
 
     struct timeval tv;
-	tv.tv_sec = 0;
-	tv.tv_usec = 500;
-	modbus_set_response_timeout( ctx, &tv );
-	const int ret = _modbus_receive_msg( ctx, &msg_len, MSG_CONFIRMATION );	/* wait for 0.5 ms */
-	tv.tv_usec = _RESPONSE_TIMEOUT;
-	modbus_set_response_timeout( ctx, &tv );
-	if( ( ret < 0 && msg_len > 0 ) || ret >= 0 )
-	{
-		const int o = ctx->backend->header_length;
-		const int slave = msg[o+0];
-		const int func = msg[o+1];
-		const int datalen = msg_len - ctx->backend->header_length - ctx->backend->checksum_length - 2;
-		int addr = 0;
-		int nb = -1;
-		int isQuery = 1;
-		switch( func )
-		{
-			case _FC_READ_COILS:
-			case _FC_READ_DISCRETE_INPUTS:
-				if( msg[o+2] == datalen-1 )
-				{
-					isQuery = 0;
-					nb = (datalen-1) * 8;
-				}
-				break;
-			case _FC_READ_HOLDING_REGISTERS:
-			case _FC_READ_INPUT_REGISTERS:
-				if( msg[o+2] == datalen-1 )
-				{
-					isQuery = 0;
-					nb = (datalen-1) / 2;
-				}
-				break;
-			case _FC_WRITE_SINGLE_COIL:
-			case _FC_WRITE_SINGLE_REGISTER:
-				/* can't decide from message whether it is a query or response */
-				isQuery = 0;
-				nb = 1;
-				addr = ( msg[o+2] << 8 ) | msg[o+3];
-				break;
-			case _FC_REPORT_SLAVE_ID:
-				nb = 0;
-			case _FC_WRITE_MULTIPLE_REGISTERS:
-			case _FC_WRITE_MULTIPLE_COILS:
-			default:
-				/* can't decide from message whether it is a query or response */
-				isQuery = 0;
-				break;
-		}
-		if( nb == -1 )	/* is query or a write-response? */
-		{
-			addr = ( msg[o+2] << 8 ) | msg[o+3];
-			nb = ( msg[o+4] << 8 ) | msg[o+5];
-		}
+    tv.tv_sec = 0;
+    tv.tv_usec = 500;
+    modbus_set_response_timeout( ctx, &tv );
+    const int ret = _modbus_receive_msg( ctx, &msg_len, MSG_CONFIRMATION );	/* wait for 0.5 ms */
+    tv.tv_usec = _RESPONSE_TIMEOUT;
+    modbus_set_response_timeout( ctx, &tv );
+    if( ( ret < 0 && msg_len > 0 ) || ret >= 0 )
+    {
+        const int o = ctx->backend->header_length;
+        const int slave = msg[o+0];
+        const int func = msg[o+1];
+        const int datalen = msg_len - ctx->backend->header_length - ctx->backend->checksum_length - 2;
+        int addr = 0;
+        int nb = -1;
+        int isQuery = 1;
+        switch( func )
+        {
+            case _FC_READ_COILS:
+            case _FC_READ_DISCRETE_INPUTS:
+                if( msg[o+2] == datalen-1 )
+                {
+                    isQuery = 0;
+                    nb = (datalen-1) * 8;
+                }
+                break;
+            case _FC_READ_HOLDING_REGISTERS:
+            case _FC_READ_INPUT_REGISTERS:
+                if( msg[o+2] == datalen-1 )
+                {
+                    isQuery = 0;
+                    nb = (datalen-1) / 2;
+                }
+                break;
+            case _FC_WRITE_SINGLE_COIL:
+            case _FC_WRITE_SINGLE_REGISTER:
+                /* can't decide from message whether it is a query or response */
+                isQuery = 0;
+                nb = 1;
+                addr = ( msg[o+2] << 8 ) | msg[o+3];
+                break;
+            case _FC_REPORT_SLAVE_ID:
+                nb = 0;
+            case _FC_WRITE_MULTIPLE_REGISTERS:
+            case _FC_WRITE_MULTIPLE_COILS:
+            default:
+                /* can't decide from message whether it is a query or response */
+                isQuery = 0;
+                break;
+        }
+        if( nb == -1 )	/* is query or a write-response? */
+        {
+            addr = ( msg[o+2] << 8 ) | msg[o+3];
+            nb = ( msg[o+4] << 8 ) | msg[o+5];
+        }
 //        busMonitorAddItem( isQuery,				/* is query */
 //                    slave,				/* slave */
 //                    func,				/* func */
@@ -1978,7 +1979,7 @@ void modbus_poll(modbus_t* ctx)
 //                    ctx->last_crc_received
 //                    //( msg[msg_len-2] << 8 ) | msg[msg_len-1]	/* CRC */
 //                );
-	}
+    }
 }
 
 

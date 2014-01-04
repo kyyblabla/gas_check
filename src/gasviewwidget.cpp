@@ -46,6 +46,7 @@ QwtDial *GasViewWidget::createDial(  )
     d_speedo->setScale( Config::ndLableMin, Config::ndLableMax );
     d_speedo->scaleDraw()->setPenWidth( 2 );
 
+
     d_speedo->setLabel(Config::ndLableName);
 
     d_speedo->setValue(0);
@@ -84,7 +85,7 @@ void GasViewWidget::setGanNd(double nd){
 
         nd=0;
 
-    }else if(nd>Config::ndLableMin){
+    }else if(nd>Config::ndLableMax){
 
         nd=Config::ndLableMax;
     }
