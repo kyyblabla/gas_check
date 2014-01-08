@@ -3,11 +3,14 @@
 #include "config.h"
 #include "configxml.h"
 #include "gasviewform.h"
+#include "testwindow.h"
 
 #include <QApplication>
 #include <QTextCodec>
 #include <QDebug>
 #include <QTranslator>
+
+MainForm * globalMainWin = NULL;
 
 int main(int argc, char *argv[])
 {
@@ -30,9 +33,12 @@ int main(int argc, char *argv[])
     Config::initConfig();
     ConfigXml::init();
 
-
+    //TestWindow w;
     MainForm w;
     w.show();
+
+    globalMainWin=&w;
+
     return a.exec();
 
 }

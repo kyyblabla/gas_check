@@ -29,6 +29,7 @@ class MainForm : public QWidget
 public:
     explicit MainForm(QWidget *parent = 0);
     ~MainForm();
+    void doReceiveData(QString data);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *ev); //filter events, in this moment,we just attention this event of ui's label
@@ -38,6 +39,9 @@ protected:
     //bool winEvent(MSG *message, long *result);
 
 private slots:
+
+    void changeStackIndex(int index);
+
     void doSetting(); //click to setting the syatem
     void backShowStyle(QSystemTrayIcon::ActivationReason reason); //click trayIcon to show or hidden the mainform
 
@@ -52,6 +56,8 @@ private slots:
     void  gasViewSelectIndexChange(int);
 
     void gasViewValueChange(int);
+
+    void pollForDataOnBus();
 
 signals:
     void gasValueChange(int);
@@ -111,6 +117,7 @@ private:
 
 
     GasViewForm*gasViewForm;
+
 
 
 };

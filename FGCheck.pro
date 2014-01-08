@@ -33,7 +33,8 @@ SOURCES +=  src/main.cpp\
             src/gasviewwidget.cpp \
             src/myserialport.cpp \
             src/myserialsettingswidget.cpp \
-            src/speedo_meter.cpp
+            src/speedo_meter.cpp \
+            src/testwindow.cpp
 
 
 
@@ -55,7 +56,8 @@ HEADERS  += src/mainform.h \
             src/gasviewwidget.h \
             src/myserialport.h \
             src/myserialsettingswidget.h \
-            src/speedo_meter.h
+            src/speedo_meter.h \
+            src/testwindow.h
 
 
 
@@ -93,7 +95,8 @@ FORMS    += form/mainform.ui \
             form/serialsettingswidget.ui \
             form/gasviewform.ui \
             form/gasviewwidget.ui \
-            src/myserialsettingswidget.ui
+            src/myserialsettingswidget.ui \
+            form/testwindow.ui
 
 
 RESOURCES += \

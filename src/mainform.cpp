@@ -28,7 +28,10 @@
 #include <QTimer>
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
+#include <QStackedLayout>
 
+
+extern MainForm * globalMainWin;
 
 MainForm::MainForm(QWidget *parent) :
     QWidget(parent),
@@ -49,17 +52,19 @@ MainForm::MainForm(QWidget *parent) :
 
     createEquipments();
 
+     qDebug()<<"111=============================="<<endl;
+
     createLinkStatusPic();
+
 
     //remove the title bar
     this->setWindowFlags(Qt::FramelessWindowHint);
 
-    this->setAttribute(Qt::WA_TranslucentBackground);
+    //this->setAttribute(Qt::WA_TranslucentBackground);
 
     this->showNormal();
     //resize(QApplication::desktop()->availableGeometry().size());
     //SQLUtil::test();
-
 
 
     logview=new LogViewDialog();
@@ -86,6 +91,37 @@ MainForm::MainForm(QWidget *parent) :
     connect(this,SIGNAL(gasValueChange(int)),this,SLOT(gasViewValueChange(int)));
 
 
+    QTimer*pollTimer=new QTimer;
+    connect(pollTimer, SIGNAL(timeout()), this, SLOT(pollForDataOnBus()));
+    pollTimer->start(10);
+
+
+    changeStackIndex(1);
+
+
+}
+
+
+
+void MainForm::changeStackIndex(int index){
+
+    ui->stackedWidget->setCurrentIndex(index);
+
+    QStackedLayout*laylout=(QStackedLayout*)ui->stackedWidget->layout();
+
+    laylout->setStackingMode(QStackedLayout::StackAll);
+
+    ui->page->setVisible(false);
+
+
+}
+
+void MainForm::pollForDataOnBus()
+{
+    if( ModbusRequestThread::m_modbus )
+    {
+        modbus_poll( ModbusRequestThread::m_modbus );
+    }
 }
 
 void MainForm::gasViewValueChange(int currIndex){
@@ -293,7 +329,7 @@ void MainForm::initLabels(){
     ui->label->setText(Config::MAIN_TITLE);
     ui->label_12->setText(Config::AREA_LABEL.split("#").at(0));
     ui->label_13->setText(Config::AREA_LABEL.split("#").at(1));
-    ui->stackedWidget_4->setCurrentIndex(0);
+    //ui->stackedWidget_4->setCurrentIndex(0);
 }
 
 /**
@@ -431,12 +467,11 @@ void MainForm::createLinkStatusPic(){
     layout->addWidget(lab2,1,0);
     layout->addWidget(lab3,1,1);
 
-    QWidget *newWidget=new QWidget;
+   // QWidget *newWidget=new QWidget;
+   // newWidget->setLayout(layout);
+   //newWidget->setStyleSheet("*{border-style:solid;border-color:#000;border-width:1px}");
 
-    newWidget->setLayout(layout);
-    //newWidget->setStyleSheet("*{border-style:solid;border-color:#000;border-width:1px}");
-
-    ui->widget_2->layout()->addWidget(newWidget);
+    ui->widget_2->setLayout(layout);
 
 
 }
@@ -493,18 +528,15 @@ bool MainForm::eventFilter(QObject *obj, QEvent *event){
 
         if (event->type() == QEvent::MouseButtonPress) {
 
-            ui->stackedWidget_4->setCurrentIndex(1);
+            //ui->stackedWidget_4->setCurrentIndex(1);
             return true;
-
-
-
         }
 
     } else if(obj==ui->label_20){
 
         if (event->type() == QEvent::MouseButtonPress) {
 
-            ui->stackedWidget_4->setCurrentIndex(0);
+            //ui->stackedWidget_4->setCurrentIndex(0);
             return true;
         }
 
@@ -666,6 +698,12 @@ void MainForm::addLogInfo(QString info,int index,int level){
 
 }
 
+void MainForm::doReceiveData(QString data){
+
+    ui->textEdit->append(data);
+
+}
+
 
 extern "C" {
 
@@ -692,7 +730,25 @@ void busMonitorRawData( uint8_t * data, uint8_t dataLen, uint8_t addNewline )
             dump += "\n";
         }
 
-         qDebug()<<dump<<endl;
+        qDebug()<<dump<<endl;
+    }
+
+
+}
+
+void busMonitorReceiveMes(uint8_t * data, uint8_t dataLen){
+
+    if( dataLen > 0 )
+    {
+        QString dump = "";
+        for( int i = 0; i < dataLen; ++i )
+        {
+            dump += QString().sprintf( "%.2x ", data[i] );
+        }
+
+        globalMainWin->doReceiveData(dump);
+
+
     }
 }
 

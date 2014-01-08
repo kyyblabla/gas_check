@@ -79,8 +79,8 @@ void ModbusRequestThread::addTranscation(Transcation *transcation){
 
 void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
 
-    if( m_modbus == NULL )
-    {
+
+    if( m_modbus == NULL ){
         return;
     }
 
@@ -98,8 +98,9 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
     int ret = -1;
     bool is16Bit = false;
     bool writeAccess = false;
-    //const QString dataType = "1111";
 
+
+    //const QString dataType = "1111";
     modbus_set_slave( m_modbus, slaveId );
 
     switch( func )
@@ -116,20 +117,9 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
         is16Bit = true;
         break;
     case 6:
-        //        ret = modbus_write_register( m_modbus, addr,
-        //                    ui->regTable->item( 0, DataColumn )->
-        //                        text().toInt(0, 0) );
-        //            writeAccess = true;
-        //            num = 1;
         break;
     case 16:
-        //        int modbus_write_registers(modbus_t *'ctx', int 'addr', int 'nb', const uint16_t *'src');*
-        //                    ui->regTable->item( 0, DataColumn )->
-        //                        text().toInt(0, 0) );
-        //            writeAccess = true;
-        //            num = 1;
         break;
-
     default:
         break;
     }
@@ -169,7 +159,7 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
     }
     else
     {
-         qDebug()<<"here2:"<<endl;
+        qDebug()<<"here2:"<<endl;
         if( ret < 0 )
         {
             if(

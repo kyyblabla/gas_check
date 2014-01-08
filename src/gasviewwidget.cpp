@@ -43,11 +43,8 @@ QwtDial *GasViewWidget::createDial(  )
 
     d_speedo = new SpeedoMeter( this );
     d_speedo->setScaleStepSize( Config::ndLableStep );
-    d_speedo->setScale( Config::ndLableMin, Config::ndLableMax );
-    d_speedo->scaleDraw()->setPenWidth( 2 );
-
-
-    d_speedo->setLabel(Config::ndLableName);
+    d_speedo->setScale(Config::ndLableMin, Config::ndLableMax );
+    d_speedo->scaleDraw()->setPenWidth(2);
 
     d_speedo->setValue(0);
 
