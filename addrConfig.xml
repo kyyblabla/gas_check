@@ -6,6 +6,8 @@
            <numCoils>1</numCoils>
            <num>1号</num>
            <location>1</location>
+           <telStartAddr>0</telStartAddr>
+           <telColiNum>1</telColiNum>
        </addr>
 
        <addr id="2">
@@ -14,6 +16,8 @@
            <numCoils>13</numCoils>
            <num>2号</num>
             <location>1</location>
+            <telStartAddr>0</telStartAddr>
+            <telColiNum>1</telColiNum>
        </addr>
 
        <addr id="3">
@@ -22,6 +26,8 @@
            <numCoils>13</numCoils>
            <num>3号</num>
            <location>1</location>
+           <telStartAddr>0</telStartAddr>
+           <telColiNum>1</telColiNum>
        </addr>
        <addr id="4">
            <startAddr>0</startAddr>
@@ -29,5 +35,7 @@
            <numCoils>13</numCoils>
            <num>1号</num>
            <location>2</location>
+           <telStartAddr>0</telStartAddr>
+           <telColiNum>1</telColiNum>
        </addr>
 </root>

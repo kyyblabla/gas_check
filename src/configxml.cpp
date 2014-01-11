@@ -91,7 +91,6 @@ void ConfigXml::init(){
 
                     }
 
-                    //qDebug() << "   " << qPrintable(attrNode.toElement().tagName()) << qPrintable(attrNode.toElement().text());
 
                 }
 
@@ -106,7 +105,7 @@ void ConfigXml::init(){
 
 void ConfigXml::update(){
 
-    qDebug()<<"open for write..." ;
+   // qDebug()<<"open for write..." ;
     QFile file("addrConfig.xml");
     if (!file.open(QIODevice::WriteOnly)) {
         qDebug()<<"open for read write..." ;

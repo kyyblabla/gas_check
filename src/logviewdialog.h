@@ -17,6 +17,9 @@ public:
     explicit LogViewDialog(QWidget *parent = 0);
     ~LogViewDialog();
     
+private slots:
+    void on_pushButton_4_clicked();
+
 private:
     Ui::LogViewDialog *ui;
 

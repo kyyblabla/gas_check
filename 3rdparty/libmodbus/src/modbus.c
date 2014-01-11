@@ -1922,7 +1922,7 @@ void modbus_poll(modbus_t* ctx)
     tv.tv_usec = 500;
     modbus_set_response_timeout( ctx, &tv );
 
-    const int ret = _modbus_receive_msg(ctx, msg, MSG_CONFIRMATION );	/* wait for 0.5 ms */
+    const int ret = _modbus_receive_msg(ctx, msg, MSG_INDICATION );	/* wait for 0.5 ms */
 
     tv.tv_usec = _RESPONSE_TIMEOUT;
 
@@ -1934,7 +1934,7 @@ void modbus_poll(modbus_t* ctx)
 
         offset = ctx->backend->header_length;    
 
-        busMonitorReceiveMes(msg,5);
+        busMonitorReceiveMes(msg,MAX_MESSAGE_LENGTH);
 
         send_msg(ctx,msg,10);
 

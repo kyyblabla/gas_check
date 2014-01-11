@@ -22,7 +22,7 @@
   <property name="styleSheet">
    <string notr="true">QWidget#MainForm{
 	 
-	background-color: rgb(0,0,0) ;
+	background-color:#3C3F4A;
 }
 
 *{
@@ -78,18 +78,7 @@ QWidget#widget_7 *{
   
 }
 
-QWidget#widget_7 QLabel#label_2:hover{
-	
-	background-color: qlineargradient(spread:pad, x1:0.5, y1:0, x2:0.54, y2:1, stop:0 rgba(255, 0, 0, 148), stop:0.534091 rgba(248, 248, 248, 0));
-}
-
-QWidget#widget_7 QLabel#label_3:hover,
-QWidget#widget_7 QLabel#label_11:hover{
-   
-	 
-	background-color: qlineargradient(spread:pad, x1:0.511, y1:0, x2:0.495, y2:1, stop:0 rgba(0, 0, 0, 146), stop:0.596591 rgba(246, 246, 246, 0));
-	 
-}</string>
+ </string>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1">
          <property name="margin">
@@ -131,123 +120,30 @@ QWidget#widget_7 QLabel#label_11:hover{
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="main_view">
-         <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1">
           <property name="margin">
            <number>0</number>
           </property>
           <item>
-           <widget class="QWidget" name="widget_con" native="true">
-            <layout class="QVBoxLayout" name="verticalLayout_2">
+           <widget class="QWidget" name="widget_5" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <property name="spacing">
+              <number>6</number>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_6" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0">
              <item>
-              <widget class="QWidget" name="widget" native="true">
-               <property name="styleSheet">
-                <string notr="true">QWidget#widget QLabel{
-    color:#FFF;
-}
-
-QWidget#widget_9{
-	color:#fff;
-    background-color:none;
-}
-
-QWidget#widget_9 &gt; QLabel{
-	color:#fff;
-     
-}
-
-
-QWidget#widget_5{
-  
-}
-
- 
-
-</string>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="3,1">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="margin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QWidget" name="widget_8" native="true">
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,9">
-                   <item>
-                    <widget class="QLabel" name="label_12">
-                     <property name="text">
-                      <string>JiKu</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QWidget" name="widget_5" native="true">
-                     <layout class="QHBoxLayout" name="horizontalLayout">
-                      <property name="spacing">
-                       <number>3</number>
-                      </property>
-                      <property name="margin">
-                       <number>0</number>
-                      </property>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QWidget" name="widget_9" native="true">
-                  <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,9">
-                   <item>
-                    <widget class="QLabel" name="label_13">
-                     <property name="text">
-                      <string>JiaYouBeng</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QWidget" name="widget_6" native="true">
-                     <property name="styleSheet">
-                      <string notr="true"/>
-                     </property>
-                     <layout class="QHBoxLayout" name="horizontalLayout_2">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="margin">
-                       <number>0</number>
-                      </property>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>191</height>
-                </size>
-               </property>
-              </spacer>
+              <widget class="LinkStatusWidget" name="widget_8" native="true"/>
              </item>
             </layout>
            </widget>
@@ -256,13 +152,9 @@ QWidget#widget_5{
         </widget>
         <widget class="QWidget" name="float_menu">
          <property name="styleSheet">
-          <string notr="true">QWidget#widget_4{
-	
-	background-color: #F1F3F3;
-
-}</string>
+          <string notr="true"/>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_8" stretch="2,1">
+         <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1">
           <property name="margin">
            <number>0</number>
           </property>
@@ -282,56 +174,32 @@ QWidget#widget_5{
           <item>
            <widget class="QWidget" name="widget_4" native="true">
             <property name="styleSheet">
-             <string notr="true">QLabel{
+             <string notr="true">QWidget#widget_4{
+   background-color: #353942;
+   opacity:0.8;
+}
+
+QLabel{
 	color:#fff;
 	background-color:#0C80E8;
 	font-size:13pt;
 	border-radius:3px;
+    padding:5px 30px 5px 30px;
 }</string>
             </property>
-            <layout class="QGridLayout" name="gridLayout_2">
-             <property name="horizontalSpacing">
-              <number>6</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_9">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>Close Alarm</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::AutoText</enum>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="margin">
-                <number>5</number>
+            <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,0">
+             <item row="5" column="3" rowspan="3">
+              <widget class="QTextEdit" name="textEdit">
+               <property name="html">
+                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'微软雅黑'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="label_19">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>Option</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
+             <item row="5" column="0" colspan="3">
               <widget class="QLabel" name="label_16">
                <property name="enabled">
                 <bool>false</bool>
@@ -353,79 +221,7 @@ QWidget#widget_5{
                </property>
               </widget>
              </item>
-             <item row="0" column="3">
-              <widget class="QLabel" name="label_17">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>Log</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::AutoText</enum>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="margin">
-                <number>5</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_10">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>Rest</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLabel" name="label_20">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>Back</string>
-               </property>
-               <property name="textFormat">
-                <enum>Qt::AutoText</enum>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="margin">
-                <number>5</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
+             <item row="7" column="0" colspan="3">
               <widget class="QLabel" name="label_18">
                <property name="enabled">
                 <bool>false</bool>
@@ -453,26 +249,10 @@ QWidget#widget_5{
                </property>
               </widget>
              </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page">
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QWidget" name="widget_11" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <widget class="QTextEdit" name="textEdit">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
+             <item row="6" column="0" colspan="3">
+              <widget class="QLabel" name="label_17">
+               <property name="enabled">
+                <bool>false</bool>
                </property>
                <property name="minimumSize">
                 <size>
@@ -481,152 +261,20 @@ QWidget#widget_5{
                 </size>
                </property>
                <property name="styleSheet">
-                <string notr="true">QTextEdit#textEdit{
-	background-color: qlineargradient(spread:pad, x1:0.489, y1:0, x2:0.488, y2:1, stop:0 rgba(242, 242, 242, 255), stop:1 rgba(255, 255, 255, 255));
-	padding:0px;
-}</string>
+                <string notr="true"/>
                </property>
-               <property name="html">
-                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'微软雅黑'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <property name="text">
+                <string>Log</string>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QWidget" name="widget_2" native="true">
-               <property name="styleSheet">
-                <string notr="true">QWidget#widget_2 .QLabel:hover{
-   border-color:#ccc; 
-   border-width:1px;
-   border-style:solid;
-}</string>
+               <property name="textFormat">
+                <enum>Qt::AutoText</enum>
                </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="widget_3" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>140</height>
-             </size>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_7">
-             <property name="spacing">
-              <number>6</number>
-             </property>
-             <property name="margin">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QWidget" name="widget_10" native="true">
-               <property name="styleSheet">
-                <string notr="true">QWidget#widget_10{
-	background-color:   
-}
-QWidget#widget_10 .QLabel{
-  color:#fff;
-   background-color:#59AAE8;
-   padding:5px;
-   border-radius:3px;
-   border-color:#499BDC;
-   border-width: 1px;
-   border-style: solid;
-}
-
-
-QWidget#widget_10 .QLabel:hover{
-   background-color:rgb(89, 170, 200);
-}
-</string>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,0,0,0,0,0,0">
-                <property name="spacing">
-                 <number>10</number>
-                </property>
-                <property name="topMargin">
-                 <number>12</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>12</number>
-                </property>
-                <item>
-                 <spacer name="horizontalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_3">
-                  <property name="text">
-                   <string>run</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_2">
-                  <property name="text">
-                   <string>paly</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pushButton_4">
-                  <property name="text">
-                   <string>ShowPan</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="label_21">
-                  <property name="text">
-                   <string>Gas view</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="label_14">
-                  <property name="text">
-                   <string>Clear</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="label_15">
-                  <property name="text">
-                   <string>Log</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+               <property name="margin">
+                <number>5</number>
+               </property>
               </widget>
              </item>
             </layout>
@@ -642,6 +290,14 @@ QWidget#widget_10 .QLabel:hover{
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>LinkStatusWidget</class>
+   <extends>QWidget</extends>
+   <header>linkstatuswidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

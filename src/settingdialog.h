@@ -1,7 +1,9 @@
 ﻿#ifndef SETTINGDIALOG_H
 #define SETTINGDIALOG_H
 
+#include <mainform.h>
 #include <QDialog>
+
 
 namespace Ui {
 class SettingDialog;
@@ -20,6 +22,8 @@ public:
     ~SettingDialog();
 signals:
     void changeSerials(int);
+    void changeIsSlave(MainForm::MasterModel model);
+
 private slots:
     
     void on_pushButton_clicked();

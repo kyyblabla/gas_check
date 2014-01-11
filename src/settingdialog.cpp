@@ -77,7 +77,6 @@ void SettingDialog::initTable(){
         tableModel->setItem(i,1,new QStandardItem(QString::number(addr->slaveId)));
         tableModel->setItem(i,2,new QStandardItem(QString::number(addr->startAddr)));
         tableModel->setItem(i,3,new QStandardItem(QString::number(addr->coilNum)));
-
         tableModel->setItem(i,4,new QStandardItem(QString::number(addr->telStartAddr)));
         tableModel->setItem(i,5,new QStandardItem(QString::number(addr->telColiNum)));
 
@@ -171,8 +170,6 @@ void SettingDialog::changeTableValue(){
         ConfigXml::addrs.at(i)->coilNum=coilNum;
         ConfigXml::addrs.at(i)->telStartAddr=addrTelStart;
         ConfigXml::addrs.at(i)->telColiNum=telCoilNum;
-
-
     }
 
     ConfigXml::update();
@@ -195,6 +192,13 @@ void SettingDialog::on_pushButton_clicked()
 void SettingDialog::on_pushButton_5_clicked()
 {
     changeTableValue();
+
+    Config::updateConfig("model/isSlave",ui->checkBox->isChecked()?"true":"false");
+
+    MainForm::MasterModel model= ui->checkBox->isChecked()?MainForm::Sub:MainForm::Master;
+
+    emit changeIsSlave(model);
+
     ui->pushButton_5->setEnabled(false);
     ui->pushButton->setEnabled(false);
 
@@ -208,8 +212,10 @@ void SettingDialog::on_pushButton_3_clicked()
 
 void SettingDialog::on_checkBox_clicked(bool checked)
 {
-    Config::updateConfig("model/isSlave",checked?"true":"false");
-    setBlockEnable(!Config::isSlave);
+    setBlockEnable(!checked);
+    ui->pushButton->setEnabled(true);
+    ui->pushButton_5->setEnabled(true);
+
 
 }
 
@@ -218,7 +224,9 @@ void SettingDialog::on_checkBox_clicked(bool checked)
 
 void SettingDialog::on_pushButton_8_clicked()
 {
+
     emit changeSerials(1);
+
     ui->pushButton_8->setEnabled(false);
     ui->pushButton_7->setEnabled(false);
 }

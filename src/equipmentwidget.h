@@ -7,6 +7,7 @@
 #include <QString>
 
 
+class dialpan;
 
 
 class EquipmentWidget : public QWidget
@@ -15,11 +16,11 @@ class EquipmentWidget : public QWidget
 public:
     explicit EquipmentWidget(QWidget *parent = 0);
 
-    void initWidget();
-    void setLabels();
-    void updateLabelInfo(int labelName, int status, QString info);
-    bool updateLabelVlaue(int labelIndex, int status);
-    int getGasNd(){return lNongDuLabelStatus;}
+    ~EquipmentWidget();
+    bool updateLableValue(int labelIndex,int value);
+    // void updateLabelInfo(int labelName, int status, QString info);
+    // bool updateLabelVlaue(int labelIndex, int status);
+    // int getGasNd(){return lNongDuLabelStatus;}
 
 signals:
     
@@ -31,24 +32,36 @@ private:
     QLabel *lNongDuLabel;
     QString lNongDuLabelName;
     QString lNongDuLabelValue;
-    int lNongDuLabelStatus;
+
 
     QLabel *lOnOrOffLabel;
     QString lOnOrOffLabelName;
     QString lOnOrOffLabelValue;
-    int lOnOrOffLabelStatus;
 
     QLabel *lWorkOrBreakLabel;
     QString lWorkOrBreakLabelName;
     QString lWorkOrBreakLabelValue;
-    int lWorkOrBreakLabelStatus;
+
 
     QLabel *lWaringLabel;
     QString lWaringLabelName;
     QString lWaringLabelValue;
-    int lWaringLabelStatus;
 
-    void updateInfo();
+
+    dialpan *dPan;
+
+
+    void initLables();
+    void setLabels();
+
+    void updateLables();
+
+    int gasValue;
+    int onOffValue;
+    int workBreakValue;
+    int waringValue;
+    int waringLevelValue;
+    QLabel *infoLabel;
     
 };
 

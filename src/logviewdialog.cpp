@@ -19,9 +19,9 @@ LogViewDialog::LogViewDialog(QWidget *parent) :
 
     initTreeView();
     initTableView();
-    ui->splitter->setStretchFactor(1,5);
+
     ui->lineEdit->setFocus();
-    this->setWindowFlags(Qt::Window);
+    this->setWindowFlags(Qt::Window|Qt::FramelessWindowHint);
 }
 
 LogViewDialog::~LogViewDialog()
@@ -76,4 +76,9 @@ void LogViewDialog::initTreeView(){
 
 
 
+}
+
+void LogViewDialog::on_pushButton_4_clicked()
+{
+    this->close();
 }

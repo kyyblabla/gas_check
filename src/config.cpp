@@ -27,8 +27,8 @@ int Config::sleepTime;
 
 bool Config::isSlave;
 
-double Config::ndLableMin;
-double Config::ndLableMax;
+int Config::ndLableMin;
+int Config::ndLableMax;
 double Config::ndLableStep;
 QString Config::ndLableName;
 
@@ -70,13 +70,13 @@ bool Config::initConfig(){
     Config::isSlave=settings.value("model/isSlave").toBool();
 
 
-    Config::ndLableMin=settings.value("color/ndLableMin").toDouble();
-    Config::ndLableMax=settings.value("color/ndLableMax").toDouble();
+    Config::ndLableMin=settings.value("color/ndLableMin").toInt();
+    Config::ndLableMax=settings.value("color/ndLableMax").toInt();
     Config::ndLableStep=settings.value("color/ndLableStep").toDouble();
     Config::ndLableName=settings.value("color/ndLableName").toString();
 
 
-    qDebug()<<Config::colorLevel<<endl;
+
 
     Config::SQL_CONNECTION_NAME="QMYSQL";
     Config::SQL_HOST_NAME="localhost";

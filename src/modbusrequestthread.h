@@ -30,6 +30,7 @@ public:
     void addTranscation(Transcation*transcation);
     static modbus_t * m_modbus;
     void createModbus();
+    void stopReq();
 signals:
 
     void transcationDone(Transcation*transcation);

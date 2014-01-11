@@ -21,15 +21,24 @@ class EquipmentWidget;
 class LogViewDialog;
 class QTimer;
 class GasViewForm;
+class SettingDialog;
+
+
 
 class MainForm : public QWidget
 {
     Q_OBJECT
-    
 public:
     explicit MainForm(QWidget *parent = 0);
     ~MainForm();
     void doReceiveData(QString data);
+
+    enum MasterModel{
+        Master,
+        Sub,
+        SubToMaster,
+        MasterToSub
+    };
 
 protected:
     bool eventFilter(QObject *obj, QEvent *ev); //filter events, in this moment,we just attention this event of ui's label
@@ -47,20 +56,23 @@ private slots:
 
     void quit();
     void playSound();
-    void on_pushButton_2_clicked();
-    void on_pushButton_3_clicked();
+
     void doLogView();
     void transcationIsDone(Transcation *trans);
     void createTranstration();
 
-    void  gasViewSelectIndexChange(int);
+    //void  gasViewSelectIndexChange(int);
 
-    void gasViewValueChange(int);
+    //void gasViewValueChange(int);
 
     void pollForDataOnBus();
 
+
+    void modelChange(MainForm::MasterModel modelType);
+    //void on_pushButton_clicked();
+
 signals:
-    void gasValueChange(int);
+    void gasValueChange(int index);
 
 private:
     Ui::MainForm *ui;
@@ -70,6 +82,10 @@ private:
     //QMenu *contentMenu;
     QAction*exitAction;
     QAction*settingAction;
+
+    SettingDialog*settingDialog;
+
+    void initTimerAndThread();
 
     void initEventerFilter(); // init label event listener
 
@@ -86,7 +102,7 @@ private:
     QAction*logViewAction;
 
     //crate lin status pic
-    void createLinkStatusPic();
+    //void createLinkStatusPic();
     void createEquipments();
 
 
@@ -105,6 +121,8 @@ private:
     QTimer *transcationCreate;
     bool isPlay;
 
+    QTimer*pollTimer;
+
     ModbusRequestThread*reqThread;
     // MySerialPort*mySerialPort;
 
@@ -113,10 +131,13 @@ private:
 
     int transitionIndex;
 
-    void addLogInfo(QString info, int index, int level);
+    //void addLogInfo(QString info, int index, int level);
+
+    //GasViewForm*gasViewForm;
+    void addLogInfo(int equipmentIndex,int labelIndex,int statu);
 
 
-    GasViewForm*gasViewForm;
+    MasterModel masterModel;
 
 
 

@@ -7,7 +7,8 @@
 #include "qcustlabel.h"
 #include "equipmentwidget.h"
 #include "configxml.h"
-#include "gasviewform.h"
+#include "dialpan.h"
+#include "sqlite.h"
 
 
 #include "imodbus.h"
@@ -29,6 +30,7 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 #include <QStackedLayout>
+#include <QHBoxLayout>
 
 
 extern MainForm * globalMainWin;
@@ -37,8 +39,8 @@ MainForm::MainForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::MainForm)
 {
-    ui->setupUi(this);
 
+    ui->setupUi(this);
 
     initLabels();
 
@@ -52,29 +54,38 @@ MainForm::MainForm(QWidget *parent) :
 
     createEquipments();
 
-     qDebug()<<"111=============================="<<endl;
-
-    createLinkStatusPic();
-
-
     //remove the title bar
     this->setWindowFlags(Qt::FramelessWindowHint);
-
-    //this->setAttribute(Qt::WA_TranslucentBackground);
-
     this->showNormal();
-    //resize(QApplication::desktop()->availableGeometry().size());
-    //SQLUtil::test();
+
+    logview=new LogViewDialog;
+
+    this->settingDialog=new SettingDialog;
+
+    connect(settingDialog,SIGNAL(changeIsSlave(MainForm::MasterModel)),this,SLOT(modelChange(MainForm::MasterModel)));
+
+    changeStackIndex(0);
+
+    initTimerAndThread();
 
 
-    logview=new LogViewDialog();
+
+}
+
+
+void MainForm::initTimerAndThread(){
 
     isPlay=false;
+
     playTimer=new QTimer;
     connect(playTimer, SIGNAL(timeout()), this, SLOT(playSound()));
 
     transcationCreate=new QTimer;
     connect(transcationCreate, SIGNAL(timeout()), this, SLOT(createTranstration()));
+
+    pollTimer=new QTimer;
+
+    connect(pollTimer, SIGNAL(timeout()), this, SLOT(pollForDataOnBus()));
 
     reqThread= new ModbusRequestThread;
     //transcationDone
@@ -82,22 +93,18 @@ MainForm::MainForm(QWidget *parent) :
 
     transitionIndex=0;
 
+    if(Config::isSlave){
 
-    this->gasViewForm=new GasViewForm;
-    connect(gasViewForm,SIGNAL(currentEquipIndexChange(int)),this,SLOT(gasViewSelectIndexChange(int)));
-    gasViewSelectIndexChange(0);
+        pollTimer->start(10);
 
+        this->masterModel=Sub;
 
-    connect(this,SIGNAL(gasValueChange(int)),this,SLOT(gasViewValueChange(int)));
+    }else{
 
-
-    QTimer*pollTimer=new QTimer;
-    connect(pollTimer, SIGNAL(timeout()), this, SLOT(pollForDataOnBus()));
-    pollTimer->start(10);
-
-
-    changeStackIndex(1);
-
+        this->transcationCreate->start(Config::sleepTime);
+        reqThread->start();
+        this->masterModel=Master;
+    }
 
 }
 
@@ -105,13 +112,65 @@ MainForm::MainForm(QWidget *parent) :
 
 void MainForm::changeStackIndex(int index){
 
+
+
     ui->stackedWidget->setCurrentIndex(index);
 
-    QStackedLayout*laylout=(QStackedLayout*)ui->stackedWidget->layout();
+    if(index==0){
 
-    laylout->setStackingMode(QStackedLayout::StackAll);
+        ui->float_menu->setVisible(false);
 
-    ui->page->setVisible(false);
+        ui->main_view->setVisible(true);
+
+    }else if(index==1){
+
+        ui->float_menu->setVisible(true);
+
+        ui->main_view->setVisible(true);
+
+    }
+
+}
+
+void MainForm::modelChange(MainForm::MasterModel model){
+
+
+    this->masterModel=model;
+    switch (model) {
+
+    case Master:
+    case SubToMaster:
+        if(this->pollTimer->isActive()){
+            this->pollTimer->stop();
+        }
+
+        if(!this->transcationCreate->isActive()){
+            this->transcationCreate->start(Config::sleepTime);
+        }
+
+        if(!this->reqThread->isRunning()){
+            this->reqThread->start();
+        }
+        break;
+    case Sub:
+    case MasterToSub:
+
+        if(this->transcationCreate->isActive()){
+            this->transcationCreate->stop();
+        }
+
+        if(this->reqThread->isRunning()){
+            this->reqThread->stopReq();
+        }
+
+        if(!this->pollTimer->isActive()){
+            this->pollTimer->start(15);
+        }
+        break;
+    default:
+        break;
+    }
+
 
 
 }
@@ -124,41 +183,6 @@ void MainForm::pollForDataOnBus()
     }
 }
 
-void MainForm::gasViewValueChange(int currIndex){
-
-    currIndex= currIndex<0?0:(currIndex>=this->equipmentsList.length()?this->equipmentsList.length()-1:currIndex);
-
-    if(currIndex==gasViewForm->getcurrentEquipIndex()){
-
-        Addr*addr=ConfigXml::addrs.at(currIndex);
-        QString labName= (addr->location==1)? Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
-
-        QString tit= labName+addr->num;
-
-        int nd= equipmentsList.at(currIndex)->getGasNd();
-
-        this->gasViewForm->setEquipments(tit,nd,currIndex);
-
-    }
-
-}
-
-
-void MainForm::gasViewSelectIndexChange(int currIndex){
-
-    currIndex= currIndex<0?0:(currIndex>=this->equipmentsList.length()?this->equipmentsList.length()-1:currIndex);
-
-
-    Addr*addr=ConfigXml::addrs.at(currIndex);
-    QString labName= (addr->location==1)? Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
-
-    QString tit= labName+addr->num;
-
-    int nd= equipmentsList.at(currIndex)->getGasNd();
-
-    this->gasViewForm->setEquipments(tit,nd,currIndex);
-
-}
 
 void MainForm::createTranstration(){
 
@@ -175,7 +199,6 @@ void MainForm::createTranstration(){
     t->funCode=2;
 
     this->reqThread->addTranscation(t);
-
 
     Transcation*t2=new Transcation;
 
@@ -196,23 +219,25 @@ void MainForm::transcationIsDone(Transcation*trans){
     int funCode=trans->funCode;
     int index=trans->addr->index;
 
+
     bool change=false;
 
     qDebug()<<"thread message index:"<<index<<endl;
+    qDebug()<<"thread message returnCode:"<<trans->returnCode<<endl;
+    qDebug()<<"thread message funccode:"<<trans->funCode<<endl;
+
 
     switch (funCode) {
     case 2:
-
-        // qDebug()<<"thread message from:"<<trans->addr->slaveId<<endl;
-        //  qDebug()<<"thread message data:"<<trans->returnData<<endl;
-        qDebug()<<"thread message returnCode:"<<trans->returnCode<<endl;
 
         if(trans->returnCode>0){
 
             change=changeEquipmentStatus(index,2,0);
             if(change){
-                this->addLogInfo(tr("continue on!"),index,0);
+                addLogInfo(index,2,0);
             }
+
+            qDebug()<<"thread message Data:"<<trans->returnData<<endl;
 
             QStringList list=trans->returnData.split("#");
 
@@ -222,73 +247,61 @@ void MainForm::transcationIsDone(Transcation*trans){
             int a2=list.at(4).toInt()==1?2:0;
             int a3=list.at(3).toInt()==1?3:0;
 
-            //  qDebug()<<"a1,a2,a3:"<<a1<<","<<a2<<","<<a3<<endl;
-
             if(fault==1){
 
-                change= changeEquipmentStatus(index,3,1);
-
+                change = changeEquipmentStatus(index,3,1);
                 if(change){
-                    this->addLogInfo(tr("break down!"),index,1);
+                    addLogInfo(index,3,1);
                 }
+                return;
 
             }else{
 
                 change=changeEquipmentStatus(index,3,0);
                 if(change){
-                    this->addLogInfo(tr("continue work!"),index,0);
+                    addLogInfo(index,3,0);
                 }
+
+
             }
 
             int waringLevel=((a3>a2)?(a3>a1?a3:(a1>a2?a1:a3)):(a2>a1?a2:a1>a3?a1:a2));
 
-            int tempWaringLevel=waringLevel>0?waringLevel-1:0;
-
-            change= changeEquipmentStatus(index,4,tempWaringLevel);
-
-            if(change&&waringLevel==3){
-
-                this->addLogInfo(tr("high alarm!"),index,3);
-
-            }else if(change&&waringLevel==2){
-
-                this->addLogInfo(tr("low alarm!"),index,2);
-
-            }else if(change&&waringLevel==0){
-
-                this->addLogInfo(tr("stop alarm!"),index,0);
-
-            }
-
-
+            change= changeEquipmentStatus(index,4,waringLevel);
 
 
         }else{  //fult to link
 
-
             change=changeEquipmentStatus(index,2,1);
+
             if(change){
-                this->addLogInfo(tr("not work!"),index,1);
+                addLogInfo(index,2,1);
             }
 
         }
+
         break;
     case 4:
 
         if(trans->returnCode>0){
 
+            qDebug()<<"thread message Data 4:"<<trans->returnData<<endl;
             QStringList list=trans->returnData.split("#");
 
             int gasNd=list.at(0).toInt();
 
             change=changeEquipmentStatus(index,1,gasNd);
 
+
         }else{
 
+
             change=changeEquipmentStatus(index,1,0);
+            if(change){
+                addLogInfo(index,1,0);
+            }
         }
 
-        emit gasValueChange(index);
 
         break;
 
@@ -298,20 +311,90 @@ void MainForm::transcationIsDone(Transcation*trans){
 
 }
 
+void MainForm::addLogInfo(int equipmentIndex, int labelIndex, int statu){
+
+
+
+    Addr*addr=ConfigXml::addrs.at(equipmentIndex);
+
+    QString labName= (addr->location==1)? Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
+
+    labName=labName+addr->num;
+
+    QString detila;
+
+    if(labelIndex==2){
+
+        if(statu==1){
+
+            detila+=labName+tr(":not work!");
+
+        }else{
+
+            detila+=labName+tr(":continue to work.");
+
+        }
+
+
+    }else if(labelIndex==3){
+
+        if(statu==1){
+
+            detila+=labName+tr(":fault!");
+
+        }else{
+            detila+=labName+tr(":fault is dispear.");
+        }
+
+    }else if(labelIndex==4){
+
+        if(statu==3){
+
+            detila+=labName+tr(":high waring!");
+
+        }else if(statu==2){
+
+            detila+=labName+tr(":low waring");
+        }else{
+
+            detila+=labName+tr(":waring dispaer.");
+
+        }
+
+    }
+
+    detila="["+QDateTime::currentDateTime().toLocalTime().toString()+"]"+detila;
+
+    ui->textEdit->append(detila);
+
+    //    Log log;
+
+    //    log.logCreateTime=QDateTime::currentDateTime().toLocalTime();
+    //    log.logDetial=detila;
+    //    log.logId="";
+    //    log.logSolveTime="";
+
+
+
+
+}
 
 bool MainForm::changeEquipmentStatus(int index,int labelIndex,int data){
 
     EquipmentWidget*e=equipmentsList.at(index);
-    e->updateLabelVlaue(labelIndex,data);
+    return  e->updateLableValue(labelIndex,data);
+
 }
 
 
 
 MainForm::~MainForm()
 {
-    this->transcationCreate->stop();
+    //this->transcationCreate->stop();
+    // this->pollTimer->stop();
 
-    qDebug()<<"~MainForm"<<endl;
+
+
     delete ui;
     delete exitAction;
     delete settingAction;
@@ -321,15 +404,29 @@ MainForm::~MainForm()
     delete playTimer;
     delete transcationCreate;
     delete reqThread;
-    delete gasViewForm;
+    delete pollTimer;
+    delete settingDialog;
+
+
+
 }
 
 
 void MainForm::initLabels(){
+
+
     ui->label->setText(Config::MAIN_TITLE);
-    ui->label_12->setText(Config::AREA_LABEL.split("#").at(0));
-    ui->label_13->setText(Config::AREA_LABEL.split("#").at(1));
+    //    ui->label_12->setText(Config::AREA_LABEL.split("#").at(0));
+    //    ui->label_13->setText(Config::AREA_LABEL.split("#").at(1));
     //ui->stackedWidget_4->setCurrentIndex(0);
+
+    QStackedLayout*laylout=(QStackedLayout*)ui->stackedWidget->layout();
+    laylout->setStackingMode(QStackedLayout::StackAll);
+
+    //ui->widget->setStyleSheet("border-color:#fff;border-width:1px;border-style:solid");
+
+    ui->widget_8->isConnection(true);
+
 }
 
 /**
@@ -338,17 +435,18 @@ void MainForm::initLabels(){
  */
 void MainForm::initEventerFilter(){
 
-    ui->label_15->installEventFilter(this);
 
-    ui->label_20->installEventFilter(this);
-    ui->label_19->installEventFilter(this);
+
+
     ui->label_16->installEventFilter(this);
 
     ui->label_17->installEventFilter(this);
     ui->label_18->installEventFilter(this);
 
-    ui->label_14->installEventFilter(this);
-    ui->label_21->installEventFilter(this);
+
+
+    ui->main_view->installEventFilter(this);
+    ui->float_menu->installEventFilter(this);
 }
 
 /**
@@ -417,27 +515,22 @@ void MainForm::createEquipments(){
 
     for(int i=0;i<len;i++){
 
-        EquipmentWidget *e=new EquipmentWidget;
-        int loca=ConfigXml::addrs.at(i)->location;
-        if(loca==1){
+        EquipmentWidget*e=new EquipmentWidget;
+        // dialpan*dia=new dialpan;
+        ui->widget_5->layout()->addWidget(e);
 
-            ui->widget_5->layout()->addWidget(e);
+        this->equipmentsList.append(e);
 
-        }else{
-
-            ui->widget_6->layout()->addWidget(e);
-
-        }
-
-        equipmentsList.append(e);
     }
+
+    qDebug()<<"equipmentsList:"<<equipmentsList.size()<<endl;
+
+    //ui->widget_5->setStyleSheet("border-color:#fff;border-style:solid;border-width:1px;");
+
 
 }
 
-/**
- * @brief MainForm::createLinkStatusPic
- *
- */
+/*
 void MainForm::createLinkStatusPic(){
 
 
@@ -467,14 +560,16 @@ void MainForm::createLinkStatusPic(){
     layout->addWidget(lab2,1,0);
     layout->addWidget(lab3,1,1);
 
-   // QWidget *newWidget=new QWidget;
-   // newWidget->setLayout(layout);
-   //newWidget->setStyleSheet("*{border-style:solid;border-color:#000;border-width:1px}");
+    // QWidget *newWidget=new QWidget;
+    // newWidget->setLayout(layout);
+    //newWidget->setStyleSheet("*{border-style:solid;border-color:#000;border-width:1px}");
 
     ui->widget_2->setLayout(layout);
 
 
 }
+
+ */
 
 
 /**
@@ -514,33 +609,7 @@ void MainForm::backShowStyle(QSystemTrayIcon::ActivationReason reason){
  */
 bool MainForm::eventFilter(QObject *obj, QEvent *event){
 
-    if(obj==ui->label_15){
-
-        if (event->type() == QEvent::MouseButtonPress) {
-
-            //qDebug()<<"show"<<endl;
-
-            showLogView();
-
-            return true;
-        }
-    } else if(obj==ui->label_19){
-
-        if (event->type() == QEvent::MouseButtonPress) {
-
-            //ui->stackedWidget_4->setCurrentIndex(1);
-            return true;
-        }
-
-    } else if(obj==ui->label_20){
-
-        if (event->type() == QEvent::MouseButtonPress) {
-
-            //ui->stackedWidget_4->setCurrentIndex(0);
-            return true;
-        }
-
-    }else if(obj==ui->label_17){
+    if(obj==ui->label_17){
 
         if (event->type() == QEvent::MouseButtonPress) {
 
@@ -565,11 +634,23 @@ bool MainForm::eventFilter(QObject *obj, QEvent *event){
 
         }
 
-    }else if(obj==ui->label_21){
+    }else if(obj==ui->main_view){
 
         if (event->type() == QEvent::MouseButtonPress) {
 
-            this->gasViewForm->exec();
+
+            this->changeStackIndex(1);
+
+            return true;
+
+        }
+
+    }else if(obj==ui->float_menu){
+
+        if (event->type() == QEvent::MouseButtonPress) {
+
+
+            this->changeStackIndex(0);
 
             return true;
 
@@ -591,9 +672,7 @@ bool MainForm::eventFilter(QObject *obj, QEvent *event){
  */
 void MainForm::doSetting(){
 
-    SettingDialog settingDialog;
-
-    settingDialog.exec();
+    settingDialog->show();
 
 }
 
@@ -619,7 +698,6 @@ void MainForm::quit(){
 void MainForm::showLogView(){
 
     this->logview->show();
-    //QMessageBox::warning(this,tr(""),tr(""),QMessageBox::Yes|QMessageBox::No);
 
 }
 
@@ -640,67 +718,32 @@ void MainForm::closeEvent(QCloseEvent *event){
 void MainForm::playSound(){
 
     QApplication::beep();
-    qDebug()<<"======"<<endl;
-    //  QSound::play("ala.wav");
-
-
-}
-
-/**
- * @brief MainForm::on_pushButton_2_clicked
- * Test the alarm
- */
-void MainForm::on_pushButton_2_clicked()
-{
-
-    if(this->isPlay){
-        if(this->playTimer->isActive()){
-            this->playTimer->stop();
-        }
-        this->isPlay=false;
-
-    }else{
-
-        this->playTimer->start(300);
-        this->isPlay=true;
-
-    }
 
 }
 
 
-/**
- * @brief MainForm::on_pushButton_3_clicked
- * test request thread
- */
-void MainForm::on_pushButton_3_clicked()
-{
-    if(reqThread->isRunning()){
-        return;
-    }
-
-    this->transcationCreate->start(Config::sleepTime);
-    reqThread->start();
-}
-
-void MainForm::addLogInfo(QString info,int index,int level){
-
-    Addr*addr=ConfigXml::addrs.at(index);
-    QString loca;
-
-    loca=(addr->location==1)?Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
 
 
-    info="<span style='color:"+Config::colorLevel.split("|").at(level)+"'>"+info+"</span>";
-
-    ui->textEdit->append("["+QDateTime::currentDateTime().toLocalTime().toString()+"]"+loca+addr->num+":"+info);
 
 
-}
+//void MainForm::addLogInfo(QString info,int index,int level){
+
+//    Addr*addr=ConfigXml::addrs.at(index);
+//    QString loca;
+
+//    loca=(addr->location==1)?Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
+
+
+//    info="<span style='color:"+Config::colorLevel.split("|").at(level)+"'>"+info+"</span>";
+
+//    ui->textEdit->append("["+QDateTime::currentDateTime().toLocalTime().toString()+"]"+loca+addr->num+":"+info);
+
+
+//}
 
 void MainForm::doReceiveData(QString data){
 
-    ui->textEdit->append(data);
+    qDebug()<<"data"<<data<<endl;
 
 }
 
@@ -709,7 +752,8 @@ extern "C" {
 
 void busMonitorAddItem( uint8_t isRequest, uint8_t slave, uint8_t func, uint16_t addr, uint16_t nb, uint16_t expectedCRC, uint16_t actualCRC )
 {
-    qDebug()<<"busMonitorAddItem:"<<endl;
+
+
 
 
 }
@@ -738,6 +782,7 @@ void busMonitorRawData( uint8_t * data, uint8_t dataLen, uint8_t addNewline )
 
 void busMonitorReceiveMes(uint8_t * data, uint8_t dataLen){
 
+
     if( dataLen > 0 )
     {
         QString dump = "";
@@ -747,9 +792,11 @@ void busMonitorReceiveMes(uint8_t * data, uint8_t dataLen){
         }
 
         globalMainWin->doReceiveData(dump);
-
+        qDebug()<<"busMonitorRawData:"<<dump<<endl;
 
     }
+
+
 }
 
 }

@@ -16,8 +16,7 @@ TRANSLATIONS += gas_zh.ts
 SOURCES +=  src/main.cpp\
             src/mainform.cpp \
             src/settingdialog.cpp \
-            src/logviewdialog.cpp \
-            src/sqlutil.cpp \
+            src/logviewdialog.cpp \ 
             src/config.cpp \
             src/qcustlabel.cpp \
             src/equipmentwidget.cpp \
@@ -29,19 +28,17 @@ SOURCES +=  src/main.cpp\
             3rdparty/libmodbus/src/modbus-tcp.c \
             src/modbusrequestthread.cpp \
             src/configxml.cpp \
-            src/gasviewform.cpp \
-            src/gasviewwidget.cpp \
             src/myserialport.cpp \
             src/myserialsettingswidget.cpp \
             src/speedo_meter.cpp \
-            src/testwindow.cpp
-
+            src/linkstatuswidget.cpp \
+            src/dialpan.cpp \
+            src/sqlite.cpp
 
 
 HEADERS  += src/mainform.h \
             src/settingdialog.h \
             src/logviewdialog.h \
-            src/sqlutil.h \
             src/config.h \
             src/qcustlabel.h \
             src/equipmentwidget.h \
@@ -52,12 +49,12 @@ HEADERS  += src/mainform.h \
             3rdparty/qextserialport/qextserialenumerator.h \
             3rdparty/libmodbus/src/modbus.h \
             src/configxml.h \
-            src/gasviewform.h \
-            src/gasviewwidget.h \
             src/myserialport.h \
             src/myserialsettingswidget.h \
             src/speedo_meter.h \
-            src/testwindow.h
+            src/linkstatuswidget.h \
+            src/dialpan.h \
+            src/sqlite.h
 
 
 
@@ -93,10 +90,8 @@ FORMS    += form/mainform.ui \
             form/settingdialog.ui \
             form/logviewdialog.ui \
             form/serialsettingswidget.ui \
-            form/gasviewform.ui \
-            form/gasviewwidget.ui \
             src/myserialsettingswidget.ui \
-            form/testwindow.ui
+            src/linkstatuswidget.ui
 
 
 RESOURCES += \

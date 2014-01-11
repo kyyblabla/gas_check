@@ -18,6 +18,11 @@ ModbusRequestThread::ModbusRequestThread()
 
 }
 
+void ModbusRequestThread::stopReq(){
+
+    this->stopFlag=true;
+}
+
 ModbusRequestThread::~ModbusRequestThread(){
 
     qDebug()<<"~ModbusRequestThread"<<endl;
@@ -147,8 +152,8 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
                 QString qs_num="";
                 qs_num=qs_num.sprintf("%d", data);
 
-                qDebug()<<"addr:"<<QString::number( satrtAddr+i )<<endl;
-                qDebug()<<"data:"<<qs_num<<endl;
+                // qDebug()<<"addr:"<<QString::number( satrtAddr+i )<<endl;
+                //  qDebug()<<"data:"<<qs_num<<endl;
 
                 qsCount+=qs_num+"#";
             }
@@ -160,8 +165,7 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
     else
     {
         qDebug()<<"here2:"<<endl;
-        if( ret < 0 )
-        {
+        if( ret < 0 ){
             if(
         #ifdef WIN32
                     errno == WSAETIMEDOUT ||
@@ -172,15 +176,14 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
 
                 qDebug()<<"I/O error: did not receive any data from slave."<<endl;
 
-
             }
             else
             {
                 qDebug()<<tr( "Slave threw exception \"%1\" or function not implemented." ).arg( modbus_strerror( errno ) )<<endl;
             }
         }
-        else
-        {
+        else{
+
             qDebug()<<"Protocol error:Number of registers returned does not match number of registers requested!"<<endl;
 
         }
@@ -198,6 +201,8 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
 
 
 void ModbusRequestThread::run(){
+
+    this->stopFlag=false;
 
     forever{
 

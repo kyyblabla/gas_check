@@ -36,8 +36,8 @@ public:
     static int sleepTime;
     static bool isSlave;
 
-    static double ndLableMin;
-    static double ndLableMax;
+    static int ndLableMin;
+    static int ndLableMax;
     static double ndLableStep;
     static QString ndLableName;
 
