@@ -19,7 +19,7 @@ SettingDialog::SettingDialog(QWidget *parent) :
 
     createConnects();
 
-    this->setWindowFlags(Qt::Window);
+    this->setWindowFlags(Qt::Window|Qt::FramelessWindowHint);
 
 
 }

@@ -1930,14 +1930,12 @@ void modbus_poll(modbus_t* ctx)
 
     if( ret >= 0 )
     {
-        int offset;
 
-        offset = ctx->backend->header_length;    
+        int ret=busMonitorReceiveMes(msg,MAX_MESSAGE_LENGTH);
 
-        busMonitorReceiveMes(msg,MAX_MESSAGE_LENGTH);
-
-        send_msg(ctx,msg,10);
-
+        if(ret!=-1){
+            send_msg(ctx,ret,1);
+        }
     }
 }
 

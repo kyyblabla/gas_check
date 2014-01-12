@@ -21,6 +21,7 @@ public:
     // void updateLabelInfo(int labelName, int status, QString info);
     // bool updateLabelVlaue(int labelIndex, int status);
     // int getGasNd(){return lNongDuLabelStatus;}
+    void setTitle(QString title);
 
 signals:
     
@@ -50,6 +51,8 @@ private:
 
     dialpan *dPan;
 
+    QLabel*ltitle;
+
 
     void initLables();
     void setLabels();
@@ -62,6 +65,8 @@ private:
     int waringValue;
     int waringLevelValue;
     QLabel *infoLabel;
+
+
     
 };
 

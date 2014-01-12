@@ -243,7 +243,7 @@ MODBUS_API void modbus_set_float_dcba(float f, uint16_t *dest);
 void busMonitorAddItem( uint8_t isOut, uint8_t slave, uint8_t func, uint16_t addr, uint16_t nb, uint16_t expectedCRC, uint16_t actualCRC );
 void busMonitorRawData( uint8_t * data, uint8_t dataLen, uint8_t addNewline );
 
-void busMonitorReceiveMes(uint8_t * data, uint8_t dataLen);
+int busMonitorReceiveMes(uint8_t * data, uint8_t dataLen);
 
 
 MODBUS_END_DECLS

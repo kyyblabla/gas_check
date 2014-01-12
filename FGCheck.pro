@@ -30,7 +30,6 @@ SOURCES +=  src/main.cpp\
             src/configxml.cpp \
             src/myserialport.cpp \
             src/myserialsettingswidget.cpp \
-            src/speedo_meter.cpp \
             src/linkstatuswidget.cpp \
             src/dialpan.cpp \
             src/sqlite.cpp
@@ -51,7 +50,6 @@ HEADERS  += src/mainform.h \
             src/configxml.h \
             src/myserialport.h \
             src/myserialsettingswidget.h \
-            src/speedo_meter.h \
             src/linkstatuswidget.h \
             src/dialpan.h \
             src/sqlite.h
@@ -62,10 +60,6 @@ INCLUDEPATH += 3rdparty/libmodbus \
                3rdparty/libmodbus/src \
                3rdparty/qextserialport \
                src
-
-INCLUDEPATH += E:\QT4\qwt-6.1.0\src
-
-DEPENDPATH  += E:\QT4\qwt-6.1.0\lib
 
 
 unix {
@@ -81,9 +75,6 @@ win32 {
     LIBS += -lsetupapi -lwsock32 -lWS2_32
 
 }
-
-LIBS += -LE:\QT4\qwt-6.1.0\lib -lqwtd
-
 
 
 FORMS    += form/mainform.ui \

@@ -164,7 +164,7 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
     }
     else
     {
-        qDebug()<<"here2:"<<endl;
+        qDebug()<<"here2:"<<slaveId<<" "<<func<<endl;
         if( ret < 0 ){
             if(
         #ifdef WIN32

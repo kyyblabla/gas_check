@@ -9,6 +9,7 @@
 #include <QSizePolicy>
 
 
+
 EquipmentWidget::EquipmentWidget(QWidget *parent) :
     QWidget(parent)
 {
@@ -17,6 +18,15 @@ EquipmentWidget::EquipmentWidget(QWidget *parent) :
     this->dPan->setValueRange(Config::ndLableMin,Config::ndLableMax);
 
     this->setStyleSheet("color:#fff");
+
+    this->setTitle("");
+
+}
+
+void EquipmentWidget::setTitle(QString title){
+
+    this->ltitle->setText(title);
+
 
 }
 
@@ -146,6 +156,11 @@ void EquipmentWidget::setLabels(){
     layout->setSpacing(0);
 
 
+
+    ltitle=new QLabel;
+    ltitle->setAlignment(Qt::AlignCenter);
+    layout->addWidget(ltitle,0,0);
+
     this->dPan=new dialpan;
 
     this->lNongDuLabel=new QLabel;
@@ -155,14 +170,14 @@ void EquipmentWidget::setLabels(){
     infoLabel->setAlignment(Qt::AlignCenter);
 
 
-    layout->addWidget(dPan,0,0,2,1);
+    layout->addWidget(dPan,1,0,3,1);
 
     lNongDuLabel->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
 
-    layout->addWidget(lNongDuLabel,2,0);
+    layout->addWidget(lNongDuLabel,4,0);
 
     infoLabel->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    layout->addWidget(infoLabel,3,0);
+    layout->addWidget(infoLabel,5,0);
 
 
     updateLables();

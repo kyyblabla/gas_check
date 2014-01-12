@@ -515,8 +515,16 @@ void MainForm::createEquipments(){
 
     for(int i=0;i<len;i++){
 
+        Addr*addr=ConfigXml::addrs.at(i);
+
+        QString labName= (addr->location==1)? Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
+
+        labName=labName+addr->num;
+
         EquipmentWidget*e=new EquipmentWidget;
         // dialpan*dia=new dialpan;
+        e->setTitle(labName);
+
         ui->widget_5->layout()->addWidget(e);
 
         this->equipmentsList.append(e);
@@ -780,21 +788,32 @@ void busMonitorRawData( uint8_t * data, uint8_t dataLen, uint8_t addNewline )
 
 }
 
-void busMonitorReceiveMes(uint8_t * data, uint8_t dataLen){
+int busMonitorReceiveMes(uint8_t * data, uint8_t dataLen){
 
 
-    if( dataLen > 0 )
-    {
-        QString dump = "";
-        for( int i = 0; i < dataLen; ++i )
-        {
-            dump += QString().sprintf( "%.2x ", data[i] );
-        }
 
-        globalMainWin->doReceiveData(dump);
-        qDebug()<<"busMonitorRawData:"<<dump<<endl;
+    int len = sizeof(data);
+//    QString dump = "";
+//    for( int i = 0; i < len; ++i )
+//    {
+//        dump += QString().sprintf( "%.2x ", data[i] );
+//    }
+
+//  //  globalMainWin->doReceiveData(dump);
+    //qDebug()<<"busMonitorRawData:"<<dump<<endl;
+
+    if(len>=15){
+
+         int id= data[0];
+         int fun=data[1];
+         int startAdd=data[3]>>8;
 
     }
+
+
+
+
+    return -1;
 
 
 }

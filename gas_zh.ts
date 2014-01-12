@@ -8,7 +8,7 @@
         <translation type="obsolete">浓度:|dp#开启状态:|工作/关闭#工作状态:|正常/故障#警报:|无/低报警/高报警</translation>
     </message>
     <message>
-        <location filename="src/equipmentwidget.cpp" line="87"/>
+        <location filename="src/equipmentwidget.cpp" line="103"/>
         <source>work normal</source>
         <translation>正常工作</translation>
     </message>
@@ -118,19 +118,13 @@
         <source>Gas Miontor</source>
         <translation>可燃气体报警监视复视器</translation>
     </message>
-    <message>
-        <location filename="form/mainform.ui" line="115"/>
-        <source>1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="form/mainform.ui" line="120"/>
-        <source>2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="form/mainform.ui" line="125"/>
-        <source>3</source>
+    <message utf8="true">
+        <location filename="form/mainform.ui" line="194"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;微软雅黑&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation></translation>
     </message>
     <message>
@@ -167,7 +161,7 @@
         <translation type="obsolete">选项</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="220"/>
+        <location filename="form/mainform.ui" line="211"/>
         <source>System Setting</source>
         <translation>系统设置</translation>
     </message>
@@ -176,13 +170,48 @@
         <translation type="obsolete">返回</translation>
     </message>
     <message>
+        <location filename="src/mainform.cpp" line="330"/>
+        <source>:not work!</source>
+        <translation>：停止工作！</translation>
+    </message>
+    <message>
         <location filename="src/mainform.cpp" line="334"/>
+        <source>:continue to work.</source>
+        <translation>：恢复正常工作。</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="343"/>
+        <source>:fault!</source>
+        <translation>：通道出错！</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="346"/>
+        <source>:fault is dispear.</source>
+        <translation>：通道错误解决。</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="353"/>
+        <source>:high waring!</source>
+        <translation>：高报警！</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="357"/>
+        <source>:low waring</source>
+        <translation>：低报警</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="360"/>
+        <source>:waring dispaer.</source>
+        <translation>：警报解除。</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="458"/>
         <source>Setting</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="276"/>
-        <location filename="src/mainform.cpp" line="338"/>
+        <location filename="form/mainform.ui" line="267"/>
+        <location filename="src/mainform.cpp" line="462"/>
         <source>Log</source>
         <translation>日志</translation>
     </message>
@@ -203,8 +232,8 @@
         <translation type="obsolete">停止工作！</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="248"/>
-        <location filename="src/mainform.cpp" line="341"/>
+        <location filename="form/mainform.ui" line="239"/>
+        <location filename="src/mainform.cpp" line="465"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
@@ -223,7 +252,7 @@
         <translation type="obsolete">复视器II</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="561"/>
+        <location filename="src/mainform.cpp" line="683"/>
         <source>Are you sure?</source>
         <translation>确定退出？</translation>
     </message>
@@ -231,7 +260,7 @@
 <context>
     <name>ModbusRequestThread</name>
     <message>
-        <location filename="src/modbusrequestthread.cpp" line="179"/>
+        <location filename="src/modbusrequestthread.cpp" line="182"/>
         <source>Slave threw exception &quot;%1&quot; or function not implemented.</source>
         <translation></translation>
     </message>
@@ -489,55 +518,60 @@
         <translation>系统设置</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="28"/>
+        <location filename="form/settingdialog.ui" line="55"/>
+        <source>System Setting</source>
+        <translation>系统设置</translation>
+    </message>
+    <message>
+        <location filename="form/settingdialog.ui" line="77"/>
         <source>Base Setting</source>
         <translation>气体监测设备设置</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="40"/>
+        <location filename="form/settingdialog.ui" line="89"/>
         <source>devices list</source>
         <translation>监测设备列表</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="52"/>
+        <location filename="form/settingdialog.ui" line="101"/>
         <source>Host/Slave Settig</source>
         <translation>主/从状态设置</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="58"/>
+        <location filename="form/settingdialog.ui" line="107"/>
         <source>Is Slave</source>
         <translation>设为从机</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="65"/>
+        <location filename="form/settingdialog.ui" line="114"/>
         <source>address</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="104"/>
-        <location filename="form/settingdialog.ui" line="178"/>
+        <location filename="form/settingdialog.ui" line="153"/>
+        <location filename="form/settingdialog.ui" line="240"/>
         <source>Sure</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="114"/>
-        <location filename="form/settingdialog.ui" line="188"/>
+        <location filename="form/settingdialog.ui" line="163"/>
+        <location filename="form/settingdialog.ui" line="250"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="121"/>
-        <location filename="form/settingdialog.ui" line="195"/>
+        <location filename="form/settingdialog.ui" line="170"/>
+        <location filename="form/settingdialog.ui" line="257"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="145"/>
+        <location filename="form/settingdialog.ui" line="194"/>
         <source>Miontor Setting</source>
         <translation>串口通信设置</translation>
     </message>
     <message>
-        <location filename="form/settingdialog.ui" line="157"/>
+        <location filename="form/settingdialog.ui" line="206"/>
         <source>SerialPort Setting</source>
         <translation>串口设置</translation>
     </message>
@@ -593,46 +627,46 @@
         <translation>Input Register通道数目</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="107"/>
+        <location filename="src/settingdialog.cpp" line="106"/>
         <source>slave address</source>
         <translation>从机ID</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="111"/>
+        <location filename="src/settingdialog.cpp" line="110"/>
         <source>host address</source>
         <translation>主机ID</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="133"/>
-        <location filename="src/settingdialog.cpp" line="141"/>
-        <location filename="src/settingdialog.cpp" line="149"/>
-        <location filename="src/settingdialog.cpp" line="157"/>
-        <location filename="src/settingdialog.cpp" line="165"/>
+        <location filename="src/settingdialog.cpp" line="132"/>
+        <location filename="src/settingdialog.cpp" line="140"/>
+        <location filename="src/settingdialog.cpp" line="148"/>
+        <location filename="src/settingdialog.cpp" line="156"/>
+        <location filename="src/settingdialog.cpp" line="164"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="133"/>
+        <location filename="src/settingdialog.cpp" line="132"/>
         <source>slaveId must be num!</source>
         <translation>从机ID必须是数字！</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="141"/>
+        <location filename="src/settingdialog.cpp" line="140"/>
         <source>addrStart must be num!</source>
         <translation>起始卡槽子通道地址必须是数字！</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="149"/>
+        <location filename="src/settingdialog.cpp" line="148"/>
         <source>coilNum must be num!</source>
         <translation>通道数目必须是数字！</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="157"/>
+        <location filename="src/settingdialog.cpp" line="156"/>
         <source>addrTelStart must be num!</source>
         <translation>Input Register通道起始地址必须是数字！</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="165"/>
+        <location filename="src/settingdialog.cpp" line="164"/>
         <source>telCoilNum must be num!</source>
         <translation>Input Register通道数目必须是数字！</translation>
     </message>
