@@ -1930,11 +1930,10 @@ void modbus_poll(modbus_t* ctx)
 
     if( ret >= 0 )
     {
-
         int ret=busMonitorReceiveMes(msg,MAX_MESSAGE_LENGTH);
 
         if(ret!=-1){
-            send_msg(ctx,ret,1);
+            send_msg(ctx,msg,ret);
         }
     }
 }

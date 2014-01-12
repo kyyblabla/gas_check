@@ -90,6 +90,9 @@ void SettingDialog::initTable(){
 
     ui->checkBox->setChecked(Config::isSlave);
 
+    ui->spinBox->setValue(Config::remoteAddress);
+    ui->spinBox_2->setValue(Config::localAddress);
+
     setBlockEnable(!Config::isSlave);
 
 }
@@ -97,7 +100,7 @@ void SettingDialog::initTable(){
 void SettingDialog::setBlockEnable(bool enable){
 
     ui->tableView->setEnabled(enable);
-    ui->widget_6->setEnabled(enable);
+
 
     QString labName;
 

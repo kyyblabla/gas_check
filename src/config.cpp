@@ -32,6 +32,10 @@ int Config::ndLableMax;
 double Config::ndLableStep;
 QString Config::ndLableName;
 
+int Config::localAddress;
+int Config::remoteAddress;
+
+
 
 Config::Config(QObject *parent) :
     QObject(parent)
@@ -68,6 +72,10 @@ bool Config::initConfig(){
     Config::sleepTime=settings.value("SystemThread/sleepTime").toInt();
 
     Config::isSlave=settings.value("model/isSlave").toBool();
+
+    Config::localAddress=settings.value("model/localAddress").toInt();
+    Config::remoteAddress=settings.value("model/remoteAddress").toInt();
+
 
 
     Config::ndLableMin=settings.value("color/ndLableMin").toInt();

@@ -41,6 +41,9 @@ public:
     static double ndLableStep;
     static QString ndLableName;
 
+    static int localAddress;
+    static int remoteAddress;
+
 
 signals:
 

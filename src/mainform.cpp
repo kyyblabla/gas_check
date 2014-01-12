@@ -792,23 +792,49 @@ int busMonitorReceiveMes(uint8_t * data, uint8_t dataLen){
 
 
 
-    int len = sizeof(data);
-//    QString dump = "";
-//    for( int i = 0; i < len; ++i )
-//    {
-//        dump += QString().sprintf( "%.2x ", data[i] );
-//    }
+    //   int len = sizeof(data);
+    //    QString dump = "";
+    //    for( int i = 0; i < len; ++i )
+    //    {
+    //        dump += QString().sprintf( "%.2x ", data[i] );
+    //    }
 
-//  //  globalMainWin->doReceiveData(dump);
+    //  //  globalMainWin->doReceiveData(dump);
     //qDebug()<<"busMonitorRawData:"<<dump<<endl;
 
-    if(len>=15){
+    // if(len>=15){
+    //0   1    2  3      4  5   6    7  8   9  10  11
+    //01  10   01 01     00 03  06   00 00  00 00  00 00
+    //id  fun  startAdd  num    len  d1     a2     d3
+    int id= data[0];
+    int fun=data[1];
 
-         int id= data[0];
-         int fun=data[1];
-         int startAdd=data[3]>>8;
+
+    if(id!=Config::localAddress||fun!=16){
+
+        return -1;
 
     }
+
+
+    int startAdd=data[2]<<8|data[3];
+    int num=data[5];
+    qDebug()<<"id:"<<id<<" fun:"<<fun<<" startAdd:"<<startAdd<<" num:"<<num<<endl;
+
+    int dataStart=7;
+    int count=0;
+
+    for(int i=0;i<num;i++){
+
+        int value= data[dataStart+2*i]<<8|data[dataStart+2*i+1];
+        qDebug()<<"value"<<i<<":"<<value<<endl;
+
+        count=dataStart+2*i+1+1;
+    }
+
+    return count;
+
+    //}
 
 
 
