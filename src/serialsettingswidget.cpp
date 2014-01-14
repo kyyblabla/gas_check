@@ -8,6 +8,8 @@
 #include "modbusrequestthread.h"
 #include "config.h"
 
+extern modbus_t * m_modbus;
+
 SerialSettingsWidget::SerialSettingsWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SerialSettingsWidget)
@@ -82,11 +84,11 @@ int SerialSettingsWidget::setupModbusPort()
 
 void SerialSettingsWidget::releaseSerialModbus()
 {
-    if( ModbusRequestThread::m_modbus )
+    if(  m_modbus )
     {
-        modbus_close( ModbusRequestThread::m_modbus);
-        modbus_free( ModbusRequestThread::m_modbus );
-        ModbusRequestThread::m_modbus = NULL;
+        modbus_close(  m_modbus);
+        modbus_free(  m_modbus );
+        m_modbus = NULL;
     }
 }
 
@@ -95,16 +97,15 @@ void SerialSettingsWidget::changeModbusInterface(const QString& port, char parit
     releaseSerialModbus();
 
     qDebug()<<port.toAscii().constData();
-    ModbusRequestThread::m_modbus = modbus_new_rtu( port.toAscii().constData(),
-                                                    ui->baud->currentText().toInt(),
-                                                    parity,
-                                                    ui->dataBits->currentText().toInt(),
-                                                    ui->stopBits->currentText().toInt() );
+    m_modbus = modbus_new_rtu( port.toAscii().constData(),
+                               ui->baud->currentText().toInt(),
+                               parity,
+                               ui->dataBits->currentText().toInt(),
+                               ui->stopBits->currentText().toInt() );
 
     //modbus_set_slave(ModbusRequestThread::m_modbus,112);
 
-    if( modbus_connect( ModbusRequestThread::m_modbus ) == -1 )
-    {
+    if( modbus_connect( m_modbus ) == -1 ) {
         QMessageBox::critical( this, tr( "Connection failed" ),
                                tr( "Could not connect serial port!" ) );
     }

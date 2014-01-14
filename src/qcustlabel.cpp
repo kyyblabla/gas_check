@@ -57,29 +57,6 @@ void QCustLabel::paintEvent(QPaintEvent *event){
 
     painter.drawText(QPoint(l,t),info);
 
-//     if(this->labelType==QCustLabel::MainDevice){
-
-//        if(!this->timer->isActive()){
-//            this->timer->start(300);
-//        }
-
-//        QPointF p1(30,15);
-//        QPointF p2(30,75);
-//        QLineF f(p1,p2);
-
-//        if(this->timeCount/2==0){
-//            painter.setPen(QPen(Qt::red,Qt::SolidLine));
-
-//        }else{
-//            painter.setPen(QPen(Qt::white,Qt::DotLine));
-//        }
-
-//        painter.drawLine(f);
-
-//        this->timeCount++;
-
-//     }
-
 
 }
 

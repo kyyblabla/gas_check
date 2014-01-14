@@ -24,8 +24,12 @@ signals:
     void changeSerials(int);
     void changeIsSlave(MainForm::MasterModel model);
 
+protected:
+    void showEvent(QShowEvent *event);
+
 private slots:
-    
+    void listItemSelectChange();
+
     void on_pushButton_clicked();
 
     void on_pushButton_3_clicked();
@@ -44,12 +48,18 @@ private slots:
 
     void serilaSelectIndexChange(int);
 
+    void on_pushButton_6_clicked();
+
+    void setSureButtonEnable(int value);
+
+
 private:
     Ui::SettingDialog *ui;
-    QStandardItemModel *tableModel;
+   // QStandardItemModel *listModel;
     void initTable();
     void  createConnects();
-    void  changeTableValue();
+    void removeConnection();
+
     void setBlockEnable(bool enable);
 };
 

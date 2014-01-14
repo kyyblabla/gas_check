@@ -24,6 +24,7 @@ QString Config::serialParity;
 QString Config::colorLevel;
 
 int Config::sleepTime;
+int Config::slaveWaitTimeOut;
 
 bool Config::isSlave;
 
@@ -70,6 +71,7 @@ bool Config::initConfig(){
     Config::colorLevel=settings.value("color/colorLevel").toString();
 
     Config::sleepTime=settings.value("SystemThread/sleepTime").toInt();
+    Config::slaveWaitTimeOut=settings.value("SystemThread/slaveWaitTimeOut").toInt();
 
     Config::isSlave=settings.value("model/isSlave").toBool();
 

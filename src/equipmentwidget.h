@@ -8,6 +8,7 @@
 
 
 class dialpan;
+class QPushButton;
 
 
 class EquipmentWidget : public QWidget
@@ -23,9 +24,14 @@ public:
     // int getGasNd(){return lNongDuLabelStatus;}
     void setTitle(QString title);
 
+    void setVisible(int i);
+
 signals:
     
 public slots:
+
+protected:
+   void paintEvent(QPaintEvent *event);
 
 private:
     QLabel *lLightLabel;
@@ -33,7 +39,6 @@ private:
     QLabel *lNongDuLabel;
     QString lNongDuLabelName;
     QString lNongDuLabelValue;
-
 
     QLabel *lOnOrOffLabel;
     QString lOnOrOffLabelName;
@@ -66,6 +71,9 @@ private:
     int waringLevelValue;
     QLabel *infoLabel;
 
+
+//    QPushButton*qb1;
+//    QPushButton*qb2;
 
     
 };

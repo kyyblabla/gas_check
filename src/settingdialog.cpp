@@ -2,12 +2,15 @@
 #include "ui_settingdialog.h"
 #include "configxml.h"
 #include "config.h"
+#include "addreditdialog.h"
 
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QDebug>
 #include <QModelIndex>
 #include <QMessageBox>
+#include <QList>
+#include <QListWidgetItem>
 
 SettingDialog::SettingDialog(QWidget *parent) :
     QDialog(parent),
@@ -17,32 +20,67 @@ SettingDialog::SettingDialog(QWidget *parent) :
 
     initTable();
 
-    createConnects();
+
 
     this->setWindowFlags(Qt::Window|Qt::FramelessWindowHint);
 
-
+    ui->listWidget->setCurrentItem(ui->listWidget->item(0));
 }
 
 SettingDialog::~SettingDialog()
 {
-    delete tableModel;
+    //delete listModel;
     delete ui;
+
+}
+
+
+void SettingDialog::showEvent(QShowEvent *event){
+
+    initTable();
+
+}
+
+void SettingDialog::removeConnection(){
+
+    disconnect(ui->checkBox,0,0,0);
+    disconnect(ui->widget_6,0,0,0);
 
 }
 
 void SettingDialog::createConnects(){
 
-    connect(tableModel,SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),this,SLOT(tableValueChange(const QModelIndex &, const QModelIndex &)));
+    //  connect(listModel,SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),this,SLOT(tableValueChange(const QModelIndex &, const QModelIndex &)));
 
     connect(ui->checkBox,SIGNAL(clicked(bool)),this,SLOT(on_checkBox_clicked(bool)));
 
     connect(this,SIGNAL(changeSerials(int)),ui->widget_6,SLOT(changeSerialPort(int)));
 
     connect(ui->widget_6,SIGNAL(selectIndexChanged(int)),this,SLOT(serilaSelectIndexChange(int)));
+    connect(ui->listWidget,SIGNAL(itemSelectionChanged()),this,SLOT(listItemSelectChange()));
+
+    connect(ui->spinBox_3,SIGNAL(valueChanged(int)),this,SLOT(setSureButtonEnable(int)));
+    connect(ui->spinBox_4,SIGNAL(valueChanged(int)),this,SLOT(setSureButtonEnable(int)));
+    connect(ui->comboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(setSureButtonEnable(int)));
 
 
 }
+
+void SettingDialog::listItemSelectChange(){
+
+    int index=ui->listWidget->currentIndex().row();
+
+    Addr*add=ConfigXml::addrs.at(index);
+
+    ui->addr_label->setText(QString::number(add->slaveId));
+    ui->fun_02_addr_label_7->setText(QString::number(add->startAddr));
+    ui->fun_02_num_label_12->setText(QString::number(add->coilNum));
+    ui->fun_04_addr_label_13->setText(QString::number(add->telStartAddr));
+    ui->fun_04_num_label_20->setText(QString::number(add->telColiNum));
+
+
+}
+
 
 void SettingDialog::tableValueChange(const QModelIndex &topLeft, const QModelIndex &bottomRight){
 
@@ -53,40 +91,19 @@ void SettingDialog::tableValueChange(const QModelIndex &topLeft, const QModelInd
 
 void SettingDialog::initTable(){
 
-
-    tableModel=new QStandardItemModel;
-
-    tableModel->setColumnCount(6);
-
-    tableModel->setHeaderData(0,Qt::Horizontal,tr("Name"));
-    tableModel->setHeaderData(1,Qt::Horizontal,tr("Slave Id"));
-    tableModel->setHeaderData(2,Qt::Horizontal,tr("Start Address"));
-    tableModel->setHeaderData(3,Qt::Horizontal,tr("Number of Colis"));
-
-    tableModel->setHeaderData(4,Qt::Horizontal,tr("Start TelAddress"));
-    tableModel->setHeaderData(5,Qt::Horizontal,tr("Number of TelColis"));
+    removeConnection();
 
     int len=ConfigXml::addrs.length();
+
+    ui->listWidget->clear();
 
     for(int i=0;i<len;i++){
 
         Addr*addr=ConfigXml::addrs.at(i);
         QString labName= (addr->location==1)? Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
-
-        tableModel->setItem(i,0,new QStandardItem(labName+addr->num));
-        tableModel->setItem(i,1,new QStandardItem(QString::number(addr->slaveId)));
-        tableModel->setItem(i,2,new QStandardItem(QString::number(addr->startAddr)));
-        tableModel->setItem(i,3,new QStandardItem(QString::number(addr->coilNum)));
-        tableModel->setItem(i,4,new QStandardItem(QString::number(addr->telStartAddr)));
-        tableModel->setItem(i,5,new QStandardItem(QString::number(addr->telColiNum)));
-
-
+        new QListWidgetItem(labName+addr->num, ui->listWidget);
     }
 
-
-    ui->tableView->setModel(tableModel);
-
-    ui->tableView->resizeColumnsToContents();
 
     ui->checkBox->setChecked(Config::isSlave);
 
@@ -95,12 +112,21 @@ void SettingDialog::initTable(){
 
     setBlockEnable(!Config::isSlave);
 
+    ui->spinBox_3->setValue(Config::ndLableMin);
+
+    ui->spinBox_4->setValue(Config::ndLableMax);
+
+    ui->comboBox->setCurrentIndex(ui->comboBox->findText(Config::ndLableName));
+
+
+    createConnects();
+
 }
+
 
 void SettingDialog::setBlockEnable(bool enable){
 
-    ui->tableView->setEnabled(enable);
-
+    // ui->tableView->setEnabled(enable);
 
     QString labName;
 
@@ -117,70 +143,15 @@ void SettingDialog::setBlockEnable(bool enable){
 
 }
 
-void SettingDialog::changeTableValue(){
 
-    for(int i=0;i<this->tableModel->rowCount();i++){
+void SettingDialog::setSureButtonEnable(int value){
 
-        if(i>=ConfigXml::addrs.length()){
-            break;
-        }
-        int slaveId;
-        int addrStart,addrTelStart;
-        int coilNum,telCoilNum;
+    bool enabled=value>=0;
 
-        try{
-            slaveId=tableModel->item(i,1)->text().toInt();
-        }catch(QString exception){
-
-            QMessageBox::about(this,tr("Error"),tr("slaveId must be num!"));
-            return;
-        }
-
-        try{
-            addrStart=tableModel->item(i,2)->text().toInt();
-        }catch(QString exception){
-
-            QMessageBox::about(this,tr("Error"),tr("addrStart must be num!"));
-            return;
-        }
-
-        try{
-            coilNum=tableModel->item(i,3)->text().toInt();
-        }catch(QString exception){
-
-            QMessageBox::about(this,tr("Error"),tr("coilNum must be num!"));
-            return;
-        }
-
-        try{
-            addrTelStart=tableModel->item(i,4)->text().toInt();
-        }catch(QString exception){
-
-            QMessageBox::about(this,tr("Error"),tr("addrTelStart must be num!"));
-            return;
-        }
-
-        try{
-            telCoilNum=tableModel->item(i,5)->text().toInt();
-        }catch(QString exception){
-
-            QMessageBox::about(this,tr("Error"),tr("telCoilNum must be num!"));
-            return;
-        }
-
-        ConfigXml::addrs.at(i)->slaveId=slaveId;
-        ConfigXml::addrs.at(i)->startAddr=addrStart;
-        ConfigXml::addrs.at(i)->coilNum=coilNum;
-        ConfigXml::addrs.at(i)->telStartAddr=addrTelStart;
-        ConfigXml::addrs.at(i)->telColiNum=telCoilNum;
-    }
-
-    ConfigXml::update();
+    ui->pushButton_5->setEnabled(enabled);
+    ui->pushButton->setEnabled(enabled);
 
 }
-
-
-
 
 
 //tab 1
@@ -188,13 +159,13 @@ void SettingDialog::on_pushButton_clicked()
 {
 
     on_pushButton_5_clicked();
-
     on_pushButton_3_clicked();
+
 }
 
 void SettingDialog::on_pushButton_5_clicked()
 {
-    changeTableValue();
+    // changeTableValue();
 
     Config::updateConfig("model/isSlave",ui->checkBox->isChecked()?"true":"false");
 
@@ -202,16 +173,20 @@ void SettingDialog::on_pushButton_5_clicked()
 
     emit changeIsSlave(model);
 
-    ui->pushButton_5->setEnabled(false);
-    ui->pushButton->setEnabled(false);
+    setSureButtonEnable(-1);
 
 }
+
 
 
 void SettingDialog::on_pushButton_3_clicked()
 {
+    this->setSureButtonEnable(-1);
+
     this->close();
 }
+
+
 
 void SettingDialog::on_checkBox_clicked(bool checked)
 {
@@ -254,4 +229,31 @@ void SettingDialog::serilaSelectIndexChange(int){
     ui->pushButton_8->setEnabled(true);
     ui->pushButton_7->setEnabled(true);
 
+}
+
+
+//edit
+void SettingDialog::on_pushButton_6_clicked()
+{
+
+    QListWidgetItem*it=ui->listWidget->currentItem();
+
+    int index=ui->listWidget->currentIndex().row();
+
+    Addr*add=ConfigXml::addrs.at(index);
+
+    AddrEditDialog addEdit(this);
+
+
+    addEdit.setValues(add);
+
+    int re= addEdit.exec();
+
+    if(re){
+
+        listItemSelectChange();
+
+    }
+
+    qDebug()<<re<<endl;
 }

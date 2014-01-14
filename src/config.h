@@ -44,6 +44,8 @@ public:
     static int localAddress;
     static int remoteAddress;
 
+    static int slaveWaitTimeOut;
+
 
 signals:
 

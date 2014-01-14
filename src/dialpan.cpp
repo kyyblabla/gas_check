@@ -32,14 +32,16 @@ void dialpan::paintEvent(QPaintEvent *) {
 
     int commEndAngle= 180-commStartAngle*2;
 
+    const int grad_num = 3;
+
     QPainter painter(this);
 
     painter.setRenderHint(QPainter::Antialiasing);
 
     int r=(this->width()/2)/(qCos(commStartAngle*M_PI/180))-30;
-    int weight=15;
+    int weight=12;
     //移动坐标系,使得坐标原点在label的下方中间
-    painter.translate(width() / 2,r+20);
+    painter.translate(width() / 2,r+31);
     //int side = qMin(width(), height());
     //painter.scale(side / 120, side / 120.0);
 
@@ -49,7 +51,7 @@ void dialpan::paintEvent(QPaintEvent *) {
     QColor co4 = QColor(255, 0, 0);
 
     /*pen1是最外边的大圆弧*/
-    QLinearGradient linearGradient = QLinearGradient(-60, 0, 60, 0);
+    QLinearGradient linearGradient = QLinearGradient(-40, 0, 40, 0);
     linearGradient.setColorAt(0.0,co1);
     linearGradient.setColorAt(0.4, co2);
     linearGradient.setColorAt(0.6, co3);
@@ -65,6 +67,20 @@ void dialpan::paintEvent(QPaintEvent *) {
     //画圆弧
     painter.drawArc(rectangle, startAngle, spanAngle);
 
+    //最顶层
+    QPen pen_me(Qt::gray,1 , Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+
+    painter.setPen(pen_me);
+
+    int x1 = 108;
+    int y1 = 108;
+    int rect_weight = 216;
+    int rect_high = 216;
+
+    QRectF rectangle2(-x1, -y1, rect_weight, rect_high);
+
+    painter.drawArc(rectangle2, startAngle,spanAngle);
+
     /*pen3是最里面的那个圆弧*/
     QPen pen3(Qt::white, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
 
@@ -75,39 +91,61 @@ void dialpan::paintEvent(QPaintEvent *) {
 
     int len=3;
 
-    int rote=commEndAngle/(len-1);
-
-    //painter.rotate(-commEndAngle/2-2);
-
+    float rote=commEndAngle/(len-1);
     painter.save();
-    //painter.drawLine(88, 0, 80, 0);
+
+    QPen pen_ziti(Qt::green , 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    painter.setPen(pen_ziti);
+
+    QFont font("Arial",8,QFont::Bold,true);
+
+    font.setCapitalization(QFont::SmallCaps);
+
+    font.setLetterSpacing(QFont::AbsoluteSpacing,0.1);
+
+    painter.setFont(font);
+
+    float precision = maxValue*1.0/grad_num;//precision
 
     painter.rotate(-rote);
 
-    int val_Width=painter.fontMetrics().width(QString::number(this->minValue));
+    for(int i = 0 ; i <= grad_num ; i++){
 
-    painter.drawText(0-val_Width/2,-r-10,QString::number(this->minValue));
+        int val_Width=painter.fontMetrics().width(QString::number(i*precision));
 
-    painter.rotate(rote);
+        painter.drawText(0-val_Width/2,-r-8,QString::number(i*precision));
 
-    int midValue=(this->maxValue-this->minValue)/2;
-    val_Width=painter.fontMetrics().width(QString::number(midValue));
-
-    painter.drawText(0-val_Width/2,-r-10,QString::number(midValue));
-
-    painter.rotate(rote);
-
-    val_Width=painter.fontMetrics().width(QString::number(this->maxValue));
-
-    painter.drawText(0-val_Width/2,-r-10,QString::number(this->maxValue));
-
-
+        painter.rotate(commEndAngle*1.0/grad_num);
+    }
     painter.restore();
 
+    painter.save();
+    /*用画笔3,画表盘刻度*/
+    painter.rotate(-rote);
 
+    for (int i = 0; i <= grad_num + grad_num * 3; i++) {
 
-    //painter.restore();
+        if( i % 4 == 0){
 
+            QPen pen_kedu(Qt::gray,1.2 , Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+            painter.setPen(pen_kedu);
+
+            painter.drawLine(x1, 0, x1 - 9, 0);
+
+            painter.rotate( -commEndAngle*1.0 / (grad_num + grad_num * 3) );
+
+        }else{
+
+            QPen pen_kedu(Qt::gray,1 , Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+            painter.setPen(pen_kedu);
+
+            painter.drawLine(x1, 0, x1 - 4, 0);
+
+            painter.rotate( -commEndAngle*1.0 / (grad_num + grad_num * 3));
+
+        }
+    }
+    painter.restore();
 
     //绘制圆心
     QBrush brush(Qt::white);
@@ -116,7 +154,6 @@ void dialpan::paintEvent(QPaintEvent *) {
     int c_r=3;
     painter.drawEllipse(-c_r,-c_r,2*c_r,2*c_r);
 
-
     painter.save();
     //绘制指针
     QPen pen4(Qt::red, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
@@ -124,26 +161,11 @@ void dialpan::paintEvent(QPaintEvent *) {
 
     int len_ro= commEndAngle*ratevalue -  commEndAngle/2;
 
-
-
     painter.rotate(len_ro);
 
     painter.drawLine(0,-c_r,0,-r+weight);
 
     painter.restore();
-
-
-
-    //绘制文字
-    //    QString val=QString::number(ratevalue);
-
-    //    int valWidth=painter.fontMetrics().width(val);
-
-    //    int valHeight=painter.fontMetrics().height();
-
-    //    painter.drawText(0-valWidth/2,0+valHeight,val);
-
-
 
 }
 

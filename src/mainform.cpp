@@ -23,6 +23,8 @@
 #include <QMouseEvent>
 #include <QIcon>
 #include <QCloseEvent>
+#include <QShowEvent>
+
 #include <QGridLayout>
 #include <QDesktopWidget>
 #include <QSound>
@@ -31,9 +33,12 @@
 #include <QGraphicsDropShadowEffect>
 #include <QStackedLayout>
 #include <QHBoxLayout>
+#include <QFrame>
+
 
 
 extern MainForm * globalMainWin;
+extern modbus_t * m_modbus;
 
 MainForm::MainForm(QWidget *parent) :
     QWidget(parent),
@@ -55,7 +60,7 @@ MainForm::MainForm(QWidget *parent) :
     createEquipments();
 
     //remove the title bar
-    this->setWindowFlags(Qt::FramelessWindowHint);
+    //this->setWindowFlags(Qt::FramelessWindowHint);
     this->showNormal();
 
     logview=new LogViewDialog;
@@ -66,14 +71,20 @@ MainForm::MainForm(QWidget *parent) :
 
     changeStackIndex(0);
 
+
     initTimerAndThread();
 
+
+    startMiontor();
 
 
 }
 
 
 void MainForm::initTimerAndThread(){
+
+
+    qDebug()<<"initTimerAndThread"<<endl;
 
     isPlay=false;
 
@@ -93,25 +104,75 @@ void MainForm::initTimerAndThread(){
 
     transitionIndex=0;
 
-    if(Config::isSlave){
 
-        pollTimer->start(10);
-
-        this->masterModel=Sub;
-
-    }else{
-
-        this->transcationCreate->start(Config::sleepTime);
-        reqThread->start();
-        this->masterModel=Master;
-    }
 
 }
 
 
+bool MainForm::checkModbus(){
+
+    if(m_modbus!=NULL){
+
+        modbus_close(  m_modbus);
+        modbus_free(  m_modbus );
+        m_modbus = NULL;
+
+    }
+
+    char parity;
+    if(Config::serialParity=="even"){
+        parity = 'E';
+    }else if(Config::serialParity=="odd"){
+        parity = 'O';
+    }else{
+        parity = 'N';
+    }
+
+    m_modbus = modbus_new_rtu(Config::serialinterface.toAscii().constData(), Config::serialBaudRate,  parity,Config::serialDatabits,Config::serialStopbits );
+
+    int re=  modbus_connect( m_modbus );
+
+    qDebug()<<"re:"<<re<<endl;
+
+    return re != -1;
+}
+
+void MainForm::startMiontor(){
+
+
+    qDebug()<<"showEvent"<<endl;
+
+    m_modbus = NULL;
+
+    if(!checkModbus())
+    {
+        int re= QMessageBox::critical( this, tr( "Connection failed" ),tr( "Could not connect serial port! Do you want to have a setting?" ),QMessageBox::Yes,QMessageBox::No);
+
+        if(re==QMessageBox::Yes){
+            this->doSetting();
+        }
+
+    }else{
+
+        if(Config::isSlave){
+
+            modelChange(Sub);
+
+        }else{
+
+            modelChange(Master);
+
+        }
+
+
+    }
+}
+
+
+
+
 
 void MainForm::changeStackIndex(int index){
-
 
 
     ui->stackedWidget->setCurrentIndex(index);
@@ -151,6 +212,7 @@ void MainForm::modelChange(MainForm::MasterModel model){
         if(!this->reqThread->isRunning()){
             this->reqThread->start();
         }
+
         break;
     case Sub:
     case MasterToSub:
@@ -166,22 +228,48 @@ void MainForm::modelChange(MainForm::MasterModel model){
         if(!this->pollTimer->isActive()){
             this->pollTimer->start(15);
         }
+
+        updateLastWaitTime();
+
         break;
     default:
         break;
     }
-
-
-
 }
 
 void MainForm::pollForDataOnBus()
 {
-    if( ModbusRequestThread::m_modbus )
+
+    qDebug()<<"pollForDataOnBus"<<endl;
+
+    if(m_modbus!=NULL)
     {
-        modbus_poll( ModbusRequestThread::m_modbus );
+        long currt=QDateTime::currentMSecsSinceEpoch();
+
+        qDebug()<<"curr:"<<currt<<" last:"<<this->lastUpdateTime<<" plus:"<<currt-this->lastUpdateTime<<endl;
+
+        if(currt-this->lastUpdateTime>=Config::slaveWaitTimeOut){
+
+            this->modelChange(Master);
+            this->addLogInfo(0,-1,0,"");
+            Config::updateConfig("model/isSlave","false");
+
+        }else{
+
+            modbus_poll(m_modbus);
+
+        }
     }
 }
+
+void MainForm::updateLastWaitTime(){
+
+
+    this->lastUpdateTime=QDateTime::currentMSecsSinceEpoch();
+
+}
+
+
 
 
 void MainForm::createTranstration(){
@@ -220,11 +308,11 @@ void MainForm::transcationIsDone(Transcation*trans){
     int index=trans->addr->index;
 
 
-    bool change=false;
 
-    qDebug()<<"thread message index:"<<index<<endl;
-    qDebug()<<"thread message returnCode:"<<trans->returnCode<<endl;
-    qDebug()<<"thread message funccode:"<<trans->funCode<<endl;
+
+    //    qDebug()<<"thread message index:"<<index<<endl;
+    //    qDebug()<<"thread message returnCode:"<<trans->returnCode<<endl;
+    //    qDebug()<<"thread message funccode:"<<trans->funCode<<endl;
 
 
     switch (funCode) {
@@ -232,12 +320,10 @@ void MainForm::transcationIsDone(Transcation*trans){
 
         if(trans->returnCode>0){
 
-            change=changeEquipmentStatus(index,2,0);
-            if(change){
-                addLogInfo(index,2,0);
-            }
+            changeEquipmentStatus(index,2,0);
 
-            qDebug()<<"thread message Data:"<<trans->returnData<<endl;
+
+            //  qDebug()<<"thread message Data:"<<trans->returnData<<endl;
 
             QStringList list=trans->returnData.split("#");
 
@@ -249,35 +335,24 @@ void MainForm::transcationIsDone(Transcation*trans){
 
             if(fault==1){
 
-                change = changeEquipmentStatus(index,3,1);
-                if(change){
-                    addLogInfo(index,3,1);
-                }
+                changeEquipmentStatus(index,3,1);
+
                 return;
 
             }else{
 
-                change=changeEquipmentStatus(index,3,0);
-                if(change){
-                    addLogInfo(index,3,0);
-                }
-
+                changeEquipmentStatus(index,3,0);
 
             }
 
             int waringLevel=((a3>a2)?(a3>a1?a3:(a1>a2?a1:a3)):(a2>a1?a2:a1>a3?a1:a2));
 
-            change= changeEquipmentStatus(index,4,waringLevel);
+            changeEquipmentStatus(index,4,waringLevel);
 
 
         }else{  //fult to link
 
-            change=changeEquipmentStatus(index,2,1);
-
-            if(change){
-                addLogInfo(index,2,1);
-            }
-
+            changeEquipmentStatus(index,2,1);
         }
 
         break;
@@ -285,24 +360,17 @@ void MainForm::transcationIsDone(Transcation*trans){
 
         if(trans->returnCode>0){
 
-            qDebug()<<"thread message Data 4:"<<trans->returnData<<endl;
+            //    qDebug()<<"thread message Data 4:"<<trans->returnData<<endl;
             QStringList list=trans->returnData.split("#");
 
             int gasNd=list.at(0).toInt();
 
-            change=changeEquipmentStatus(index,1,gasNd);
-
+            changeEquipmentStatus(index,1,gasNd);
 
         }else{
 
-
-            change=changeEquipmentStatus(index,1,0);
-            if(change){
-                addLogInfo(index,1,0);
-            }
+            changeEquipmentStatus(index,1,0);
         }
-
-
         break;
 
     default:
@@ -311,9 +379,7 @@ void MainForm::transcationIsDone(Transcation*trans){
 
 }
 
-void MainForm::addLogInfo(int equipmentIndex, int labelIndex, int statu){
-
-
+void MainForm::addLogInfo(int equipmentIndex, int labelIndex, int statu,QString data){
 
     Addr*addr=ConfigXml::addrs.at(equipmentIndex);
 
@@ -321,7 +387,7 @@ void MainForm::addLogInfo(int equipmentIndex, int labelIndex, int statu){
 
     labName=labName+addr->num;
 
-    QString detila;
+    QString detila="";
 
     if(labelIndex==2){
 
@@ -361,9 +427,17 @@ void MainForm::addLogInfo(int equipmentIndex, int labelIndex, int statu){
 
         }
 
+    }else{
+
+        detila+= tr("can't receive any data from master! Try to be Master!");
     }
 
-    detila="["+QDateTime::currentDateTime().toLocalTime().toString()+"]"+detila;
+    QDateTime time = QDateTime::currentDateTime();
+    QString str = time.toString("yyyy-MM-dd hh:mm:ss");
+
+
+
+    detila="["+str+"]"+detila;
 
     ui->textEdit->append(detila);
 
@@ -379,21 +453,68 @@ void MainForm::addLogInfo(int equipmentIndex, int labelIndex, int statu){
 
 }
 
-bool MainForm::changeEquipmentStatus(int index,int labelIndex,int data){
+
+void MainForm::changeEquipmentStatus(int index,int labelIndex,int data){
 
     EquipmentWidget*e=equipmentsList.at(index);
-    return  e->updateLableValue(labelIndex,data);
+    if(e->updateLableValue(labelIndex,data)){
+        addLogInfo(index,labelIndex,data,"");
+    }
+
+}
+
+bool MainForm::changeEquipmentStatusById(int id,int labelIndex,int data){
+
+    for(int i=0;i<ConfigXml::addrs.length();i++){
+
+        if(ConfigXml::addrs.at(i)->slaveId==id){
+
+            EquipmentWidget*e=this->equipmentsList.at(i);
+
+            if(e->updateLableValue(labelIndex,data)){
+
+                addLogInfo(i,labelIndex,data,"");
+
+            }
+
+        }
+
+    }
 
 }
 
 
 
+
 MainForm::~MainForm()
 {
+
+    qDebug()<<"~MainForm"<<endl;
+
+    if(this->pollTimer->isActive()){
+
+        pollTimer->stop();
+    }
+
+    qDebug()<<"~MainForm11111"<<endl;
+
+    if(this->transcationCreate->isActive()){
+
+        transcationCreate->stop();
+    }
+
+    qDebug()<<"~MainForm22222"<<endl;
+
+    if(this->reqThread->isRunning()){
+
+        reqThread->stopReq();
+
+    }
+
+    //    qDebug()<<"~MainForm3333"<<endl;
+
     //this->transcationCreate->stop();
     // this->pollTimer->stop();
-
-
 
     delete ui;
     delete exitAction;
@@ -442,6 +563,10 @@ void MainForm::initEventerFilter(){
 
     ui->label_17->installEventFilter(this);
     ui->label_18->installEventFilter(this);
+
+    ui->label_2->installEventFilter(this);
+
+    ui->label_3->installEventFilter(this);
 
 
 
@@ -525,59 +650,22 @@ void MainForm::createEquipments(){
         // dialpan*dia=new dialpan;
         e->setTitle(labName);
 
+        e->setVisible(i);
+
         ui->widget_5->layout()->addWidget(e);
+
 
         this->equipmentsList.append(e);
 
     }
 
-    qDebug()<<"equipmentsList:"<<equipmentsList.size()<<endl;
 
-    //ui->widget_5->setStyleSheet("border-color:#fff;border-style:solid;border-width:1px;");
-
-
-}
-
-/*
-void MainForm::createLinkStatusPic(){
-
-
-    QCustLabel *lab1=new QCustLabel;
-    lab1->setDesInfo(Config::LINKSTATUS_LABEL.split("#").at(0));
-    lab1->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
-    lab1->setLabelType(QCustLabel::MainDevice);
-
-
-    QCustLabel*lab2=new QCustLabel;
-    lab2->setDesInfo(Config::LINKSTATUS_LABEL.split("#").at(1));
-    lab2->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
-
-
-    QCustLabel*lab3=new QCustLabel;
-    lab3->setDesInfo(Config::LINKSTATUS_LABEL.split("#").at(2));
-    lab3->setPixmap(QPixmap(QString::fromUtf8(":/computer_white.png")));
-
-
-
-
-    QGridLayout *layout=new QGridLayout;
-    layout->setMargin(0);
-    layout->setSpacing(0);
-
-    layout->addWidget(lab1,0,0,1,2);
-    layout->addWidget(lab2,1,0);
-    layout->addWidget(lab3,1,1);
-
-    // QWidget *newWidget=new QWidget;
-    // newWidget->setLayout(layout);
-    //newWidget->setStyleSheet("*{border-style:solid;border-color:#000;border-width:1px}");
-
-    ui->widget_2->setLayout(layout);
+    //ui->widget_5->setStyleSheet("border-bottom-color:#fff;border-bottom-style:solid;border-bottom-width:1px;");
 
 
 }
 
- */
+
 
 
 /**
@@ -664,7 +752,27 @@ bool MainForm::eventFilter(QObject *obj, QEvent *event){
 
         }
 
+    }else if(obj==ui->label_2){
+
+        if (event->type() == QEvent::MouseButtonPress) {
+
+
+
+
+            return true;
+
+        }
+
+    }else if(obj==ui->label_3){
+
+        if (event->type() == QEvent::MouseButtonPress) {
+
+            return true;
+
+        }
+
     }
+
 
     return QWidget::eventFilter(obj,event);
 
@@ -730,25 +838,6 @@ void MainForm::playSound(){
 }
 
 
-
-
-
-
-//void MainForm::addLogInfo(QString info,int index,int level){
-
-//    Addr*addr=ConfigXml::addrs.at(index);
-//    QString loca;
-
-//    loca=(addr->location==1)?Config::AREA_LABEL.split("#").at(0):Config::AREA_LABEL.split("#").at(1);
-
-
-//    info="<span style='color:"+Config::colorLevel.split("|").at(level)+"'>"+info+"</span>";
-
-//    ui->textEdit->append("["+QDateTime::currentDateTime().toLocalTime().toString()+"]"+loca+addr->num+":"+info);
-
-
-//}
-
 void MainForm::doReceiveData(QString data){
 
     qDebug()<<"data"<<data<<endl;
@@ -808,7 +897,7 @@ int busMonitorReceiveMes(uint8_t * data, uint8_t dataLen){
     //id  fun  startAdd  num    len  d1     a2     d3
     int id= data[0];
     int fun=data[1];
-
+    qDebug()<<"id:"<<id<<" fun:"<<fun<<endl;
 
     if(id!=Config::localAddress||fun!=16){
 
@@ -816,31 +905,28 @@ int busMonitorReceiveMes(uint8_t * data, uint8_t dataLen){
 
     }
 
-
     int startAdd=data[2]<<8|data[3];
     int num=data[5];
-    qDebug()<<"id:"<<id<<" fun:"<<fun<<" startAdd:"<<startAdd<<" num:"<<num<<endl;
+    qDebug()<<" startAdd:"<<startAdd<<" num:"<<num<<endl;
+
 
     int dataStart=7;
-    int count=0;
 
-    for(int i=0;i<num;i++){
+    int count=dataStart+2*num+1;
 
-        int value= data[dataStart+2*i]<<8|data[dataStart+2*i+1];
-        qDebug()<<"value"<<i<<":"<<value<<endl;
+    int  equpmentId= data[dataStart]<<8|data[dataStart+1];
 
-        count=dataStart+2*i+1+1;
-    }
+    dataStart+=2;
+    int  labelIndex= data[dataStart]<<8|data[dataStart+1];
+
+    dataStart+=2;
+    int  labelStatus=data[dataStart]<<8|data[dataStart+1];
+
+
+    globalMainWin->changeEquipmentStatusById(equpmentId,labelIndex,labelStatus);
+    globalMainWin->updateLastWaitTime();
 
     return count;
-
-    //}
-
-
-
-
-    return -1;
-
 
 }
 

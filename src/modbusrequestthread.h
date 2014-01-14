@@ -2,7 +2,7 @@
 #define MODBUSREQUESTTHREAD_H
 
 #include "configxml.h"
-#include "modbus.h"
+
 #include <QThread>
 #include <QMutex>
 #include <QQueue>
@@ -28,9 +28,8 @@ public:
     ModbusRequestThread();
     ~ModbusRequestThread();
     void addTranscation(Transcation*transcation);
-    static modbus_t * m_modbus;
-    void createModbus();
     void stopReq();
+
 signals:
 
     void transcationDone(Transcation*transcation);

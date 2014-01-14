@@ -3,6 +3,7 @@
 #include "config.h"
 #include "configxml.h"
 #include "gasviewform.h"
+#include "modbus.h"
 
 
 #include <QApplication>
@@ -11,6 +12,8 @@
 #include <QTranslator>
 
 MainForm * globalMainWin = NULL;
+
+modbus_t * m_modbus = NULL;
 
 int main(int argc, char *argv[])
 {

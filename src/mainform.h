@@ -22,7 +22,7 @@ class LogViewDialog;
 class QTimer;
 class GasViewForm;
 class SettingDialog;
-
+class QShowEvent;
 
 
 class MainForm : public QWidget
@@ -40,12 +40,17 @@ public:
         MasterToSub
     };
 
+    bool changeEquipmentStatusById(int id,int labelIndex,int data);
+
+    void updateLastWaitTime();
+
 protected:
     bool eventFilter(QObject *obj, QEvent *ev); //filter events, in this moment,we just attention this event of ui's label
     //void mousePressEvent(QMouseEvent *event);        //define a mouse peress event
     //void mouseMoveEvent(QMouseEvent *event);         // define a mouse move event
     void closeEvent(QCloseEvent *event);
     //bool winEvent(MSG *message, long *result);
+
 
 private slots:
 
@@ -84,6 +89,10 @@ private:
     QAction*settingAction;
 
     SettingDialog*settingDialog;
+    bool checkModbus();
+
+    void startMiontor();
+
 
     void initTimerAndThread();
 
@@ -121,20 +130,21 @@ private:
     QTimer *transcationCreate;
     bool isPlay;
 
+    long lastUpdateTime;
     QTimer*pollTimer;
 
     ModbusRequestThread*reqThread;
     // MySerialPort*mySerialPort;
 
 
-    bool changeEquipmentStatus(int index, int labelIndex, int data);
+    void changeEquipmentStatus(int index, int labelIndex, int data);
 
     int transitionIndex;
 
     //void addLogInfo(QString info, int index, int level);
 
     //GasViewForm*gasViewForm;
-    void addLogInfo(int equipmentIndex,int labelIndex,int statu);
+    void addLogInfo(int equipmentIndex, int labelIndex, int statu, QString data);
 
 
     MasterModel masterModel;

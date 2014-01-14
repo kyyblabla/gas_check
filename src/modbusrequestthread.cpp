@@ -1,29 +1,31 @@
 ﻿#include "modbusrequestthread.h"
 #include "modbus-private.h"
-#include "configxml.h"
 #include "config.h"
-#include "myserialport.h"
+#include "modbus.h"
 
 #include <QMessageBox>
 #include <QDebug>
 #include <QMutexLocker>
 
-modbus_t* ModbusRequestThread::m_modbus;
+extern modbus_t * m_modbus;
 
 ModbusRequestThread::ModbusRequestThread()
 {
     this->stopFlag=false;
     this->sleepTime=10;
-    createModbus();
+
 
 }
 
 void ModbusRequestThread::stopReq(){
 
+    QMutexLocker locker(&mutex);
     this->stopFlag=true;
+
 }
 
 ModbusRequestThread::~ModbusRequestThread(){
+
 
     qDebug()<<"~ModbusRequestThread"<<endl;
 
@@ -40,37 +42,13 @@ ModbusRequestThread::~ModbusRequestThread(){
 
     }
 
-    wait();
+
+
+    // wait();
 
 }
 
 
-void ModbusRequestThread::createModbus(){
-
-
-    char parity;
-    if(Config::serialParity=="even"){
-        parity = 'E';
-    }else if(Config::serialParity=="odd"){
-        parity = 'O';
-    }else{
-        parity = 'N';
-    }
-
-
-    qDebug()<<Config::serialinterface.toAscii().constData();
-    ModbusRequestThread::m_modbus = modbus_new_rtu(  Config::serialinterface.toAscii().constData(),
-                                                     Config::serialBaudRate,
-                                                     parity,
-                                                     Config::serialDatabits,
-                                                     Config::serialStopbits );
-
-    if( modbus_connect( ModbusRequestThread::m_modbus ) == -1 )
-    {
-        qDebug()<<"cant create"<<endl;
-    }
-
-}
 
 
 void ModbusRequestThread::addTranscation(Transcation *transcation){
@@ -83,7 +61,6 @@ void ModbusRequestThread::addTranscation(Transcation *transcation){
 
 
 void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
-
 
     if( m_modbus == NULL ){
         return;
@@ -129,12 +106,12 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
         break;
     }
 
-    qDebug()<<"ret:"<<ret<<endl;
+   // qDebug()<<"ret:"<<ret<<endl;
     if( ret == coilNum  )
     {
         if( writeAccess )
         {
-            qDebug()<<"Values successfully sent"<<endl;
+   //         qDebug()<<"Values successfully sent"<<endl;
 
             transcation->returnCode=1;
             transcation->returnData="";
@@ -164,7 +141,7 @@ void ModbusRequestThread::sendModbusRequest(Transcation *transcation){
     }
     else
     {
-        qDebug()<<"here2:"<<slaveId<<" "<<func<<endl;
+    //    qDebug()<<"here2:"<<slaveId<<" "<<func<<endl;
         if( ret < 0 ){
             if(
         #ifdef WIN32
@@ -220,7 +197,7 @@ void ModbusRequestThread::run(){
 
         Transcation*trans=this->transcations.dequeue();
 
-        qDebug()<<"get a transation:"<<trans->addr->slaveId<<endl;
+  //      qDebug()<<"get a transation:"<<trans->addr->slaveId<<endl;
 
         sendModbusRequest(trans);
 

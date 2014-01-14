@@ -28,11 +28,10 @@ SOURCES +=  src/main.cpp\
             3rdparty/libmodbus/src/modbus-tcp.c \
             src/modbusrequestthread.cpp \
             src/configxml.cpp \
-            src/myserialport.cpp \
-            src/myserialsettingswidget.cpp \
             src/linkstatuswidget.cpp \
             src/dialpan.cpp \
-            src/sqlite.cpp
+            src/sqlite.cpp \
+    src/addreditdialog.cpp
 
 
 HEADERS  += src/mainform.h \
@@ -48,11 +47,10 @@ HEADERS  += src/mainform.h \
             3rdparty/qextserialport/qextserialenumerator.h \
             3rdparty/libmodbus/src/modbus.h \
             src/configxml.h \
-            src/myserialport.h \
-            src/myserialsettingswidget.h \
             src/linkstatuswidget.h \
             src/dialpan.h \
-            src/sqlite.h
+            src/sqlite.h \
+    src/addreditdialog.h
 
 
 
@@ -82,7 +80,8 @@ FORMS    += form/mainform.ui \
             form/logviewdialog.ui \
             form/serialsettingswidget.ui \
             src/myserialsettingswidget.ui \
-            src/linkstatuswidget.ui
+            src/linkstatuswidget.ui \
+    src/addreditdialog.ui
 
 
 RESOURCES += \

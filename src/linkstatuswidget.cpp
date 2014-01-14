@@ -42,11 +42,10 @@ int LinkStatusWidget::getLineLength(int index,int type){
 
 void LinkStatusWidget::initLines(){
 
-
+    lines.clear();
 
     int lineLeft=this->left_left+this->left_width+this->left_space;
     int lineRight=this->width()-this->right_right;
-
 
     int centerHeight=this->right_top+this->right_height+this->right_space/2;
 
@@ -55,7 +54,7 @@ void LinkStatusWidget::initLines(){
 
     QLine line_1(p_left_left,p_left_right);
 
-    int lineRightRight=lineRight+this->right_space;
+    int lineRightRight=this->width()-this->right_right+this->right_space;
     int lineRightTop=centerHeight- this->right_space/2-this->right_height/2;
     int lineRightBottom= centerHeight+this->right_space/2+this->right_height/2;
 
@@ -94,8 +93,8 @@ void LinkStatusWidget::init(){
     left_left=10;
     left_top=10;
     left_space=6;
-    left_width=100;
-    left_height=100;
+    left_width=110;
+    left_height=90;
 
     right_right=20;
     right_top=10;
@@ -131,6 +130,7 @@ LinkStatusWidget::~LinkStatusWidget()
 
 void LinkStatusWidget::paintEvent(QPaintEvent *event){
 
+    initLines();
 
     QPainter painter(this);
 
@@ -139,6 +139,12 @@ void LinkStatusWidget::paintEvent(QPaintEvent *event){
     QRectF dest(0,0,pic.width(),pic.height());
 
 
+
+    QPixmap pic2(QString::fromUtf8(":/honeywell.png"));
+
+    QRectF dest2(0,0,pic2.width(),pic2.height());
+    //220*180
+
     QRectF target_0(this->left_left,this->left_top,this->left_width,this->left_height);
 
     QRectF target_1(this->width()-this->right_right-this->right_width,this->right_top,this->right_width,this->right_height);
@@ -146,7 +152,7 @@ void LinkStatusWidget::paintEvent(QPaintEvent *event){
     QRectF target_2(this->width()-this->right_right-this->right_width,this->right_top+this->right_height+this->right_space,this->right_width,this->right_height);
 
 
-    painter.drawPixmap(target_0,pic,dest);
+    painter.drawPixmap(target_0,pic2,dest2);
 
     painter.drawPixmap(target_1,pic,dest);
 
@@ -261,11 +267,6 @@ void LinkStatusWidget::paintEvent(QPaintEvent *event){
 
 
 void LinkStatusWidget::showEvent(QShowEvent *event){
-
-    initLines();
-
-
-
 
 }
 
