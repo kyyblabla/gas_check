@@ -1,6 +1,10 @@
 QT       += core gui xml
 QT       += sql
 
+CONFIG+= qaxcontainer
+
+
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = FGCheck
@@ -31,8 +35,8 @@ SOURCES +=  src/main.cpp\
             src/linkstatuswidget.cpp \
             src/dialpan.cpp \
             src/sqlite.cpp \
-    src/addreditdialog.cpp
-
+            src/addreditdialog.cpp \
+            src/qexcel.cpp
 
 HEADERS  += src/mainform.h \
             src/settingdialog.h \
@@ -50,7 +54,8 @@ HEADERS  += src/mainform.h \
             src/linkstatuswidget.h \
             src/dialpan.h \
             src/sqlite.h \
-    src/addreditdialog.h
+            src/addreditdialog.h \
+            src/qexcel.h
 
 
 
@@ -81,7 +86,7 @@ FORMS    += form/mainform.ui \
             form/serialsettingswidget.ui \
             src/myserialsettingswidget.ui \
             src/linkstatuswidget.ui \
-    src/addreditdialog.ui
+            src/addreditdialog.ui
 
 
 RESOURCES += \

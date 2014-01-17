@@ -45,6 +45,7 @@ public:
     static int remoteAddress;
 
     static int slaveWaitTimeOut;
+    static int linkHostFailMaxCount;
 
 
 signals:

@@ -3,6 +3,7 @@
 
 #include "modbusrequestthread.h"
 #include "myserialport.h"
+#include "sqlite.h"
 
 #include <QSystemTrayIcon>
 #include <QWidget>
@@ -84,6 +85,7 @@ private:
     QList<EquipmentWidget*> equipmentsList;
     QPoint dragPosition;
 
+
     //QMenu *contentMenu;
     QAction*exitAction;
     QAction*settingAction;
@@ -136,7 +138,7 @@ private:
     ModbusRequestThread*reqThread;
     // MySerialPort*mySerialPort;
 
-
+    int linkHostFailCount;
     void changeEquipmentStatus(int index, int labelIndex, int data);
 
     int transitionIndex;

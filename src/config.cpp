@@ -35,6 +35,7 @@ QString Config::ndLableName;
 
 int Config::localAddress;
 int Config::remoteAddress;
+int Config::linkHostFailMaxCount;
 
 
 
@@ -72,6 +73,7 @@ bool Config::initConfig(){
 
     Config::sleepTime=settings.value("SystemThread/sleepTime").toInt();
     Config::slaveWaitTimeOut=settings.value("SystemThread/slaveWaitTimeOut").toInt();
+     Config::linkHostFailMaxCount=settings.value("SystemThread/linkHostFailMaxCount").toInt();
 
     Config::isSlave=settings.value("model/isSlave").toBool();
 

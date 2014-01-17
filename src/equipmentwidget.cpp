@@ -10,7 +10,7 @@
 #include <QPushButton>
 #include <QPainter>
 #include <QPen>
-
+#include <QColor>
 
 
 EquipmentWidget::EquipmentWidget(QWidget *parent) :
@@ -20,7 +20,7 @@ EquipmentWidget::EquipmentWidget(QWidget *parent) :
 
     this->dPan->setValueRange(Config::ndLableMin,Config::ndLableMax);
 
-    this->setStyleSheet("color:#fff");
+    this->setStyleSheet("color:#fff;font:10pt;");
 
     this->setTitle("");
 
@@ -86,33 +86,40 @@ void EquipmentWidget::updateLables(){
 
     this->dPan->setRateValue(this->gasValue);
 
-    this->lNongDuLabel->setText(lNongDuLabelName+QString::number(gasValue)+lNongDuLabelValue);
+    // this->lNongDuLabel->setText(lNongDuLabelName+QString::number(gasValue)+lNongDuLabelValue);
+    this->lNongDuLabel->setText(QString::number(gasValue)+lNongDuLabelValue);
 
     this->waringLevelValue = this->waringValue>0?waringValue:(this->workBreakValue>0||this->onOffValue>0?1:0);
 
     if(waringLevelValue==3){
-
-        this->infoLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(2));
+          infoLabel->setStyleSheet("color:red;background:#5CC1D9;");
+        //   this->infoLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(2));
+        this->infoLabel->setText(lWaringLabelValue.split("/").at(2));
 
     }else if(waringLevelValue==2){
-
-        this->infoLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(1));
+          infoLabel->setStyleSheet("color:yellow;background:#5CC1D9;");
+        //this->infoLabel->setText(lWaringLabelName+lWaringLabelValue.split("/").at(1));
+        this->infoLabel->setText(lWaringLabelValue.split("/").at(1));
 
     }else if(waringLevelValue==1){
 
+        infoLabel->setStyleSheet("color:#f40;background:#5CC1D9;");
         if(this->workBreakValue==1){
 
-            infoLabel->setText(lWorkOrBreakLabelName+lWorkOrBreakLabelValue.split("/").at(1));
+            //infoLabel->setText(lWorkOrBreakLabelName+lWorkOrBreakLabelValue.split("/").at(1));
+            infoLabel->setText(lWorkOrBreakLabelValue.split("/").at(1));
 
         }else{
 
-            infoLabel->setText(lOnOrOffLabelName+lOnOrOffLabelValue.split("/").at(1));
+           // infoLabel->setText(lOnOrOffLabelName+lOnOrOffLabelValue.split("/").at(1));
+            infoLabel->setText(lOnOrOffLabelValue.split("/").at(1));
+
         }
 
 
 
     }else{
-
+        infoLabel->setStyleSheet("color:#fff;background:#5CC1D9;");
         infoLabel->setText(tr("work normal"));
     }
 
@@ -160,16 +167,18 @@ void EquipmentWidget::setLabels(){
 
     ltitle=new QLabel;
     ltitle->setAlignment(Qt::AlignCenter);
+    ltitle->setStyleSheet("background:#3C3F4A;");
     layout->addWidget(ltitle,0,0);
 
     this->dPan=new dialpan;
 
     this->lNongDuLabel=new QLabel;
     lNongDuLabel->setAlignment(Qt::AlignCenter);
+    lNongDuLabel->setStyleSheet("background:#3C3F4A;");
 
     this->infoLabel=new QLabel;
     infoLabel->setAlignment(Qt::AlignCenter);
-
+    infoLabel->setStyleSheet("background:#5CC1D9;");
 
     layout->addWidget(dPan,1,0,4,1);
 
@@ -206,27 +215,28 @@ void EquipmentWidget::paintEvent(QPaintEvent *event){
 
     QPainter painter(this);
 
-    QPen pen;
-    pen.setColor(Qt::gray);
-    pen.setStyle(Qt::DotLine);
 
-    int plud=20;
-    int x1=this->width()-1;
-    int y1=plud;
-    int x2=x1;
-    int y2=this->height()-plud;
+//    QPen pen;
+//    pen.setColor(QColor("#cccccc"));
+//    pen.setStyle(Qt::SolidLine);
 
-    painter.setPen(pen);
-    painter.drawLine(x1,y1,x2,y2);
+//    int plud=0;
+//    int x1=this->width()-1;
+//    int y1=plud;
+//    int x2=x1;
+//    int y2=this->height()-plud;
+
+//    painter.setPen(pen);
+//    painter.drawLine(x1,y1,x2,y2);
 
 
-    x1=0;
-    y1=this->height()-1;
-    x2=this->width();
-    y2=y1;
+    //    x1=0;
+    //    y1=this->height()-1;
+    //    x2=this->width();
+    //    y2=y1;
 
-    painter.setPen(pen);
-    painter.drawLine(x1,y1,x2,y2);
+    //    painter.setPen(pen);
+    //    painter.drawLine(x1,y1,x2,y2);
 
 
 }

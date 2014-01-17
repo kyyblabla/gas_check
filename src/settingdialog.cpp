@@ -236,9 +236,10 @@ void SettingDialog::serilaSelectIndexChange(int){
 void SettingDialog::on_pushButton_6_clicked()
 {
 
-    QListWidgetItem*it=ui->listWidget->currentItem();
 
-    int index=ui->listWidget->currentIndex().row();
+    int index=ui->listWidget->currentRow();
+
+    index=index!=-1?index:0;
 
     Addr*add=ConfigXml::addrs.at(index);
 
@@ -255,5 +256,8 @@ void SettingDialog::on_pushButton_6_clicked()
 
     }
 
+    ConfigXml::update();
+
     qDebug()<<re<<endl;
+
 }

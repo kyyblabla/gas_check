@@ -21,7 +21,8 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget#MainForm{
-	background-color:#3C3F4A;
+	/*background-color:#3C3F4A;*/
+	background-color:#fff;
 }
 
 *{
@@ -133,7 +134,7 @@ QWidget#widget_7 *{
            <widget class="QWidget" name="widget_5" native="true">
             <property name="styleSheet">
              <string notr="true">QWidget#widget_5{ 
- 
+ 	color:#ccc;
 }</string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout">
@@ -149,17 +150,83 @@ QWidget#widget_7 *{
           <item>
            <widget class="QWidget" name="widget_6" native="true">
             <property name="styleSheet">
-             <string notr="true">QWidget#widget_4{ 
-	background-color: #353942;
-}</string>
+             <string notr="true">QWidget#widget_6{ 
+	background-color:#3C3F4A;
+    background-color:#E6ECF1;
+	background-color:#000;
+	background-color:#3C3F4A;
+}
+
+</string>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
-             <property name="spacing">
-              <number>0</number>
-             </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
              <property name="margin">
               <number>0</number>
              </property>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <widget class="QWidget" name="widget_3" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_3">
+                  <property name="leftMargin">
+                   <number>9</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>9</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>9</number>
+                  </property>
+                  <item>
+                   <widget class="QLabel" name="label_4">
+                    <property name="font">
+                     <font>
+                      <family>微软雅黑</family>
+                      <pointsize>12</pointsize>
+                      <weight>50</weight>
+                      <italic>false</italic>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">font: 12pt &quot;微软雅黑&quot;;
+color:#fff;
+border-bottom-color:#fff;
+border-bottom-style:solid;
+border-bottom-width:1px;
+ </string>
+                    </property>
+                    <property name="text">
+                     <string>Link Status</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QWidget" name="widget_2" native="true">
+                 <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1">
+                  <property name="spacing">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="LinkStatusWidget" name="widget_8" native="true"/>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </item>
              <item>
               <widget class="QWidget" name="widget" native="true">
                <property name="styleSheet">
@@ -171,7 +238,7 @@ QWidget#widget_7 *{
     padding:5px 30px 5px 30px;
 }</string>
                </property>
-               <layout class="QVBoxLayout" name="verticalLayout">
+               <layout class="QVBoxLayout" name="verticalLayout" stretch="2,2,3">
                 <item>
                  <widget class="QLabel" name="label_2">
                   <property name="text">
@@ -208,9 +275,6 @@ QWidget#widget_7 *{
                </layout>
               </widget>
              </item>
-             <item>
-              <widget class="LinkStatusWidget" name="widget_8" native="true"/>
-             </item>
             </layout>
            </widget>
           </item>
@@ -241,8 +305,9 @@ QWidget#widget_7 *{
            <widget class="QWidget" name="widget_4" native="true">
             <property name="styleSheet">
              <string notr="true">QWidget#widget_4{
-   background-color: #353942;
-   opacity:0.8;
+    
+   background-color: #000;
+   
 }
 
 QLabel{
@@ -251,6 +316,12 @@ QLabel{
 	font-size:13pt;
 	border-radius:3px;
     padding:5px 30px 5px 30px;
+	 
+	 
+}
+
+QLabel:hover{
+	background-color:rgba(12, 128, 232,100);
 }</string>
             </property>
             <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
@@ -306,6 +377,12 @@ QLabel{
              </item>
              <item row="5" column="2" rowspan="3">
               <widget class="QTextEdit" name="textEdit">
+               <property name="styleSheet">
+                <string notr="true">background-color: rgba(255, 255, 255, 0);
+color:#fff;
+border:no;
+</string>
+               </property>
                <property name="html">
                 <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;

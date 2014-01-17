@@ -18,5 +18,9 @@
         <file>zhen.png</file>
         <file>test.gif</file>
         <file>honeywell.png</file>
+        <file>needle.png</file>
+        <file>needle_shadow.png</file>
+        <file>overlay.png</file>
+        <file>needle_red.png</file>
     </qresource>
 </RCC>

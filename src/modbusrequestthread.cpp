@@ -42,9 +42,7 @@ ModbusRequestThread::~ModbusRequestThread(){
 
     }
 
-
-
-    // wait();
+    //wait();
 
 }
 

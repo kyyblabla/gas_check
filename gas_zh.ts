@@ -41,7 +41,7 @@
         <translation type="obsolete">浓度:|dp#开启状态:|工作/关闭#工作状态:|正常/故障#警报:|无/低报警/高报警</translation>
     </message>
     <message>
-        <location filename="src/equipmentwidget.cpp" line="114"/>
+        <location filename="src/equipmentwidget.cpp" line="123"/>
         <source>work normal</source>
         <translation>正常工作</translation>
     </message>
@@ -78,70 +78,84 @@
         <translation>系统日志查看</translation>
     </message>
     <message>
-        <location filename="form/logviewdialog.ui" line="121"/>
+        <location filename="form/logviewdialog.ui" line="118"/>
+        <location filename="src/logviewdialog.cpp" line="128"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="form/logviewdialog.ui" line="126"/>
+        <location filename="form/logviewdialog.ui" line="123"/>
         <source>Red</source>
         <translation>红色警报</translation>
     </message>
     <message>
-        <location filename="form/logviewdialog.ui" line="131"/>
+        <location filename="form/logviewdialog.ui" line="128"/>
         <source>Yellow</source>
         <translation>黄色警报</translation>
     </message>
     <message>
-        <location filename="form/logviewdialog.ui" line="136"/>
+        <location filename="form/logviewdialog.ui" line="133"/>
         <source>Orange</source>
         <translation>橙色警报</translation>
     </message>
     <message>
-        <location filename="form/logviewdialog.ui" line="147"/>
+        <location filename="form/logviewdialog.ui" line="144"/>
         <source>Serach</source>
         <translation>查询</translation>
     </message>
     <message>
-        <location filename="form/logviewdialog.ui" line="203"/>
+        <location filename="form/logviewdialog.ui" line="200"/>
         <source>Dump</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="form/logviewdialog.ui" line="210"/>
+        <location filename="form/logviewdialog.ui" line="207"/>
         <source>Del</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="form/logviewdialog.ui" line="217"/>
+        <location filename="form/logviewdialog.ui" line="214"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="form/logviewdialog.ui" line="113"/>
-        <location filename="src/logviewdialog.cpp" line="58"/>
+        <location filename="form/logviewdialog.ui" line="110"/>
         <source>all</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="src/logviewdialog.cpp" line="43"/>
         <source>ID</source>
-        <translation>编号</translation>
+        <translation type="obsolete">编号</translation>
     </message>
     <message>
-        <location filename="src/logviewdialog.cpp" line="44"/>
+        <location filename="src/logviewdialog.cpp" line="113"/>
         <source>Detial</source>
         <translation>详情</translation>
     </message>
     <message>
-        <location filename="src/logviewdialog.cpp" line="45"/>
+        <location filename="src/logviewdialog.cpp" line="112"/>
         <source>Create Time</source>
         <translation>发生时间</translation>
     </message>
     <message>
-        <location filename="src/logviewdialog.cpp" line="46"/>
+        <location filename="src/logviewdialog.cpp" line="114"/>
         <source>Deal Time</source>
         <translation>解除时间</translation>
+    </message>
+    <message>
+        <location filename="src/logviewdialog.cpp" line="170"/>
+        <source>save success!</source>
+        <translation>保存成功！</translation>
+    </message>
+    <message>
+        <location filename="src/logviewdialog.cpp" line="174"/>
+        <source>save fail! check file is exist!</source>
+        <translation>保存失败！请检查您是否有权限写入文件！</translation>
+    </message>
+    <message>
+        <location filename="src/logviewdialog.cpp" line="178"/>
+        <source>dump result</source>
+        <translation>导出结果</translation>
     </message>
 </context>
 <context>
@@ -152,12 +166,17 @@
         <translation>可燃气体报警监视复视器</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="178"/>
+        <location filename="form/mainform.ui" line="245"/>
         <source>Slicen</source>
         <translation>关闭响铃</translation>
     </message>
+    <message>
+        <location filename="form/mainform.ui" line="203"/>
+        <source>Link Status</source>
+        <translation>连接状态</translation>
+    </message>
     <message utf8="true">
-        <location filename="form/mainform.ui" line="310"/>
+        <location filename="form/mainform.ui" line="387"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -170,7 +189,7 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">可燃气体报警监视复视器</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="103"/>
+        <location filename="form/mainform.ui" line="104"/>
         <source>Gas Minotor</source>
         <translation>可燃气体报警监视复视器</translation>
     </message>
@@ -191,7 +210,7 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">关闭响铃</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="188"/>
+        <location filename="form/mainform.ui" line="255"/>
         <source>Rest</source>
         <translation>复位</translation>
     </message>
@@ -200,7 +219,7 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">选项</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="266"/>
+        <location filename="form/mainform.ui" line="337"/>
         <source>System Setting</source>
         <translation>系统设置</translation>
     </message>
@@ -209,58 +228,68 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">返回</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="149"/>
+        <location filename="src/mainform.cpp" line="145"/>
         <source>Connection failed</source>
         <translation>连接失败</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="149"/>
+        <location filename="src/mainform.cpp" line="145"/>
         <source>Could not connect serial port! Do you want to have a setting?</source>
         <translation>打开串口失败！是否需要重新设置？</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="397"/>
+        <location filename="src/mainform.cpp" line="396"/>
         <source>:not work!</source>
         <translation>：停止工作！</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="401"/>
+        <location filename="src/mainform.cpp" line="400"/>
         <source>:continue to work.</source>
         <translation>：恢复正常工作。</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="410"/>
+        <location filename="src/mainform.cpp" line="409"/>
         <source>:fault!</source>
         <translation>：通道出错！</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="413"/>
+        <location filename="src/mainform.cpp" line="412"/>
         <source>:fault is dispear.</source>
         <translation>：通道错误解决。</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="420"/>
+        <location filename="src/mainform.cpp" line="419"/>
         <source>:high waring!</source>
         <translation>：高报警！</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="424"/>
+        <location filename="src/mainform.cpp" line="423"/>
         <source>:low waring</source>
         <translation>：低报警</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="427"/>
+        <location filename="src/mainform.cpp" line="426"/>
         <source>:waring dispaer.</source>
         <translation>：警报解除。</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="572"/>
+        <location filename="src/mainform.cpp" line="432"/>
+        <source>can&apos;t receive any data from master! Try to be Master!</source>
+        <translation>不能收到来自主复视器的数据！该机自动切换为主复视器！</translation>
+    </message>
+    <message>
+        <location filename="src/mainform.cpp" line="608"/>
         <source>Setting</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="333"/>
-        <location filename="src/mainform.cpp" line="576"/>
+        <location filename="src/mainform.cpp" line="824"/>
+        <source>sure to exit</source>
+        <translation>确认退出</translation>
+    </message>
+    <message>
+        <location filename="form/mainform.ui" line="410"/>
+        <location filename="src/mainform.cpp" line="612"/>
         <source>Log</source>
         <translation>日志</translation>
     </message>
@@ -281,8 +310,8 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">停止工作！</translation>
     </message>
     <message>
-        <location filename="form/mainform.ui" line="294"/>
-        <location filename="src/mainform.cpp" line="579"/>
+        <location filename="form/mainform.ui" line="365"/>
+        <location filename="src/mainform.cpp" line="615"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
@@ -301,7 +330,7 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">复视器II</translation>
     </message>
     <message>
-        <location filename="src/mainform.cpp" line="788"/>
+        <location filename="src/mainform.cpp" line="824"/>
         <source>Are you sure?</source>
         <translation>确定退出？</translation>
     </message>
@@ -309,7 +338,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ModbusRequestThread</name>
     <message>
-        <location filename="src/modbusrequestthread.cpp" line="159"/>
+        <location filename="src/modbusrequestthread.cpp" line="157"/>
         <source>Slave threw exception &quot;%1&quot; or function not implemented.</source>
         <translation></translation>
     </message>
@@ -423,6 +452,33 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="src/sqlite.cpp" line="344"/>
+        <location filename="src/sqlite.cpp" line="392"/>
+        <source>Id</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="src/sqlite.cpp" line="347"/>
+        <location filename="src/sqlite.cpp" line="394"/>
+        <source>CreateTime</source>
+        <translation>发生时间</translation>
+    </message>
+    <message>
+        <location filename="src/sqlite.cpp" line="350"/>
+        <location filename="src/sqlite.cpp" line="395"/>
+        <source>SolveTime</source>
+        <translation>解决时间</translation>
+    </message>
+    <message>
+        <location filename="src/sqlite.cpp" line="353"/>
+        <location filename="src/sqlite.cpp" line="393"/>
+        <source>Detail</source>
+        <translation>详情</translation>
+    </message>
+</context>
+<context>
     <name>SerialSettingsWidget</name>
     <message>
         <location filename="form/serialsettingswidget.ui" line="20"/>
@@ -442,12 +498,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="form/serialsettingswidget.ui" line="147"/>
         <source>Baud</source>
-        <translation>速率</translation>
+        <translation>波特率</translation>
     </message>
     <message>
         <location filename="form/serialsettingswidget.ui" line="154"/>
         <source>Data bits</source>
-        <translation>数据位数</translation>
+        <translation>数据位</translation>
     </message>
     <message>
         <location filename="form/serialsettingswidget.ui" line="71"/>
@@ -740,12 +796,12 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Input Register通道数目</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="119"/>
+        <location filename="src/settingdialog.cpp" line="135"/>
         <source>slave address</source>
         <translation>从机ID</translation>
     </message>
     <message>
-        <location filename="src/settingdialog.cpp" line="123"/>
+        <location filename="src/settingdialog.cpp" line="139"/>
         <source>host address</source>
         <translation>主机ID</translation>
     </message>

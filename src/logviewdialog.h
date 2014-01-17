@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "sqlite.h"
+
 namespace Ui {
 class LogViewDialog;
 }
@@ -19,17 +21,22 @@ public:
     
 private slots:
     void on_pushButton_4_clicked();
+    void doShowLog();
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::LogViewDialog *ui;
-
     QStandardItemModel *tableModel;
     void initTableView();
-
-    QStandardItemModel *treeModel;
     void initTreeView();
+    void createConnection();
+    QList<Log> *logList;
 
 
+    void showLogs();
 
 };
 

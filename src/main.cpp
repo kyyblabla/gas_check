@@ -1,4 +1,4 @@
-﻿#include "mainform.h"
+#include "mainform.h"
 #include "sqlutil.h"
 #include "config.h"
 #include "configxml.h"

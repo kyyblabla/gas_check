@@ -1,101 +1,39 @@
-﻿#include "sqlutil.h"
-#include "config.h"
-
+#include "SQLUtil.h"
+#include "QTextCodec"
 
 QSqlDatabase SQLUtil::dateBase;
 
-Log::Log(){
-
-
-}
-
-SQLUtil::SQLUtil(QObject *parent) :
-    QObject(parent)
-{
-
-}
-
-bool SQLUtil::initConnection(){
-
-    /*
-    bool re=Config::initConfig();
-    if(re){
-
-        dateBase = QSqlDatabase::addDatabase("QMYSQL");
-        dateBase.setHostName("localhost");
-        dateBase.setDatabaseName("test");
-        dateBase.setPort(3306);
-        dateBase.setUserName("root");
-        dateBase.setPassword("qaz");
-
-    }
-    return re;
-    */
-}
-
 bool SQLUtil::open(){
 
-    dateBase = QSqlDatabase::addDatabase("QSQLITE");//添加驱动
+    if(QSqlDatabase::contains("Date_sql")){
+
+        dateBase = QSqlDatabase::database("Date_sql");
+    }else{
+
+        dateBase = QSqlDatabase::addDatabase("QSQLITE" , "Date_sql");
+    }
 
     dateBase.setDatabaseName("FGcheck.db");
 
     if(!dateBase.open()){
 
-        qDebug()<<"open false1"<<endl;//需要修改
         return false;
 
     }
     else{
 
-        if(!dateBase.contains("FGCheck")){
-
-            QSqlQuery sql_add(dateBase);
-
-            sql_add.exec("create table FGCheck(logId varchar primary key, logDetail varchar , logCreateTime varchar , logSolveTime varchar )");
-
-        }
-
         return true;
     }
-
 }
 
 bool SQLUtil::close(){
 
     if(dateBase.isOpen()){
+
         dateBase.close();
     }
 
     return !dateBase.isOpen();
-
-}
-
-
-bool SQLUtil::deltetAll(){
-
-    if(!open()){
-
-        return false;
-    }
-    else{
-
-        QSqlQuery sql_exec(dateBase);
-
-        sql_exec.exec("delete from FGcheck");
-
-        if(!sql_exec.exec()){
-
-            qDebug()<<"deleteAll fail1";
-        }else{
-
-            qDebug()<<"deleteAll success";
-        }
-
-    }
-
-
-    close();
-    return true;
 }
 
 bool SQLUtil::add(Log log){
@@ -108,22 +46,121 @@ bool SQLUtil::add(Log log){
 
         QSqlQuery sql_add(dateBase);
 
-        sql_add.exec("insert into FGCheck values(? , ? , ? , ?)");
+        sql_add.exec("create table FGCheck(logId INTEGER primary key, logDetail TEXT , logCreateTime DateTime , logSolveTime DateTime)");
 
-        sql_add.bindValue(0 , log.logId );
+        if(sql_add.exec()){
 
-        sql_add.bindValue(1 , log.logDetial);
+            qDebug()<<"table create successfully";
+        }
+        else{
 
-        sql_add.bindValue(2 , log.logCreateTime);
+            qDebug()<<"table had been created";
+        }
 
-        sql_add.bindValue(3 , log.logSolveTime);
+        QString str_insert = "insert into FGCheck(logDetail ,logCreateTime , logSolveTime) values(:detail, :create , :end)";
+
+        sql_add.prepare(str_insert);
+        sql_add.bindValue(":detail", log.logDetial);
+        sql_add.bindValue(":create" , log.logCreateTime);
+        sql_add.bindValue(":end" , log.logSolveTime);
+
+        if(!sql_add.exec()){
+
+            QString name ;
+            {
+                name = QSqlDatabase::database().connectionName();
+            }
+            QSqlDatabase::removeDatabase(name);
+            close();
+
+            return false;
+
+        }else{
+
+            QString name ;
+            {
+                name = QSqlDatabase::database().connectionName();
+            }
+            QSqlDatabase::removeDatabase(name);
+            close();
+            return true ;
+        }
+    }
+    return false;
+}
+
+void SQLUtil::getAll(QList<Log> *list){
+
+    if(!open()){
+
+        qDebug()<<"sqlite open fail"<<endl;
+
+    }else{
+
+        QSqlQuery sql_Find(dateBase);
+
+        if(sql_Find.exec("select * from FGCheck order by logCreateTime desc")){
+
+            Log log;
+
+            while(sql_Find.next()){
+
+                log.logId = sql_Find.value(0).toInt();
+                log.logDetial = sql_Find.value(1).toString();
+                log.logCreateTime = sql_Find.value(2).toString();
+                log.logSolveTime = sql_Find.value(3).toString();
+                list->append(log);
+            }
+        }
     }
 
-    close();
-    return true;
-
+    QString name ;
+    {
+        name = QSqlDatabase::database().connectionName();
+    }
+    QSqlDatabase::removeDatabase(name);
+    close();   
 }
-bool SQLUtil::delete_id(QString logId){
+
+bool SQLUtil::deltetAll(){
+
+    if(!open()){
+
+        qDebug()<<"sql open fail";
+        return false;
+    }
+    else{
+
+        QSqlQuery sql_delAll(dateBase);
+
+        if(!sql_delAll.exec("delete from FGcheck")){
+
+            QString name ;
+            {
+                name = QSqlDatabase::database().connectionName();
+            }
+            QSqlDatabase::removeDatabase(name);
+
+            close();
+
+            return false;
+
+        }else{
+
+            QString name ;
+            {
+                name = QSqlDatabase::database().connectionName();
+            }
+            QSqlDatabase::removeDatabase(name);
+
+            close();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool SQLUtil::delete_id(int Id){
 
     if(!open()){
 
@@ -133,30 +170,44 @@ bool SQLUtil::delete_id(QString logId){
 
         QSqlQuery sql_del(dateBase);
 
-        sql_del.exec("delete from FGCheck where logId = ?");
+        QString str_del = "delete from FGCheck where logId = ?";
 
-        sql_del.bindValue(0 , logId);
+        sql_del.prepare(str_del);
+
+        sql_del.addBindValue(Id);
 
         if(!sql_del.exec()){
 
-            qDebug()<<"deleteid fail1";
+            QString name ;
+            {
+                name = QSqlDatabase::database().connectionName();
+            }
+            QSqlDatabase::removeDatabase(name);
+            close();
+            qDebug()<<"the id is not existing";
+            return false;
         }
         else{
 
-            qDebug()<<"deleteid success";
+            QString name ;
+            {
+                name = QSqlDatabase::database().connectionName();
+            }
+            QSqlDatabase::removeDatabase(name);
+            close();
+            qDebug()<<"the id is existing ,but had been deleted";
+            return true;
 
         }
-
     }
-    close();
-    return true;
+    return false;
 }
 
-
-bool SQLUtil::update(QString logId , QString logEndTime){
+bool SQLUtil::update(int logId , QString logEndTime){
 
     if(!open()){
 
+        qDebug()<<"sql open fail";
         return false;
 
     }else{
@@ -171,134 +222,199 @@ bool SQLUtil::update(QString logId , QString logEndTime){
 
         if(!sql_del.exec()){
 
-            qDebug()<<"deleteid fail1";
+            QString name ;
+            {
+                name = QSqlDatabase::database().connectionName();
+            }
+            QSqlDatabase::removeDatabase(name);
+            close();
+
+            return false;
         }
         else{
 
-            qDebug()<<"deleteid success";
-
+            QString name ;
+            {
+                name = QSqlDatabase::database().connectionName();
+            }
+            QSqlDatabase::removeDatabase(name);
+            close();
+            return true;
         }
-
     }
+    return  false;
+}
+
+void SQLUtil::getByKeyWord(QString keyWord, QList<Log> *list){
+
+    if(!open()){
+
+        qDebug()<<"sql open fail"<<endl;
+
+    }else{
+
+        QSqlQuery sql_FindKey(dateBase);
+
+        sql_FindKey.prepare("select * from FGCheck where logDetail like ?");
+
+        sql_FindKey.bindValue(0 , keyWord);
+
+        if(sql_FindKey.exec()){
+
+            Log log;
+
+            while(sql_FindKey.next()){
+
+                log.logId = sql_FindKey.value(0).toInt();
+
+                log.logDetial = sql_FindKey.value(1).toString();
+
+                log.logCreateTime = sql_FindKey.value(2).toString();
+
+                log.logSolveTime = sql_FindKey.value(3).toString();
+
+                list->append(log);
+
+            }
+        }
+    }
+    QString name ;
+    {
+        name = QSqlDatabase::database().connectionName();
+    }
+    QSqlDatabase::removeDatabase(name);
     close();
-    return true;
-}
-QList<Log *> SQLUtil::getAll(){
-
-    QList<Log *> list;
-
-    if(open()){
-
-        QSqlQuery sql_Find(dateBase);
-
-        sql_Find.exec("select * from FGCheck");
-
-        if(sql_Find.exec()){
-
-            while(sql_Find.next()){
-
-                Log*l = new Log();
-
-                l->logId = sql_Find.value(0).toString();
-
-                l->logId = sql_Find.value(1).toString();
-
-                l->logId = sql_Find.value(2).toString();
-
-                l->logSolveTime = sql_Find.value(3).toString();
-
-                list.append(l);
-            }
-        }
-
-
-        close();
-
-
-    }
-    return list;
 }
 
-QList<Log *> SQLUtil::getByKeyWord(QString keyWord){
+void SQLUtil::getByPage(int PageNum, int PageCount, QList<Log> *list){
 
-    QList<Log *> list;
+    if(!open()){
 
-    if(open()){
+        qDebug()<<"sql open fail"<<endl;
 
-        QSqlQuery sql_Find(dateBase);
-
-        sql_Find.exec("select * from FGCheck where ? = logId)");
-
-        sql_Find.bindValue(0 , keyWord);
-
-        sql_Find.exec("select * from FGCheck where ? = logDetail )");
-
-        sql_Find.bindValue(0 , keyWord);
-
-        sql_Find.exec("select * from FGCheck where ? =logCreateTime )");
-
-        sql_Find.bindValue(0 , keyWord);
-
-        sql_Find.exec("select * from FGCheck where ? =logSolveTime)");
-
-        sql_Find.bindValue(0 , keyWord);
-
-        if(sql_Find.exec()){
-
-            while(sql_Find.next()){
-
-                Log*l = new Log();
-
-                l->logId = sql_Find.value(0).toString();
-
-                l->logId = sql_Find.value(1).toString();
-
-                l->logId = sql_Find.value(2).toString();
-
-                l->logSolveTime = sql_Find.value(3).toString();
-
-                list.append(l);
-            }
-        }
-        close();
-
-    }
-    return list;
-}
-
-QList<Log*> SQLUtil::getByPage(int PageStart, int PageEnd){
-
-    QList<Log *> list;
-
-    if(open()){
-
-
-
+    }else{
         QSqlQuery sql_get(dateBase);
 
-        sql_get.exec("select * from FGCheck where logId >= ?*10 and logId < ?*10");
+        int x = (PageNum-1) * PageCount ;
 
-        sql_get.bindValue(0 , PageStart);
-        sql_get.bindValue(1 , PageEnd);
+        sql_get.prepare("select * from FGCheck limit ? offset ?");
 
-        while(sql_get.next()){
+        sql_get.bindValue(0 , PageCount);
+        sql_get.bindValue(1 , x);
 
-            Log*l = new Log();
+        if(sql_get.exec()){
 
-            l->logId = sql_get.value(0).toString();
+            Log l;
 
-            l->logId = sql_get.value(1).toString();
+            while(sql_get.next()){
 
-            l->logId = sql_get.value(2).toString();
+                l.logId = sql_get.value(0).toInt();
 
-            l->logSolveTime = sql_get.value(3).toString();
+                l.logDetial = sql_get.value(1).toString();
 
-            list.append(l);
+                l.logCreateTime = sql_get.value(2).toString();
+
+                l.logSolveTime = sql_get.value(3).toString();
+
+                list->append(l);
+            }
         }
-
-        close();
     }
 
-    return list;
+    QString name ;
+    {
+        name = QSqlDatabase::database().connectionName();
+    }
+    QSqlDatabase::removeDatabase(name);
+    close();
 }
+bool SQLUtil::save_txt(QList<Log> *list , QString fileName){
 
+    QFile file(fileName);
+    file.open(QIODevice::WriteOnly);
+
+    QTextStream save(&file);
+
+    save.setCodec("UTF-8");
+    for(int i = -1 ; i < list->length(); i++){
+
+        if(i == -1){
+
+            save.setFieldAlignment(QTextStream::AlignLeft);
+            save<<qSetFieldWidth(8)<<QObject::tr("Id");
+
+            save.setFieldAlignment(QTextStream::AlignLeft);
+            save<<qSetFieldWidth(22)<<QObject::tr("CreateTime");
+
+            save.setFieldAlignment(QTextStream::AlignLeft);
+            save<<qSetFieldWidth(22)<<QObject::tr("SolveTime");
+
+            save.setFieldAlignment(QTextStream::AlignLeft);
+            save<<QObject::tr("Detail");
+            save<<qSetFieldWidth(1)<<"\r\n";
+            continue;
+        }
+
+        save.setFieldAlignment(QTextStream::AlignLeft);
+        save<<qSetFieldWidth(8)<<list->at(i).logId;
+
+        save.setFieldAlignment(QTextStream::AlignLeft);
+        save<<qSetFieldWidth(22)<<list->at(i).logCreateTime;
+
+        save.setFieldAlignment(QTextStream::AlignLeft);
+        save<<qSetFieldWidth(22)<<list->at(i).logSolveTime;
+
+        save.setFieldAlignment(QTextStream::AlignLeft);
+        save<<list->at(i).logDetial;
+        save<<qSetFieldWidth(1)<<"\r\n";
+    }
+    save.flush();
+    file.close();
+    return true;
+}
+bool SQLUtil::save_excel(QList<Log> *list, QString fileName){
+
+    QExcel excel(fileName);
+
+    excel.selectSheet(1);
+
+    int row_count = excel.getUsedRowsCount();
+
+    qDebug()<<"row"<<row_count;
+
+    for(int i = 1 ; i<=row_count;i++){
+
+        excel.clearCell(i , 1);
+        excel.clearCell(i , 2);
+        excel.clearCell(i , 3);
+        excel.clearCell(i , 4);
+    }
+
+    row_count = 1;
+    if(row_count == 1){
+
+        excel.setCellTextCenter(row_count, 1);
+        excel.setCellTextCenter(row_count, 2);
+        excel.setCellTextCenter(row_count, 3);
+        excel.setCellTextCenter(row_count, 4);
+        excel.setCellString(row_count , 1 ,QObject::tr("Id"));
+        excel.setCellString(row_count , 2 ,QObject::tr("Detail"));
+        excel.setCellString(row_count , 3 ,QObject::tr("CreateTime"));
+        excel.setCellString(row_count , 4 ,QObject::tr("SolveTime"));
+    }
+
+    for(int i = 0 ; i < list->length() ; i++){
+
+        excel.setCellTextCenter(row_count+i+1, 1);
+        excel.setCellTextCenter(row_count+i+1, 2);
+        excel.setCellTextCenter(row_count+i+1, 3);
+        excel.setCellTextCenter(row_count+i+1, 4);
+        excel.setCellString(row_count+i+1 , 1 ,QString::number(list->at(i).logId));
+        excel.setCellString(row_count+i+1 , 2 ,list->at(i).logDetial);
+        excel.setCellString(row_count+i+1 , 3 ,"'"+list->at(i).logCreateTime);
+        excel.setCellString(row_count+i+1 , 4 ,"'"+list->at(i).logSolveTime);
+    }
+    excel.save();
+    excel.close();
+    return true;
+}

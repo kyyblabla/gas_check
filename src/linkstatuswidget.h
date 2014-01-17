@@ -20,6 +20,7 @@ public:
     explicit LinkStatusWidget(QWidget *parent = 0);
     ~LinkStatusWidget();
     void isConnection(bool isConn);
+    void setLinkStatu(int index,bool statu);
 
 protected:
     void  paintEvent(QPaintEvent *event);
